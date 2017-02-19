@@ -230,6 +230,7 @@ apiRouter.post('/createDomainFromSMN', function (req, res, next) {
             response.success = false;
             response.error = err.toString();
             console.log("Error creating Domain from SMN: " + err);
+            console.log(err.stack);
         }
         res.send(response);
     }

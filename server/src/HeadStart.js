@@ -173,7 +173,7 @@ HeadStart.prototype.loadGeneratedHBSPartials = function () {
 //
 // Operators:
 // [?]: Test if elements of this type exist
-// [*]: Indicates that there can be multiple matches (mandatoy)
+// [*]: Indicates that there can be multiple matches (mandatory)
 // [!]: For children of Entity only. Used to include inherited elements. Can be combined with [?]
 //
 
@@ -341,13 +341,23 @@ HeadStart.prototype.parseSMN = function (smn) {
     // Map each line to one element in new array
     var smnFile = smn.split("\n");
 
-    //
+    // If a line starts with "-", append it to previous line
+    var smnFileMerged = [];
+    for (var idx in smnFile) {
+        var currentLine = smnFile[idx];
+        if (currentLine.length>0 && currentLine[0] === "-")
+            smnFileMerged[smnFileMerged.length-1] = smnFileMerged[smnFileMerged.length-1] + ","+ currentLine.substr(1);
+        else
+            smnFileMerged.push(currentLine);
+    }
+
+    // Start with empty model
     var model = {};
 
     // Now process each line:
-    for (idx in smnFile) {
+    for (var idx in smnFileMerged) {
         // Remove '\r' and comments ('//'), ignore empty lines:
-        var currentLine = smnFile[idx].replace(/\r/g, '');
+        var currentLine = smnFileMerged[idx].replace(/\r/g, '');
         if (currentLine.includes("//"))
             currentLine = currentLine.split("//", 1)[0];
         if (currentLine.length < 1) continue;
@@ -370,6 +380,7 @@ HeadStart.prototype.parseSMN = function (smn) {
         }
         else {
             header = currentLine;
+            body = "";
         }
 
         // Inheritance?
@@ -391,10 +402,13 @@ HeadStart.prototype.parseSMN = function (smn) {
         if (baseClass.length > 1)
             model[entity].baseClass = baseClass;
 
-        if (body.includes("{")) {
+        // Parse aggregations
+        while (body.includes("{")) {
             if (!body.includes("}")) throw "Missing '}' in line " + idx;
-            body = util.extractTagValue(body, "{", "}")[1];
-            var aggregations = body.split(",");
+            var s = util.extractTagValue(body, "{", "}");
+            var token = s[1];
+            body = s[0] + (s.length>2?s[2]:"");
+            var aggregations = token.split(",");
             for (j in aggregations) {
                 var agg = aggregations[j].split(":");
                 if (agg.length === 1) {
@@ -408,28 +422,32 @@ HeadStart.prototype.parseSMN = function (smn) {
                 model[entity].aggregations.push(agg);
             }
         }
-        else if (body.includes("=>")) {
-            var associations = body.split(",");
-            for (j in associations) {
-                var assoc = associations[j].split("=>");
-                if (assoc.length === 1 || assoc[0].length === 0)
-                    assoc = {sourceRole: assoc[1], targetType: assoc[1]};
-                else
-                    assoc = {sourceRole: assoc[0], targetType: assoc[1]};
-                model[entity].associations.push(assoc);
-            }
-        }
-        else { // Properties
-            var properties = body.split(",");
-            if (properties.length === 1 && properties[0].length === 0) continue;
-            for (j in properties) {
-                var prop = properties[j].split(":");
-                if (prop.length === 1) // No type information supplied, use string as default
-                    prop = {property: prop[0], type: HeadStart.me.BasicTypes.String};
-                else
-                    prop = {property: prop[0], type: prop[1]};
-                if (!this.isValidBasicType(prop.type) && !prop.type.includes("[")) throw "Invalid basic type '" + prop.type + "' in line " + idx;
-                model[entity].properties.push(prop);
+
+
+        // Now parse definitions of attributes and associations
+        if (body.replace(/\s/g, '').length>0) // Body is not empty
+        {
+            var tokens = body.split(",");
+            for (var idx = 0; idx < tokens.length; idx++) {
+                var token = tokens[idx];
+                if (!token.replace(/\s/g, '').length>0) continue;
+                if (token.includes("=>")) { // Association
+                    var assoc = token.split("=>");
+                    if (assoc.length === 1 || assoc[0].length === 0)
+                        assoc = {sourceRole: assoc[1], targetType: assoc[1]};
+                    else
+                        assoc = {sourceRole: assoc[0], targetType: assoc[1]};
+                    model[entity].associations.push(assoc);
+                }
+                else { // Property
+                    var prop = token.split(":");
+                    if (prop.length === 1) // No type information supplied, use string as default
+                        prop = {property: prop[0], type: HeadStart.me.BasicTypes.String};
+                    else
+                        prop = {property: prop[0], type: prop[1]};
+                    if (!this.isValidBasicType(prop.type) && !prop.type.includes("[")) throw "Invalid basic type '" + prop.type + "' in line " + idx;
+                    model[entity].properties.push(prop);
+                }
             }
         }
     }

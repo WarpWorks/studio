@@ -658,8 +658,8 @@ Entity.prototype.createNewDefaultViews = function () {
     var newDefaultTableView = this.addNewTableView("DefaultTableView", "");
     newDefaultTableView.setAsDefault();
     pos = 0;
-    for (var i in this.basicProperties) {
-        var property = this.basicProperties[i];
+    for (var i in properties) {
+        var property = properties[i];
         var tableItem = newDefaultTableView.addNewTableItem(property.name, "Tooltip", property);
         tableItem.position = pos++;
     }
@@ -824,7 +824,7 @@ Entity.prototype.processLocalTemplateFunctions = function (template) {
         ["PageView!", this.getPageViews(false)],
         ["TableView!", this.getTableViews(false)]
         // Notice that the !-operator can be combined with the ?-operator
-        // Example: {{Entity!?}}...{{Entity!}}...{{/Entity!}}...{{/Entity!?}}
+        // Example: {{Enumeration!?}}...{{Enumeration!}}...{{/Enumeration!}}...{{/Enumeration!?}}
     ];
 
     template = this.processTemplateWithChildElements(template, children);
