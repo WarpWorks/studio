@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap core CSS -->
+    <link href="/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="/libs/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="/libs/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/libs/bootstrap/theme.css" rel="stylesheet">
+
+    <!-- HeadStart specific styles -->
+    <link href="/stylesheets/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+<!-- Bootstrap core JavaScript -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="/libs/bootstrap/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="/libs/bootstrap/bootstrap.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="/libs/bootstrap/ie10-viewport-bug-workaround.js"></script>
+
+<!---------------------------------------------------------
+     shared Functions
+---------------------------------------------------------->
+
+<script src="/HeadStart/layout.js"></script>
+<script src="/HeadStart/genericModal.js"></script>
+<script src="/HeadStart/RESTCalls.js"></script>
+
+<!---------------------------------------------------------
+     NavBar
+---------------------------------------------------------->
+
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" rel="home" href="/" title="HeadStart">
+                <img style="max-width:30px; margin-top: -7px;"
+                     src="/images/runner2.png">
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#" id="DomainHomeA">Domain</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="pageMenuA">Options <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="pageMenuDD">
+                </ul>
+            </li>
+            <li><a href="#" id="TestMenuA"><span class="glyphicon glyphicon-cog"></span></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="NavButtonSaveA"><span class="glyphicon glyphicon-ok"></span></a></li>
+            <li><a href="#" id="NavButtonCancelA"><span class="glyphicon glyphicon-remove"></span></a></li>
+            <li><a href="#" id="NavButtonDeleteA"><span class="glyphicon glyphicon-trash"></span></a></li>
+            <li><a href="/"><span class="glyphicon glyphicon-search"></span></a></li>
+        </ul>
+    </div>
+</nav>
+
+<!---------------------------------------------------------
+     Body goes here (via Handlebars)
+---------------------------------------------------------->
+{{{body}}}
+
+<!---------------------------------------------------------
+     Some Bootstrap-related Stuff
+---------------------------------------------------------->
+
+
+<div id="global-zeroclipboard-html-bridge" class="global-zeroclipboard-container" title=""
+     style="position: absolute; left: 0px; top: -9999px; width: 15px; height: 15px; z-index: 999999999;"
+     data-original-title="Copy to clipboard">
+    <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" id="global-zeroclipboard-flash-bridge" width="100%"
+            height="100%">
+        <param name="movie" value="/libs/bootstrap/ZeroClipboard.swf?noCache=1472591222559">
+        <param name="allowScriptAccess" value="sameDomain">
+        <param name="scale" value="exactfit">
+        <param name="loop" value="false">
+        <param name="menu" value="false">
+        <param name="quality" value="best">
+        <param name="bgcolor" value="#ffffff">
+        <param name="wmode" value="transparent">
+        <param name="flashvars"
+               value="trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com">
+        <embed src="/libs/bootstrap/ZeroClipboard.swf?noCache=1472591222559" loop="false" menu="false" quality="best"
+               bgcolor="#ffffff" width="100%" height="100%" name="global-zeroclipboard-flash-bridge"
+               allowscriptaccess="sameDomain" allowfullscreen="false" type="application/x-shockwave-flash"
+               wmode="transparent" pluginspage="http://www.macromedia.com/go/getflashplayer"
+               flashvars="trustedOrigins=getbootstrap.com%2C%2F%2Fgetbootstrap.com%2Chttp%3A%2F%2Fgetbootstrap.com"
+               scale="exactfit">
+    </object>
+</div>
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="500" viewBox="0 0 1140 500" preserveAspectRatio="none"
+     style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;">
+    <defs>
+        <style type="text/css">
+        </style>
+    </defs>
+    <text x="0" y="57" style="font-weight:bold;font-size:57pt;font-family:Arial, Helvetica, Open Sans, sans-serif">
+        Thirdslide
+    </text>
+</svg>
+</body>
+</html>
+
+<!---------------------------------------------------------
+         Modals (TBD: Move to separate file(s))
+---------------------------------------------------------->
+
+<!--
+          Domain Wizard
+-->
+
+<div class="container">
+    <div class="modal fade" id="domainWizardM" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Domain Wizard</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <button type="button" id="wizardAddEntityB"      class="btn btn-primary btn-xs">Entities</button>
+                        <button type="button" id="wizardAddInheritanceB" class="btn btn-primary btn-xs">Inheritance</button>
+                        <button type="button" id="wizardAddAggB"         class="btn btn-primary btn-xs">Aggregations</button>
+                        <button type="button" id="wizardAddAssocB"       class="btn btn-primary btn-xs">Associations</button>
+                        <button type="button" id="wizardAddDomainB"      class="btn btn-primary btn-xs">Domain</button>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="14" id="wizardFormDataT"></textarea>
+                    </div>
+                    <div id="wizardStatusD">
+                        <div class="alert alert-info">
+                            Use the <strong>Simple Model Notation (SMN)</strong> to describe your domain, like in the example provided
+                            above.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="dropup div-inline">
+                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span> Examples
+                        </button>
+                        <ul class="dropdown-menu" id="SMNExamplesUL">
+                        </ul>
+                    </div>
+                    <button type="button" class="btn btn-default" onclick="wizardCreateDomain()"><span class="glyphicon glyphicon-cog"></span> Create New Domain
+                    </button>
+                    <button type="button" class="btn btn-default" onclick="wizardClearForm()">Clear Form</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+          Domain Details
+-->
+<div class="container">
+    <div class="modal fade" id="domainDetailsM" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Domain Details</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="domainOverviewF">
+                        <div class="form-group">
+                            <label for="domainNameI" class="col-sm-3 control-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="domainNameI" placeholder="Domain Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="domainDescI" class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="domainDescI" placeholder="Description">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label for="domainDefOfManyI" class="col-sm-3 control-label">Definition of 'Many'</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="domainDefOfManyI" placeholder="100" title="Definition of 'Many', which is used to qualify cardinalities of relationships (e.g. '1:few' vs. '1:many'); used for DB optimization.">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveDomainOververviewB" class="btn btn-default" data-dismiss="modal">OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+          App Test Menu
+-->
+<div class="container">
+    <div class="modal fade" id="testAppM" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Test App</h4>
+                </div>
+                <div class="modal-body">
+                    <button type='button' class='btn btn-primary' id="generateDefaultViewsB">Generate Default Views</button><br><br>
+                    <button type='button' class='btn btn-primary' id="generateTestDataB">Generate Test Data</button><br><br>
+                    <button type='button' class='btn btn-primary' id="removeTestDataB">Remove Test Data</button><br><br>
+                    <button type='button' class='btn btn-primary' id="viewTestAppB"><span class="glyphicon glyphicon-forward"></span> Start Test Application</button><br><br>
+                    <div id="testAppStatusD">
+                        <div class="alert alert-info">
+                            <strong>Go!</strong> Select option from above.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveDomainOververviewB" class="btn btn-default" data-dismiss="modal">OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+          Element Selection
+-->
+<div class="container">
+    <div class="modal fade" id="selectElementM" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="selectElement_titleH" class="modal-title">Select Element</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-container">
+                        <table class="table table-hover" id="selectElement_ElementsT">
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="selectElement_selectB" class="btn btn-default" data-dismiss="modal">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+          Enum Editor
+-->
+<div class="container">
+    <div class="modal fade" id="enumEditLiteralsM" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Literals</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="enumEditLiterals_LiteralsT">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveEnumLiteralsB" class="btn btn-default" data-dismiss="modal">OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+          Generic Modal
+-->
+<div class='container'>
+   <div class='modal fade' id='genericModalM' role='dialog'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                    <h4 class='modal-title' id="genericModalTitleH">
+                    </h4>
+                </div>
+                <div class='modal-body'>
+                    <div class='alert alert-info' id="genericModalMessageD">
+                    </div>
+                </div>
+                <div class='modal-footer' id='genericModalButtonsD'>
+                </div>
+            </div>
+        </div>
+   </div>
+</div>

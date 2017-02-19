@@ -1,0 +1,21 @@
+{{Domain*}}{{Options}} {"saveAs": "this.name+'Gen.smn';"} {{/Options}}//
+// Domain: #{{js:this.name;/}}
+//
+{{Entity*}}
+// Views for Entity: {{js:this.name;/}}
+{{PageView*}}
+PageView: {{js:this.name;/}} (isDefault={{js:this.isDefault;/}}) {
+{{Panel*}}  Panel: {{js:this.name;/}} ({{js:this.desc;/}}) {
+{{SeparatorPanelItem*}}    SeparatorPanelItem: {{js:this.name;/}}
+{{/SeparatorPanelItem}}{{RelationshipPanelItem*}}    RelationshipPanelItem: {{js:this.name;/}} (=> Entity:{{js:this.relationship.getTargetEntity().name;/}})
+{{/RelationshipPanelItem}}{{BasicPropertyPanelItem*}}    BasicPropertyPanelItem: {{js:this.name;/}} (=> Property:{{js:this.basicProperty.name;/}})
+{{/BasicPropertyPanelItem}}{{EnumPanelItem*}}    EnumPanelItem: {{js:this.name;/}} (=> Enum:{{js:this.enumeration.name;/}})
+{{/EnumPanelItem}}  }
+{{/Panel}}}
+{{/PageView}}
+{{TableView*}}TableView: {{js:this.name;/}} (isDefault={{js:this.isDefault;/}}) { {{TableItem*}}
+  {{js:this.name;/}} (=> Property:{{js:this.property.name;/}}) {{/TableItem}}
+}
+{{/TableView}}
+{{/Entity}}
+{{/Domain}}

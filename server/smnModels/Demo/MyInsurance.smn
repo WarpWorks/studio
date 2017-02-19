@@ -1,0 +1,24 @@
+// Domain
+#MyInsurance: {products:ProductDefinition*, customers:Partner*}
+
+// Basic Entity Definitions:
+Partner: partnerID:string, partnerSince:date, isActive:boolean
+Person(Partner): FirstName:string, LastName:string
+Company(Partner): VATID:string
+Address: Street:string, ZIP:string, Country:[Germany|USA|China|Japan]
+ProductDefinition: ProductID:string, validSince:date, isActive:boolean
+HealthInsurance(ProductDefinition): Type:[General|Dental]
+HomeInsurance(ProductDefinition): Type:[Earthquake|Hailstorm|Flooding]
+LifeInsurance(ProductDefinition): Type:[TermInsurance|WholeLifeInsurance]
+Money: amount:string, Currency:[USD|Euro|RMB|Yen]
+
+Contract: startingDate:date, description
+Claim: dateOfIncident:date, dateOfSubmission:date
+
+// Aggregation Hierarchy:
+Partner: {addresses:Address, contracts:Contract, claims:Claim}
+Contract: {monthlyPremium:Money}
+
+// Associations:
+Contract: product => ProductDefinition
+Claim: contract => Contract

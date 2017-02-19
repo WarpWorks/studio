@@ -1,0 +1,20 @@
+// Domain
+#MyComplexShop: {Customer*, Product*}
+
+// Basic Entity Definitions:
+Customer: FirstName:string, LastName:string, DoB:date, CustomerType:[Private|Company]
+Address: Street:string, ZIP:string, Country:[Germany|USA|China|Japan]
+PaymentMethod
+CreditCard(PaymentMethod): Name:string, Number:string, Month:string, Year:string, SecurityCode:string
+Paypal(PaymentMethod): eMail:string
+Order: Date:date
+OrderItem
+Product: ProductID:string, Price:number, Stock:number
+
+// Aggregation Hierarchy:
+Customer: {addresses:Address, paymentMethods:PaymentMethod, orders:Order}
+Order: {orderItems:OrderItem}
+
+// Associations:
+Order: addresses=>Address
+OrderItem: product=>Product

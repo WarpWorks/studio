@@ -1,0 +1,49 @@
+//
+// Model
+//
+
+// Basic Entity Definitions:
+Domain: definitionOfMany:number
+Entity: isAbstract:boolean, namePlural:string, isRootEntity:boolean, isRootInstance:boolean
+Relationship: isAggregation:boolean, sourceRole, sourceMin:number, sourceMax:number, targetRole, targetMin:number, targetMax:number, targetAverage:number
+Property
+BasicProperty(Property): propertyType:[string|number|boolean|date], defaultValue, constraints, examples
+Enumeration(Property): validEnumSelections:[One|ZeroOne|ZeroMany|OneMany]
+Literal: position, icon
+
+// Aggregation Hierarchy:
+#HeadStart: {Domain*}
+Domain:{entities:Entity*}
+Entity:{basicProperties:BasicProperty*, relationships:Relationship*, pageViews:PageView*, tableViews:TableView*, enums:Enumeration*}
+Enumeration:{literals:Literal*}
+
+// Associations:
+Entity:parentClass=>Entity
+Relationship:targetEntity=>Entity
+
+//
+// View
+//
+
+// Basic Entity Definitions:
+View: label:string, isDefault:boolean
+TableView(View)
+TableItem: position:number, label:string
+PageView(View)
+Panel: position:number, label:string, columns:number, alternatingColors:boolean
+PanelItem: position:number, label:string
+SeparatorPanelItem(PanelItem)
+RelationshipPanelItem(PanelItem)
+BasicPropertyPanelItem(PanelItem)
+EnumPanelItem(PanelItem)
+
+// Aggregation Hierarchy:
+PageView:{panels:Panel*}
+Panel:{separatorPanelItems:SeparatorPanelItem*, relationshipPanelItems:RelationshipPanelItem*, basicPropertyPanelItems:BasicPropertyPanelItem*, enumPanelItems:EnumPanelItem*}
+TableView:{tableItems:TableItem*}
+
+// Associations:
+RelationshipPanelItem:relationship=>Relationship
+BasicPropertyPanelItem:basicProperty=>BasicProperty
+EnumPanelItem:enumeration=>Enumeration
+TableItem:property=>Property

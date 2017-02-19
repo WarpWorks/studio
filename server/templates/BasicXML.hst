@@ -1,0 +1,27 @@
+<DOMAINS>{{Domain* saveAs: this.name+".xml";}}
+  <DOMAIN name='{{js:this.name;/}}'>
+    <ENTITIES>{{Entity*}}
+      <ENTITY name='{{js:this.name;/}}'>
+        {{BasicProperty?}}
+        <PROPERTIES>{{BasicProperty*}}
+          <PROPERTY name='{{js:this.name;/}}', propertyType='{{js:this.propertyType;/}}'/>{{/BasicProperty}}
+        </PROPERTIES>
+        {{/BasicProperty?}}
+        {{Enumeration?}}
+         <ENUMERATIONS>{{Enumeration*}}
+            <ENUMERATION name='{{js:this.name;/}}'>
+              <LITERALS>{{Literal*}}
+                <LITERAL name='{{js:this.name;/}}'/>{{/Literal}}
+              </LITERALS>
+            </ENUMERATION>{{/Enumeration}}
+          </ENUMERATIONS>
+        {{/Enumeration?}}
+        {{Relationship?}}
+        <RELATIONSHIPS>{{Relationship*}}
+          <RELATIONSHIP name='{{js:this.name;/}}' targetType='{{js:this.targetEntity.name;/}}'/>{{/Relationship}}
+        </RELATIONSHIPS>
+        {{/Relationship?}}
+      </ENTITY>{{/Entity}}
+    </ENTITIES>
+  <DOMAIN>{{/Domain}}
+ </DOMAINS>

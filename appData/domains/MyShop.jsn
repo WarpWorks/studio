@@ -1,0 +1,636 @@
+{
+  "name": "MyShop",
+  "desc": "MyShop from SMN",
+  "type": "Domain",
+  "id": 1,
+  "definitionOfMany": 100,
+  "entities": [
+    {
+      "name": "MyShop",
+      "desc": "Root for domain MyShop",
+      "type": "Entity",
+      "id": 2,
+      "isRootEntity": false,
+      "isRootInstance": true,
+      "isAbstract": false,
+      "namePlural": "MyShops",
+      "parentClass": [],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Customers",
+          "desc": "Customers: MyShop[undefined] (1:Many)",
+          "type": "Relationship",
+          "id": 18,
+          "isAggregation": true,
+          "targetEntity": [
+            3
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "3"
+        },
+        {
+          "name": "Products",
+          "desc": "Products: MyShop[undefined] (1:Many)",
+          "type": "Relationship",
+          "id": 19,
+          "isAggregation": true,
+          "targetEntity": [
+            8
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "3"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 20,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Customers",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 21,
+              "position": 0,
+              "label": "Customers",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Customers",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 22,
+                  "position": 0,
+                  "label": "Customers",
+                  "relationship": [
+                    18
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Products",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 23,
+              "position": 1,
+              "label": "Products",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Products",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 24,
+                  "position": 0,
+                  "label": "Products",
+                  "relationship": [
+                    19
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 25,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Customer",
+      "desc": "",
+      "type": "Entity",
+      "id": 3,
+      "isRootEntity": true,
+      "isAbstract": false,
+      "namePlural": "Customers",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "DoB",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 4,
+          "defaultValue": "\"2017-02-12 22:43:07\"",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "date"
+        },
+        {
+          "name": "FirstName",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 5,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        },
+        {
+          "name": "LastName",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 6,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "myOrders",
+          "desc": "myOrders: Customer[undefined] (1:Many)",
+          "type": "Relationship",
+          "id": 7,
+          "isAggregation": true,
+          "targetEntity": [
+            12
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "3"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 26,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 27,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "DoB",
+                  "desc": "Tooltip for DoB",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 28,
+                  "position": 0,
+                  "label": "DoB",
+                  "basicProperty": [
+                    4
+                  ]
+                },
+                {
+                  "name": "FirstName",
+                  "desc": "Tooltip for FirstName",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 29,
+                  "position": 1,
+                  "label": "FirstName",
+                  "basicProperty": [
+                    5
+                  ]
+                },
+                {
+                  "name": "LastName",
+                  "desc": "Tooltip for LastName",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 30,
+                  "position": 2,
+                  "label": "LastName",
+                  "basicProperty": [
+                    6
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            },
+            {
+              "name": "myOrders",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 31,
+              "position": 1,
+              "label": "myOrders",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "myOrders",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 32,
+                  "position": 0,
+                  "label": "myOrders",
+                  "relationship": [
+                    7
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 33,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "DoB",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 34,
+              "position": 0,
+              "label": "DoB",
+              "property": [
+                4
+              ]
+            },
+            {
+              "name": "FirstName",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 35,
+              "position": 1,
+              "label": "FirstName",
+              "property": [
+                5
+              ]
+            },
+            {
+              "name": "LastName",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 36,
+              "position": 2,
+              "label": "LastName",
+              "property": [
+                6
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "desc": "",
+      "type": "Entity",
+      "id": 12,
+      "isAbstract": false,
+      "namePlural": "Orders",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "quantity",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 13,
+          "defaultValue": 0,
+          "constraints": null,
+          "examples": null,
+          "propertyType": "number"
+        }
+      ],
+      "enums": [
+        {
+          "name": "payment",
+          "type": "Enumeration",
+          "id": 14,
+          "literals": [
+            {
+              "name": "PayPal",
+              "type": "Literal",
+              "id": 15
+            },
+            {
+              "name": "CreditCard",
+              "type": "Literal",
+              "id": 16
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "products",
+          "desc": "products: Order=>undefined (Many:Many)",
+          "type": "Relationship",
+          "id": 17,
+          "isAggregation": false,
+          "targetEntity": [
+            8
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 46,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 47,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 1,
+                  "label": "",
+                  "id": 49
+                },
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 3,
+                  "label": "",
+                  "id": 51
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "products",
+                  "desc": "Tooltip for products",
+                  "type": "RelationshipPanelItem",
+                  "id": 52,
+                  "position": 4,
+                  "label": "products",
+                  "relationship": [
+                    17
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "quantity",
+                  "desc": "Tooltip for quantity",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 48,
+                  "position": 0,
+                  "label": "quantity",
+                  "basicProperty": [
+                    13
+                  ]
+                }
+              ],
+              "enumPanelItems": [
+                {
+                  "name": "payment",
+                  "desc": "Tooltip for payment",
+                  "type": "EnumPanelItem",
+                  "id": 50,
+                  "position": 2,
+                  "label": "payment",
+                  "enumeration": [
+                    14
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 53,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "quantity",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 54,
+              "position": 0,
+              "label": "quantity",
+              "property": [
+                13
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "desc": "",
+      "type": "Entity",
+      "id": 8,
+      "isRootEntity": true,
+      "isAbstract": false,
+      "namePlural": "Products",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "productID",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 9,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        },
+        {
+          "name": "stock",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 10,
+          "defaultValue": 0,
+          "constraints": null,
+          "examples": null,
+          "propertyType": "number"
+        },
+        {
+          "name": "isOnSale",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 11,
+          "defaultValue": true,
+          "constraints": null,
+          "examples": null,
+          "propertyType": "boolean"
+        }
+      ],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 37,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 38,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "productID",
+                  "desc": "Tooltip for productID",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 39,
+                  "position": 0,
+                  "label": "productID",
+                  "basicProperty": [
+                    9
+                  ]
+                },
+                {
+                  "name": "stock",
+                  "desc": "Tooltip for stock",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 40,
+                  "position": 1,
+                  "label": "stock",
+                  "basicProperty": [
+                    10
+                  ]
+                },
+                {
+                  "name": "isOnSale",
+                  "desc": "Tooltip for isOnSale",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 41,
+                  "position": 2,
+                  "label": "isOnSale",
+                  "basicProperty": [
+                    11
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 42,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "productID",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 43,
+              "position": 0,
+              "label": "productID",
+              "property": [
+                9
+              ]
+            },
+            {
+              "name": "stock",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 44,
+              "position": 1,
+              "label": "stock",
+              "property": [
+                10
+              ]
+            },
+            {
+              "name": "isOnSale",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 45,
+              "position": 2,
+              "label": "isOnSale",
+              "property": [
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

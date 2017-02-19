@@ -1,0 +1,11 @@
+{{Domain*}}{{Options}} {"saveAs": "this.name+'Gen.smn';"} {{/Options}}//
+// Domain: #{{js:this.name;/}}
+//
+
+{{Entity?}}// Basic Entity Definitions:{{Entity*}}
+{{js:(this.isRootInstance?"#":"")+this.name;/}}{{if}}this.hasParentClass(){{then}}({{js:this.getParentClass().name/}}){{/if}}{{js: this.basicProperties.length+this.enums.length>0?': ':''/}}{{BasicProperty*}}{{js:(this.itemIsFirst?'':', ')+this.name+':'+this.propertyType;/}}{{/BasicProperty}}{{js: this.enums.length>0?', ':'';/}}{{Enumeration*}}{{js:this.name;/}}:[{{Literal*}}{{js:(this.itemIsFirst?'':'|')+this.name;/}}{{/Literal}}]{{/Enumeration}}{{/Entity}}{{/Entity?}}
+
+// Aggregation Hierarchy:{{Entity*}}{{js:this.getAggregations().length>0?'\n'+(this.isRootInstance?"#":"")+this.name+': ':'';/}}{{Relationship?}}{{{Relationship*}}{{Options}}{"condition":"this.isAggregation"}{{/Options}}{{js: (this.itemIsFirst?'':', ')+this.name+':'+this.getTargetEntity().name+(this.targetMax!='1'?'*':'');/}}{{/Relationship}}}{{/Relationship?}} {{/Entity}}
+
+// Associations:{{Entity*}}{{js:this.getAssociations().length>0?'\n'+this.name+': ':'';/}}{{Relationship*}}{{Options}}{"condition":"!this.isAggregation"}{{/Options}}{{js: (this.itemIsFirst?'':', ')+this.name+'=>'+this.getTargetEntity().name;/}}{{/Relationship}} {{/Entity}}
+{{/Domain}}

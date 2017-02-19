@@ -1,0 +1,14 @@
+// Domain
+#HelloWorld: {Hello*, World*}
+
+// Basic Entity Definitions:
+Hello: myString:string, myNumber:number, myBoolean:boolean
+World: myDate:date, myEnum:[Selection_A|Selection_B]
+SpecialWorld (World): myOtherNumber:number
+
+// Aggregation Hierarchy:
+Hello: {myWorlds:World, mySpecialWorld:SpecialWorld*}
+
+// Associations:
+World: myParent=>Hello
+SpecialWorld: otherWorlds=>World

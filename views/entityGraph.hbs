@@ -1,0 +1,44 @@
+<div class="container" role="main">
+    <div id="mynetwork"></div>
+    <form>
+        Mode:
+        <label class="radio-inline">
+            <input type="radio" name="optradio" checked="checked" onclick="showAllMode()">Show All
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="optradio" onclick="entityClusterMode()">Browse Entity Hierarchy
+        </label>
+    </form>
+    <form>
+        Show:
+        <label class="checkbox-inline">
+            <input type="checkbox" checked="checked" id="aggregationsI" onchange="updateGraph()">Aggregations
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" id="associationsI" onchange="updateGraph()">Associations
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" checked="checked" id="inheritanceI" onchange="updateGraph()">Inheritance
+        </label>
+        <label class="checkbox-inline">
+            <input type="checkbox" id="quantitiesI" onchange="updateGraph()">Avg. Quantities
+        </label>
+    </form>
+    <button type="button" class="btn btn-primary btn-xs" onclick="updateGraph()">Re-Draw</button>
+</div>
+
+<script src="/HeadStart/HeadStart_WebAPI.js"></script>
+<script src="/HeadStart/HeadStart_WebAPIExtensions.js"></script>
+<script src="/HeadStart/entityGraph.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css"/>
+
+<style type="text/css">
+    #mynetwork {
+        width: 800px;
+        height: 500px;
+        border: 2px solid lightgray;
+    }
+</style>
+

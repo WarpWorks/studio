@@ -1,0 +1,13 @@
+// Domain
+#MyShop: {Customer*, Product*}
+
+// Basic Entity Definitions:
+Customer: DoB:date, FirstName, LastName
+Product: productID:string, stock:number, isOnSale:boolean
+Order: quantity:number, payment:[PayPal|CreditCard]
+
+// Aggregation Hierarchy:
+Customer: {myOrders:Order*}
+
+// Associations:
+Order: products=>Product

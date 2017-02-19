@@ -1,0 +1,5143 @@
+{
+  "name": "IIC",
+  "desc": "IIC from SMN",
+  "type": "Domain",
+  "id": 1,
+  "definitionOfMany": 100,
+  "entities": [
+    {
+      "name": "IIC",
+      "desc": "Root for domain IIC",
+      "type": "Entity",
+      "id": 2,
+      "isRootEntity": false,
+      "isRootInstance": true,
+      "isAbstract": false,
+      "namePlural": "IICs",
+      "parentClass": [],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Organizations",
+          "desc": "Organizations: IIC[Organization] (1:Many)",
+          "type": "Relationship",
+          "id": 87,
+          "isAggregation": true,
+          "targetEntity": [
+            30
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "I3Cs",
+          "desc": "I3Cs: IIC[I3C] (1:Many)",
+          "type": "Relationship",
+          "id": 88,
+          "isAggregation": true,
+          "targetEntity": [
+            49
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Librarys",
+          "desc": "Librarys: IIC[Library] (1:Many)",
+          "type": "Relationship",
+          "id": 89,
+          "isAggregation": true,
+          "targetEntity": [
+            44
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 90,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Organizations",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 91,
+              "position": 0,
+              "label": "Organizations",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Organizations",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 92,
+                  "position": 0,
+                  "label": "Organizations",
+                  "relationship": [
+                    87
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "I3Cs",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 93,
+              "position": 1,
+              "label": "I3Cs",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "I3Cs",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 94,
+                  "position": 0,
+                  "label": "I3Cs",
+                  "relationship": [
+                    88
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Librarys",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 95,
+              "position": 2,
+              "label": "Librarys",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Librarys",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 96,
+                  "position": 0,
+                  "label": "Librarys",
+                  "relationship": [
+                    89
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 97,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "LogEntry",
+      "desc": "",
+      "type": "Entity",
+      "id": 3,
+      "isAbstract": false,
+      "namePlural": "LogEntrys",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "DateCreated",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 4,
+          "defaultValue": "\"2017-02-17 22:47:18\"",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "date"
+        },
+        {
+          "name": "Summary",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 5,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        },
+        {
+          "name": "Details",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 6,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "CreatedBy",
+          "desc": "CreatedBy: LogEntry=>UserProfile (Many:Many)",
+          "type": "Relationship",
+          "id": 7,
+          "isAggregation": false,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 98,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 99,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 3,
+                  "label": "",
+                  "id": 103
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "CreatedBy",
+                  "desc": "Tooltip for CreatedBy",
+                  "type": "RelationshipPanelItem",
+                  "id": 104,
+                  "position": 4,
+                  "label": "CreatedBy",
+                  "relationship": [
+                    7
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "DateCreated",
+                  "desc": "Tooltip for DateCreated",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 100,
+                  "position": 0,
+                  "label": "DateCreated",
+                  "basicProperty": [
+                    4
+                  ]
+                },
+                {
+                  "name": "Summary",
+                  "desc": "Tooltip for Summary",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 101,
+                  "position": 1,
+                  "label": "Summary",
+                  "basicProperty": [
+                    5
+                  ]
+                },
+                {
+                  "name": "Details",
+                  "desc": "Tooltip for Details",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 102,
+                  "position": 2,
+                  "label": "Details",
+                  "basicProperty": [
+                    6
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 105,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "DateCreated",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 106,
+              "position": 0,
+              "label": "DateCreated",
+              "property": [
+                4
+              ]
+            },
+            {
+              "name": "Summary",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 107,
+              "position": 1,
+              "label": "Summary",
+              "property": [
+                5
+              ]
+            },
+            {
+              "name": "Details",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 108,
+              "position": 2,
+              "label": "Details",
+              "property": [
+                6
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "desc": "",
+      "type": "Entity",
+      "id": 8,
+      "isAbstract": false,
+      "namePlural": "Comments",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "DateCreated",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 9,
+          "defaultValue": "\"2017-02-17 22:47:18\"",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "date"
+        },
+        {
+          "name": "Title",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 10,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        },
+        {
+          "name": "Comment",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 11,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "CreatedBy",
+          "desc": "CreatedBy: Comment=>UserProfile (Many:Many)",
+          "type": "Relationship",
+          "id": 12,
+          "isAggregation": false,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 109,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 110,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 3,
+                  "label": "",
+                  "id": 114
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "CreatedBy",
+                  "desc": "Tooltip for CreatedBy",
+                  "type": "RelationshipPanelItem",
+                  "id": 115,
+                  "position": 4,
+                  "label": "CreatedBy",
+                  "relationship": [
+                    12
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "DateCreated",
+                  "desc": "Tooltip for DateCreated",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 111,
+                  "position": 0,
+                  "label": "DateCreated",
+                  "basicProperty": [
+                    9
+                  ]
+                },
+                {
+                  "name": "Title",
+                  "desc": "Tooltip for Title",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 112,
+                  "position": 1,
+                  "label": "Title",
+                  "basicProperty": [
+                    10
+                  ]
+                },
+                {
+                  "name": "Comment",
+                  "desc": "Tooltip for Comment",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 113,
+                  "position": 2,
+                  "label": "Comment",
+                  "basicProperty": [
+                    11
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 116,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "DateCreated",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 117,
+              "position": 0,
+              "label": "DateCreated",
+              "property": [
+                9
+              ]
+            },
+            {
+              "name": "Title",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 118,
+              "position": 1,
+              "label": "Title",
+              "property": [
+                10
+              ]
+            },
+            {
+              "name": "Comment",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 119,
+              "position": 2,
+              "label": "Comment",
+              "property": [
+                11
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Image",
+      "desc": "",
+      "type": "Entity",
+      "id": 13,
+      "isAbstract": false,
+      "namePlural": "Images",
+      "parentClass": [],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Map",
+          "desc": "Map: Image[ImageArea] (1:Many)",
+          "type": "Relationship",
+          "id": 14,
+          "isAggregation": true,
+          "targetEntity": [
+            15
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 120,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Map",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 121,
+              "position": 0,
+              "label": "Map",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Map",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 122,
+                  "position": 0,
+                  "label": "Map",
+                  "relationship": [
+                    14
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 123,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "ImageArea",
+      "desc": "",
+      "type": "Entity",
+      "id": 15,
+      "isAbstract": false,
+      "namePlural": "ImageAreas",
+      "parentClass": [],
+      "basicProperties": [
+        {
+          "name": "Coords",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 19,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        },
+        {
+          "name": "Alt",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 20,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [
+        {
+          "name": "Shape",
+          "type": "Enumeration",
+          "id": 16,
+          "literals": [
+            {
+              "name": "Rect",
+              "type": "Literal",
+              "id": 17
+            },
+            {
+              "name": "Circle",
+              "type": "Literal",
+              "id": 18
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "Target",
+          "desc": "Target: ImageArea=>Content (Many:Many)",
+          "type": "Relationship",
+          "id": 21,
+          "isAggregation": false,
+          "targetEntity": [
+            22
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 124,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 125,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 2,
+                  "label": "",
+                  "id": 128
+                },
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 4,
+                  "label": "",
+                  "id": 130
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "Target",
+                  "desc": "Tooltip for Target",
+                  "type": "RelationshipPanelItem",
+                  "id": 131,
+                  "position": 5,
+                  "label": "Target",
+                  "relationship": [
+                    21
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "Coords",
+                  "desc": "Tooltip for Coords",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 126,
+                  "position": 0,
+                  "label": "Coords",
+                  "basicProperty": [
+                    19
+                  ]
+                },
+                {
+                  "name": "Alt",
+                  "desc": "Tooltip for Alt",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 127,
+                  "position": 1,
+                  "label": "Alt",
+                  "basicProperty": [
+                    20
+                  ]
+                }
+              ],
+              "enumPanelItems": [
+                {
+                  "name": "Shape",
+                  "desc": "Tooltip for Shape",
+                  "type": "EnumPanelItem",
+                  "id": 129,
+                  "position": 3,
+                  "label": "Shape",
+                  "enumeration": [
+                    16
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 132,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "Coords",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 133,
+              "position": 0,
+              "label": "Coords",
+              "property": [
+                19
+              ]
+            },
+            {
+              "name": "Alt",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 134,
+              "position": 1,
+              "label": "Alt",
+              "property": [
+                20
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "desc": "",
+      "type": "Entity",
+      "id": 22,
+      "isAbstract": false,
+      "namePlural": "Contents",
+      "parentClass": [],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "LogEntries",
+          "desc": "LogEntries: Content[LogEntry] (1:Many)",
+          "type": "Relationship",
+          "id": 23,
+          "isAggregation": true,
+          "targetEntity": [
+            3
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Comments",
+          "desc": "Comments: Content[Comment] (1:Many)",
+          "type": "Relationship",
+          "id": 24,
+          "isAggregation": true,
+          "targetEntity": [
+            8
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Frontpage",
+          "desc": "Frontpage: Content[Article] (1:Many)",
+          "type": "Relationship",
+          "id": 25,
+          "isAggregation": true,
+          "targetEntity": [
+            26
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 135,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 136,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 137,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 138,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 139,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 140,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 141,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 142,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Article",
+      "desc": "",
+      "type": "Entity",
+      "id": 26,
+      "isAbstract": false,
+      "namePlural": "Articles",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Paragraphs",
+          "desc": "Paragraphs: Article[Paragraph] (1:Many)",
+          "type": "Relationship",
+          "id": 27,
+          "isAggregation": true,
+          "targetEntity": [
+            28
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 143,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Paragraphs",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 144,
+              "position": 0,
+              "label": "Paragraphs",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Paragraphs",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 145,
+                  "position": 0,
+                  "label": "Paragraphs",
+                  "relationship": [
+                    27
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 146,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 147,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 148,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 149,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 150,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 151,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 152,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Paragraph",
+      "desc": "",
+      "type": "Entity",
+      "id": 28,
+      "isAbstract": false,
+      "namePlural": "Paragraphs",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Images",
+          "desc": "Images: Paragraph[Image] (1:Many)",
+          "type": "Relationship",
+          "id": 29,
+          "isAggregation": true,
+          "targetEntity": [
+            13
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 153,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Images",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 154,
+              "position": 0,
+              "label": "Images",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Images",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 155,
+                  "position": 0,
+                  "label": "Images",
+                  "relationship": [
+                    29
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 156,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 157,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 158,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 159,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 160,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 161,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 162,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Organization",
+      "desc": "",
+      "type": "Entity",
+      "id": 30,
+      "isRootEntity": true,
+      "isAbstract": false,
+      "namePlural": "Organizations",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "UserProfiles",
+          "desc": "UserProfiles: Organization[UserProfile] (1:Many)",
+          "type": "Relationship",
+          "id": 31,
+          "isAggregation": true,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "WorkGroups",
+          "desc": "WorkGroups: Organization[WorkGroup] (1:Many)",
+          "type": "Relationship",
+          "id": 32,
+          "isAggregation": true,
+          "targetEntity": [
+            35
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 163,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "UserProfiles",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 164,
+              "position": 0,
+              "label": "UserProfiles",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "UserProfiles",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 165,
+                  "position": 0,
+                  "label": "UserProfiles",
+                  "relationship": [
+                    31
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "WorkGroups",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 166,
+              "position": 1,
+              "label": "WorkGroups",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "WorkGroups",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 167,
+                  "position": 0,
+                  "label": "WorkGroups",
+                  "relationship": [
+                    32
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 168,
+              "position": 2,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 169,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 170,
+              "position": 3,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 171,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 172,
+              "position": 4,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 173,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 174,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "UserProfile",
+      "desc": "",
+      "type": "Entity",
+      "id": 33,
+      "isAbstract": false,
+      "namePlural": "UserProfiles",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Certifications",
+          "desc": "Certifications: UserProfile[Certification] (1:Many)",
+          "type": "Relationship",
+          "id": 34,
+          "isAggregation": true,
+          "targetEntity": [
+            40
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 175,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Certifications",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 176,
+              "position": 0,
+              "label": "Certifications",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Certifications",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 177,
+                  "position": 0,
+                  "label": "Certifications",
+                  "relationship": [
+                    34
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 178,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 179,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 180,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 181,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 182,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 183,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 184,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "WorkGroup",
+      "desc": "",
+      "type": "Entity",
+      "id": 35,
+      "isAbstract": false,
+      "namePlural": "WorkGroups",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "TaskGroups",
+          "desc": "TaskGroups: WorkGroup[TaskGroup] (1:Many)",
+          "type": "Relationship",
+          "id": 36,
+          "isAggregation": true,
+          "targetEntity": [
+            38
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Members",
+          "desc": "Members: WorkGroup=>UserProfile (Many:Many)",
+          "type": "Relationship",
+          "id": 37,
+          "isAggregation": false,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 185,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 186,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 0,
+                  "label": "",
+                  "id": 187
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "Members",
+                  "desc": "Tooltip for Members",
+                  "type": "RelationshipPanelItem",
+                  "id": 188,
+                  "position": 1,
+                  "label": "Members",
+                  "relationship": [
+                    37
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "TaskGroups",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 189,
+              "position": 1,
+              "label": "TaskGroups",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "TaskGroups",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 190,
+                  "position": 0,
+                  "label": "TaskGroups",
+                  "relationship": [
+                    36
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 191,
+              "position": 2,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 192,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 193,
+              "position": 3,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 194,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 195,
+              "position": 4,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 196,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 197,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "TaskGroup",
+      "desc": "",
+      "type": "Entity",
+      "id": 38,
+      "isAbstract": false,
+      "namePlural": "TaskGroups",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Members",
+          "desc": "Members: TaskGroup=>UserProfile (Many:Many)",
+          "type": "Relationship",
+          "id": 39,
+          "isAggregation": false,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 198,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 199,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 0,
+                  "label": "",
+                  "id": 200
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "Members",
+                  "desc": "Tooltip for Members",
+                  "type": "RelationshipPanelItem",
+                  "id": 201,
+                  "position": 1,
+                  "label": "Members",
+                  "relationship": [
+                    39
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 202,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 203,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 204,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 205,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 206,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 207,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 208,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Certification",
+      "desc": "",
+      "type": "Entity",
+      "id": 40,
+      "isAbstract": false,
+      "namePlural": "Certifications",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [
+        {
+          "name": "Date",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 41,
+          "defaultValue": "\"2017-02-17 22:47:18\"",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "date"
+        }
+      ],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "CertifiedFor",
+          "desc": "CertifiedFor: Certification=>Content (Many:Many)",
+          "type": "Relationship",
+          "id": 42,
+          "isAggregation": false,
+          "targetEntity": [
+            22
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "CertifiedBy",
+          "desc": "CertifiedBy: Certification=>UserProfile (Many:Many)",
+          "type": "Relationship",
+          "id": 43,
+          "isAggregation": false,
+          "targetEntity": [
+            33
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 209,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 210,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 1,
+                  "label": "",
+                  "id": 212
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "CertifiedFor",
+                  "desc": "Tooltip for CertifiedFor",
+                  "type": "RelationshipPanelItem",
+                  "id": 213,
+                  "position": 2,
+                  "label": "CertifiedFor",
+                  "relationship": [
+                    42
+                  ]
+                },
+                {
+                  "name": "CertifiedBy",
+                  "desc": "Tooltip for CertifiedBy",
+                  "type": "RelationshipPanelItem",
+                  "id": 214,
+                  "position": 3,
+                  "label": "CertifiedBy",
+                  "relationship": [
+                    43
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "Date",
+                  "desc": "Tooltip for Date",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 211,
+                  "position": 0,
+                  "label": "Date",
+                  "basicProperty": [
+                    41
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 215,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 216,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 217,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 218,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 219,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 220,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 221,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "Date",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 222,
+              "position": 0,
+              "label": "Date",
+              "property": [
+                41
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Library",
+      "desc": "",
+      "type": "Entity",
+      "id": 44,
+      "isRootEntity": true,
+      "isAbstract": false,
+      "namePlural": "Librarys",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Articles",
+          "desc": "Articles: Library[Article] (1:Many)",
+          "type": "Relationship",
+          "id": 45,
+          "isAggregation": true,
+          "targetEntity": [
+            26
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "IIRAs",
+          "desc": "IIRAs: Library[IIRA] (1:Many)",
+          "type": "Relationship",
+          "id": 46,
+          "isAggregation": true,
+          "targetEntity": [
+            80
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "IISFs",
+          "desc": "IISFs: Library[IISF] (1:Many)",
+          "type": "Relationship",
+          "id": 47,
+          "isAggregation": true,
+          "targetEntity": [
+            85
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "BSSLs",
+          "desc": "BSSLs: Library[BSSL] (1:Many)",
+          "type": "Relationship",
+          "id": 48,
+          "isAggregation": true,
+          "targetEntity": [
+            86
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 223,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Articles",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 224,
+              "position": 0,
+              "label": "Articles",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Articles",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 225,
+                  "position": 0,
+                  "label": "Articles",
+                  "relationship": [
+                    45
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "IIRAs",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 226,
+              "position": 1,
+              "label": "IIRAs",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "IIRAs",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 227,
+                  "position": 0,
+                  "label": "IIRAs",
+                  "relationship": [
+                    46
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "IISFs",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 228,
+              "position": 2,
+              "label": "IISFs",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "IISFs",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 229,
+                  "position": 0,
+                  "label": "IISFs",
+                  "relationship": [
+                    47
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "BSSLs",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 230,
+              "position": 3,
+              "label": "BSSLs",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "BSSLs",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 231,
+                  "position": 0,
+                  "label": "BSSLs",
+                  "relationship": [
+                    48
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 232,
+              "position": 4,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 233,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 234,
+              "position": 5,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 235,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 236,
+              "position": 6,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 237,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 238,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "I3C",
+      "desc": "",
+      "type": "Entity",
+      "id": 49,
+      "isRootEntity": true,
+      "isAbstract": false,
+      "namePlural": "I3Cs",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "IndustrySectors",
+          "desc": "IndustrySectors: I3C[IndustrySector] (1:Many)",
+          "type": "Relationship",
+          "id": 50,
+          "isAggregation": true,
+          "targetEntity": [
+            55
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "ApplicationAreas",
+          "desc": "ApplicationAreas: I3C[ApplicationArea] (1:Many)",
+          "type": "Relationship",
+          "id": 51,
+          "isAggregation": true,
+          "targetEntity": [
+            58
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "HotSpots",
+          "desc": "HotSpots: I3C[HotSpot] (1:Many)",
+          "type": "Relationship",
+          "id": 52,
+          "isAggregation": true,
+          "targetEntity": [
+            62
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "StandardsOrganizations",
+          "desc": "StandardsOrganizations: I3C[StandardsOrganization] (1:Many)",
+          "type": "Relationship",
+          "id": 53,
+          "isAggregation": true,
+          "targetEntity": [
+            68
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "TechnologyAreas",
+          "desc": "TechnologyAreas: I3C[TechnologyArea] (1:Many)",
+          "type": "Relationship",
+          "id": 54,
+          "isAggregation": true,
+          "targetEntity": [
+            77
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 239,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "IndustrySectors",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 240,
+              "position": 0,
+              "label": "IndustrySectors",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "IndustrySectors",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 241,
+                  "position": 0,
+                  "label": "IndustrySectors",
+                  "relationship": [
+                    50
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "ApplicationAreas",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 242,
+              "position": 1,
+              "label": "ApplicationAreas",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "ApplicationAreas",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 243,
+                  "position": 0,
+                  "label": "ApplicationAreas",
+                  "relationship": [
+                    51
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "HotSpots",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 244,
+              "position": 2,
+              "label": "HotSpots",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "HotSpots",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 245,
+                  "position": 0,
+                  "label": "HotSpots",
+                  "relationship": [
+                    52
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "StandardsOrganizations",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 246,
+              "position": 3,
+              "label": "StandardsOrganizations",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "StandardsOrganizations",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 247,
+                  "position": 0,
+                  "label": "StandardsOrganizations",
+                  "relationship": [
+                    53
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "TechnologyAreas",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 248,
+              "position": 4,
+              "label": "TechnologyAreas",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "TechnologyAreas",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 249,
+                  "position": 0,
+                  "label": "TechnologyAreas",
+                  "relationship": [
+                    54
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 250,
+              "position": 5,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 251,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 252,
+              "position": 6,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 253,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 254,
+              "position": 7,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 255,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 256,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "IndustrySector",
+      "desc": "",
+      "type": "Entity",
+      "id": 55,
+      "isAbstract": false,
+      "namePlural": "IndustrySectors",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "IndustryVerticals",
+          "desc": "IndustryVerticals: IndustrySector[IndustryVertical] (1:Many)",
+          "type": "Relationship",
+          "id": 56,
+          "isAggregation": true,
+          "targetEntity": [
+            57
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 257,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "IndustryVerticals",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 258,
+              "position": 0,
+              "label": "IndustryVerticals",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "IndustryVerticals",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 259,
+                  "position": 0,
+                  "label": "IndustryVerticals",
+                  "relationship": [
+                    56
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 260,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 261,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 262,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 263,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 264,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 265,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 266,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "IndustryVertical",
+      "desc": "",
+      "type": "Entity",
+      "id": 57,
+      "isAbstract": false,
+      "namePlural": "IndustryVerticals",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 267,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 268,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 269,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 270,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 271,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 272,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 273,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 274,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "ApplicationArea",
+      "desc": "",
+      "type": "Entity",
+      "id": 58,
+      "isAbstract": false,
+      "namePlural": "ApplicationAreas",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "UseCases",
+          "desc": "UseCases: ApplicationArea[UseCase] (1:Many)",
+          "type": "Relationship",
+          "id": 59,
+          "isAggregation": true,
+          "targetEntity": [
+            60
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 275,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "UseCases",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 276,
+              "position": 0,
+              "label": "UseCases",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "UseCases",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 277,
+                  "position": 0,
+                  "label": "UseCases",
+                  "relationship": [
+                    59
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 278,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 279,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 280,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 281,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 282,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 283,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 284,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "UseCase",
+      "desc": "",
+      "type": "Entity",
+      "id": 60,
+      "isAbstract": false,
+      "namePlural": "UseCases",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [
+        {
+          "name": "KPIs",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 61,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 285,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 286,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "KPIs",
+                  "desc": "Tooltip for KPIs",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 287,
+                  "position": 0,
+                  "label": "KPIs",
+                  "basicProperty": [
+                    61
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 288,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 289,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 290,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 291,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 292,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 293,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 294,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "KPIs",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 295,
+              "position": 0,
+              "label": "KPIs",
+              "property": [
+                61
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HotSpot",
+      "desc": "",
+      "type": "Entity",
+      "id": 62,
+      "isAbstract": false,
+      "namePlural": "HotSpots",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Images",
+          "desc": "Images: HotSpot[Image] (1:Many)",
+          "type": "Relationship",
+          "id": 63,
+          "isAggregation": true,
+          "targetEntity": [
+            13
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "IndustryVerticals",
+          "desc": "IndustryVerticals: HotSpot=>IndustryVertical (Many:Many)",
+          "type": "Relationship",
+          "id": 64,
+          "isAggregation": false,
+          "targetEntity": [
+            57
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "UseCases",
+          "desc": "UseCases: HotSpot=>UseCase (Many:Many)",
+          "type": "Relationship",
+          "id": 65,
+          "isAggregation": false,
+          "targetEntity": [
+            60
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Technologies",
+          "desc": "Technologies: HotSpot=>Technology (Many:Many)",
+          "type": "Relationship",
+          "id": 66,
+          "isAggregation": false,
+          "targetEntity": [
+            79
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "Standards",
+          "desc": "Standards: HotSpot=>Standard (Many:Many)",
+          "type": "Relationship",
+          "id": 67,
+          "isAggregation": false,
+          "targetEntity": [
+            75
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 296,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 297,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [
+                {
+                  "name": "Separator",
+                  "desc": "---------",
+                  "type": "SeparatorPanelItem",
+                  "position": 0,
+                  "label": "",
+                  "id": 298
+                }
+              ],
+              "relationshipPanelItems": [
+                {
+                  "name": "IndustryVerticals",
+                  "desc": "Tooltip for IndustryVerticals",
+                  "type": "RelationshipPanelItem",
+                  "id": 299,
+                  "position": 1,
+                  "label": "IndustryVerticals",
+                  "relationship": [
+                    64
+                  ]
+                },
+                {
+                  "name": "UseCases",
+                  "desc": "Tooltip for UseCases",
+                  "type": "RelationshipPanelItem",
+                  "id": 300,
+                  "position": 2,
+                  "label": "UseCases",
+                  "relationship": [
+                    65
+                  ]
+                },
+                {
+                  "name": "Technologies",
+                  "desc": "Tooltip for Technologies",
+                  "type": "RelationshipPanelItem",
+                  "id": 301,
+                  "position": 3,
+                  "label": "Technologies",
+                  "relationship": [
+                    66
+                  ]
+                },
+                {
+                  "name": "Standards",
+                  "desc": "Tooltip for Standards",
+                  "type": "RelationshipPanelItem",
+                  "id": 302,
+                  "position": 4,
+                  "label": "Standards",
+                  "relationship": [
+                    67
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Images",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 303,
+              "position": 1,
+              "label": "Images",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Images",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 304,
+                  "position": 0,
+                  "label": "Images",
+                  "relationship": [
+                    63
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 305,
+              "position": 2,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 306,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 307,
+              "position": 3,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 308,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 309,
+              "position": 4,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 310,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 311,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "StandardsOrganization",
+      "desc": "",
+      "type": "Entity",
+      "id": 68,
+      "isAbstract": false,
+      "namePlural": "StandardsOrganizations",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [
+        {
+          "name": "LiasonStatus",
+          "type": "Enumeration",
+          "id": 69,
+          "literals": [
+            {
+              "name": "None",
+              "type": "Literal",
+              "id": 70
+            },
+            {
+              "name": "Considered",
+              "type": "Literal",
+              "id": 71
+            },
+            {
+              "name": "WIP",
+              "type": "Literal",
+              "id": 72
+            },
+            {
+              "name": "Confirmed",
+              "type": "Literal",
+              "id": 73
+            }
+          ]
+        }
+      ],
+      "relationships": [
+        {
+          "name": "Standards",
+          "desc": "Standards: StandardsOrganization[Standard] (1:Many)",
+          "type": "Relationship",
+          "id": 74,
+          "isAggregation": true,
+          "targetEntity": [
+            75
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 312,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 313,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": [
+                {
+                  "name": "LiasonStatus",
+                  "desc": "Tooltip for LiasonStatus",
+                  "type": "EnumPanelItem",
+                  "id": 314,
+                  "position": 0,
+                  "label": "LiasonStatus",
+                  "enumeration": [
+                    69
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Standards",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 315,
+              "position": 1,
+              "label": "Standards",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Standards",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 316,
+                  "position": 0,
+                  "label": "Standards",
+                  "relationship": [
+                    74
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 317,
+              "position": 2,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 318,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 319,
+              "position": 3,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 320,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 321,
+              "position": 4,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 322,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 323,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Standard",
+      "desc": "",
+      "type": "Entity",
+      "id": 75,
+      "isAbstract": false,
+      "namePlural": "Standards",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [
+        {
+          "name": "Technologies",
+          "desc": "",
+          "type": "BasicProperty",
+          "id": 76,
+          "defaultValue": "'text'",
+          "constraints": null,
+          "examples": null,
+          "propertyType": "string"
+        }
+      ],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 324,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Basics",
+              "desc": "Properties, Enums and Associations",
+              "type": "Panel",
+              "id": 325,
+              "position": 0,
+              "label": "Basics",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [],
+              "basicPropertyPanelItems": [
+                {
+                  "name": "Technologies",
+                  "desc": "Tooltip for Technologies",
+                  "type": "BasicPropertyPanelItem",
+                  "id": 326,
+                  "position": 0,
+                  "label": "Technologies",
+                  "basicProperty": [
+                    76
+                  ]
+                }
+              ],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 327,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 328,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 329,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 330,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 331,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 332,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 333,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": [
+            {
+              "name": "Technologies",
+              "desc": "Tooltip",
+              "type": "TableItem",
+              "id": 334,
+              "position": 0,
+              "label": "Technologies",
+              "property": [
+                76
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TechnologyArea",
+      "desc": "",
+      "type": "Entity",
+      "id": 77,
+      "isAbstract": false,
+      "namePlural": "TechnologyAreas",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "Technologies",
+          "desc": "Technologies: TechnologyArea[Technology] (1:Many)",
+          "type": "Relationship",
+          "id": 78,
+          "isAggregation": true,
+          "targetEntity": [
+            79
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 335,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "Technologies",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 336,
+              "position": 0,
+              "label": "Technologies",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Technologies",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 337,
+                  "position": 0,
+                  "label": "Technologies",
+                  "relationship": [
+                    78
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 338,
+              "position": 1,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 339,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 340,
+              "position": 2,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 341,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 342,
+              "position": 3,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 343,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 344,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "Technology",
+      "desc": "",
+      "type": "Entity",
+      "id": 79,
+      "isAbstract": false,
+      "namePlural": "Technologys",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 345,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 346,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 347,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 348,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 349,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 350,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 351,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 352,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "IIRA",
+      "desc": "",
+      "type": "Entity",
+      "id": 80,
+      "isAbstract": false,
+      "namePlural": "IIRAs",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [
+        {
+          "name": "ArchitecturePatterns",
+          "desc": "ArchitecturePatterns: IIRA[ArchitecturePattern] (1:Many)",
+          "type": "Relationship",
+          "id": 81,
+          "isAggregation": true,
+          "targetEntity": [
+            83
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        },
+        {
+          "name": "ArchitectureLayers",
+          "desc": "ArchitectureLayers: IIRA[ArchitectureLayer] (1:Many)",
+          "type": "Relationship",
+          "id": 82,
+          "isAggregation": true,
+          "targetEntity": [
+            84
+          ],
+          "sourceRole": "Source Role",
+          "sourceMin": "1",
+          "sourceMax": "*",
+          "sourceAverage": "/",
+          "targetRole": "Target Role",
+          "targetMin": "0",
+          "targetMax": "*",
+          "targetAverage": "/"
+        }
+      ],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 353,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "ArchitecturePatterns",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 354,
+              "position": 0,
+              "label": "ArchitecturePatterns",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "ArchitecturePatterns",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 355,
+                  "position": 0,
+                  "label": "ArchitecturePatterns",
+                  "relationship": [
+                    81
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "ArchitectureLayers",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 356,
+              "position": 1,
+              "label": "ArchitectureLayers",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "ArchitectureLayers",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 357,
+                  "position": 0,
+                  "label": "ArchitectureLayers",
+                  "relationship": [
+                    82
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 358,
+              "position": 2,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 359,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 360,
+              "position": 3,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 361,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 362,
+              "position": 4,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 363,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 364,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "ArchitecturePattern",
+      "desc": "",
+      "type": "Entity",
+      "id": 83,
+      "isAbstract": false,
+      "namePlural": "ArchitecturePatterns",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 365,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 366,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 367,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 368,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 369,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 370,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 371,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 372,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "ArchitectureLayer",
+      "desc": "",
+      "type": "Entity",
+      "id": 84,
+      "isAbstract": false,
+      "namePlural": "ArchitectureLayers",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 373,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 374,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 375,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 376,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 377,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 378,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 379,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 380,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "IISF",
+      "desc": "",
+      "type": "Entity",
+      "id": 85,
+      "isAbstract": false,
+      "namePlural": "IISFs",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 381,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 382,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 383,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 384,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 385,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 386,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 387,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 388,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    },
+    {
+      "name": "BSSL",
+      "desc": "",
+      "type": "Entity",
+      "id": 86,
+      "isAbstract": false,
+      "namePlural": "BSSLs",
+      "parentClass": [
+        22
+      ],
+      "basicProperties": [],
+      "enums": [],
+      "relationships": [],
+      "pageViews": [
+        {
+          "name": "DefaultPageView",
+          "desc": "",
+          "type": "PageView",
+          "isDefault": true,
+          "id": 389,
+          "label": "DefaultPageView",
+          "panels": [
+            {
+              "name": "LogEntries",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 390,
+              "position": 0,
+              "label": "LogEntries",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "LogEntries",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 391,
+                  "position": 0,
+                  "label": "LogEntries",
+                  "relationship": [
+                    23
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Comments",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 392,
+              "position": 1,
+              "label": "Comments",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Comments",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 393,
+                  "position": 0,
+                  "label": "Comments",
+                  "relationship": [
+                    24
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            },
+            {
+              "name": "Frontpage",
+              "desc": "Tooltip",
+              "type": "Panel",
+              "id": 394,
+              "position": 2,
+              "label": "Frontpage",
+              "columns": 1,
+              "alternatingColors": false,
+              "separatorPanelItems": [],
+              "relationshipPanelItems": [
+                {
+                  "name": "Frontpage",
+                  "desc": "Tooltip",
+                  "type": "RelationshipPanelItem",
+                  "id": 395,
+                  "position": 0,
+                  "label": "Frontpage",
+                  "relationship": [
+                    25
+                  ]
+                }
+              ],
+              "basicPropertyPanelItems": [],
+              "enumPanelItems": []
+            }
+          ]
+        }
+      ],
+      "tableViews": [
+        {
+          "name": "DefaultTableView",
+          "desc": "",
+          "type": "TableView",
+          "id": 396,
+          "label": "DefaultTableView",
+          "isDefault": true,
+          "tableItems": []
+        }
+      ]
+    }
+  ]
+}

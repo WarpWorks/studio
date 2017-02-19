@@ -1,0 +1,380 @@
+<div class="container" role="main">
+    <div class="row">
+        <!----------------------------------------------------------------------------------
+                                        Entity list (left side)
+        ----------------------------------------------------------------------------------->
+        <div class="col-sm-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">Entities
+                    <a href="#" id="entityGraphA" onclick="addNewEntity()"><span
+                            class="glyphicon glyphicon-plus-sign pull-right"></span></a>
+                </div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked" id="entityOverviewNP"></ul>
+                </div>
+            </div>
+        </div>
+        <!----------------------------------------------------------------------------------
+                                            Entity Details
+        ----------------------------------------------------------------------------------->
+        <div class="col-sm-9">
+            <div class="panel panel-success">
+                <div class="panel-heading" id="entityPanelHeadingD">Entity</div>
+                <!----------------------------------------------------------------------------------
+                                    Tabs
+                ----------------------------------------------------------------------------------->
+                <div class="panel-body" id="entityPanelBodyD">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#entityBasicsT">Basics</a></li>
+                        <li><a data-toggle="tab" href="#propertyDetailsT">Properties</a></li>
+                        <li><a data-toggle="tab" href="#enumDetailsT">Enums</a></li>
+                        <li><a data-toggle="tab" href="#aggregationDetailsT">Aggregations</a></li>
+                        <li><a data-toggle="tab" href="#associationDetailsT">Associations</a></li>
+                        <li><a data-toggle="tab" href="#viewDetailsT">Views</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <!----------------------------------------------------------------------------------
+                                                       Tab 1: Entity Basics
+                        ----------------------------------------------------------------------------------->
+                        <div id="entityBasicsT" class="tab-pane fade in active">
+                            <div class="panel-body">
+                                <form class="form-horizontal" id="entityBasicsF">
+                                    <div class="form-group">
+                                        <label for="entityNameI" class="col-sm-3 control-label">Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="entityNameI"
+                                                   placeholder="Entity Name"
+                                                   onchange="entityNameChanged()">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="entityDescI" class="col-sm-3 control-label">Description</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="entityDescI"
+                                                   placeholder="Description">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="rootEntityFG">
+                                        <label class="col-sm-3 control-label">Root Entity?</label>
+                                        <div class="col-sm-9">
+                                            <ul class="nav nav-pills" id="rootEntityNP">
+                                                <li><a href="#" id="rootEntityStatusA">No</a></li>
+                                                <li><a href="#" id="rootEntityMakeRootA"
+                                                       onclick="makeRootEntity()">
+                                                    <span class="glyphicon glyphicon-cog"></span> Make Root Entity</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="parentEntityFG">
+                                        <label class="col-sm-3 control-label">Parent Entity</label>
+                                        <div class="col-sm-9">
+                                            <ul class="nav nav-pills" id="parentEntityNP">
+                                                <li><a href="#" id="parentEntityNameA">undefined!</a></li>
+                                                <li><a href="#" onclick="selectTargetEntityForInheritance()"><span
+                                                        class="glyphicon glyphicon-circle-arrow-left"></span></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">Actions</label>
+                                        <div class="col-sm-9">
+                                            <button type="button" class="btn btn-danger btn-sm" id="removeEntityB"
+                                                    onclick="removeEntity()"><span
+                                                    class="glyphicon glyphicon-remove-sign"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                       Tab 2: Properties
+                        ----------------------------------------------------------------------------------->
+                        <div id="propertyDetailsT" class="tab-pane fade">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills" id="propertiesNP"></ul>
+                            </div>
+                            <form class="form-horizontal" id="propertyDetailsF">
+                                <div class="form-group">
+                                    <label for="propertyNameI" class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="propertyNameI" placeholder="Name"
+                                               onchange="propertyNameChanged()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="propertyDescI" class="col-sm-3 control-label">Description</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="propertyDescI"
+                                               placeholder="Description">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="propertyTypeI" class="col-sm-3 control-label">Type</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="propertyTypeI">
+                                            <option>string</option>
+                                            <option>date</option>
+                                            <option>boolean</option>
+                                            <option>number</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="propertyDefaultValueI" class="col-sm-3 control-label">Default</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="propertyDefaultValueI"
+                                               placeholder="Default Value">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="propertyExamplesI" class="col-sm-3 control-label">Examples</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="propertyExamplesI"
+                                               placeholder="Lorem, Ipsum, Dolor">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Actions</label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removePropertyB"
+                                                onclick="removeProperty()">
+                                            <span class="glyphicon glyphicon-remove-sign"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                       Tab 3: Enums
+                        ----------------------------------------------------------------------------------->
+                        <div id="enumDetailsT" class="tab-pane fade">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills" id="enumsNP"></ul>
+                            </div>
+                            <form class="form-horizontal" id="enumDetailsF">
+                                <div class="form-group">
+                                    <label for="enumNameI" class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="enumNameI" placeholder="Name"
+                                               onchange="enumNameChanged()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enumDescI" class="col-sm-3 control-label">Description</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="enumDescI"
+                                               placeholder="Description">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enumValidSelectionI" class="col-sm-3 control-label">Valid Selections</label>
+                                    <div class="col-sm-9">
+                                        <select class="form-control" id="enumValidSelectionI">
+                                            <option>Exactly One</option>
+                                            <option>Zero or One</option>
+                                            <option>Zero to Many</option>
+                                            <option>One to Many</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="enumLiteralsI" class="col-sm-3 control-label">Literals</label>
+                                    <div class="col-sm-7">
+                                        <textarea class="form-control" rows="2" id="enumLiteralsI" disabled></textarea>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <ul class="nav nav-pills" id="parentEntityNP">
+                                            <li><a href="#" onclick="enumEditLiterals()"><span
+                                                    class="glyphicon glyphicon-edit"></span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Actions</label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeEnumB"
+                                                onclick="removeEnum()">
+                                            <span class="glyphicon glyphicon-remove-sign"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                          Tab 4: Aggregations
+                        ----------------------------------------------------------------------------------->
+                        <div id="aggregationDetailsT" class="tab-pane fade">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills" id="aggregationNP"></ul>
+                            </div>
+                            <form class="form-horizontal" id="aggregationDetailsF">
+                                <div class="form-group">
+                                    <label for="aggregationNameI" class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="aggregationNameI" placeholder="Name"
+                                               onchange="aggregationNameChanged()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="aggregationDescI" class="col-sm-3 control-label">Description</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" rows="2" id="aggregationDescI" disabled></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Target</label>
+                                    <div class="col-sm-9">
+                                        <ul class="nav nav-pills" id="aggregationTargetNP">
+                                            <li><a href="#" id="aggregationTargetNameA">undefined!</a></li>
+                                            <li><a href="#" onclick="selectTargetEntityForAggregation()"><span
+                                                    class="glyphicon glyphicon-circle-arrow-left"></span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="aggregationTargetMinI" class="col-sm-3 control-label">Min.</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="aggregationTargetMinI">
+                                    </div>
+                                    <label for="aggregationTargetAvgI" class="col-sm-1 control-label">Average</label>
+                                    <div class="col-sm-3">
+                                        <input type="text"
+                                               class="form-control"
+                                               id="aggregationTargetAvgI"
+                                               title="/ = undefined"
+                                               value="99"
+                                               onchange="aggregationAverageChanged()">
+                                    </div>
+                                    <label for="aggregationTargetMaxI" class="col-sm-1 control-label">Max.</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="aggregationTargetMaxI"
+                                               title="* = unlimited">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Actions</label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeAggregationB"
+                                                onclick="removeAggregation()"><span
+                                                class="glyphicon glyphicon-remove-sign"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                          Tab 5: Associations
+                        ----------------------------------------------------------------------------------->
+                        <div id="associationDetailsT" class="tab-pane fade">
+                            <div class="panel-body">
+                                <ul class="nav nav-pills" id="associationNP"></ul>
+                            </div>
+                            <form class="form-horizontal" id="associationDetailsF">
+                                <div class="form-group">
+                                    <label for="associationNameI" class="col-sm-3 control-label">Name</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="associationNameI" placeholder="Name"
+                                               onchange="associationNameChanged()">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="associationDescI" class="col-sm-3 control-label">Description</label>
+                                    <div class="col-sm-9">
+                                        <textarea class="form-control" rows="2" id="associationDescI" disabled></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Target</label>
+                                    <div class="col-sm-9">
+                                        <ul class="nav nav-pills" id="associationTargetNP">
+                                            <li><a href="#" id="associationTargetNameA">undefined!</a></li>
+                                            <li><a href="#" onclick="selectTargetEntityForAssociation()"><span
+                                                    class="glyphicon glyphicon-circle-arrow-left"></span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="associationTargetMinI" class="col-sm-3 control-label">Min.</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="associationTargetMinI">
+                                    </div>
+                                    <label for="associationTargetAvgI" class="col-sm-1 control-label">Average</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="associationTargetAvgI"
+                                               value="99" onchange="associationAverageChanged()">
+                                    </div>
+                                    <label for="associationTargetMaxI" class="col-sm-1 control-label">Max.</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="associationTargetMaxI"
+                                               title="'*' = unlimited">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">Actions</label>
+                                    <div class="col-sm-9">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeAssociationB"
+                                                onclick="removeAssociation()"><span
+                                                class="glyphicon glyphicon-remove-sign"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                           Tab 6: Views
+                        ----------------------------------------------------------------------------------->
+                        <div id="viewDetailsT" class="tab-pane fade">
+                            <div class="panel-body">
+                                <form class="form-horizontal" id="viewsF">
+                                    <div class="form-group" id="pageViewsFG">
+                                        <label class="col-sm-3 control-label">Page Views</label>
+                                        <div class="col-sm-9">
+                                            <ul class="nav nav-pills" id="pageViewsNP">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="tableViewsFG">
+                                        <label class="col-sm-3 control-label">Table Views</label>
+                                        <div class="col-sm-9">
+                                            <ul class="nav nav-pills" id="tableViewsNP">
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="form-group" id="pageViewsFG">
+                                        <label class="col-sm-3 control-label">Actions</label>
+                                        <div class="col-sm-9">
+                                            <button type='button' class='btn btn-primary'
+                                                    id="createDefaultViewsB"
+                                                    onclick="createDefaultViews()">
+                                                Create Default Views
+                                            </button>
+                                        </div>
+                                    </div>
+                                 </form>
+                            </div>
+                        </div>
+                        <!----------------------------------------------------------------------------------
+                                                          END Tabs
+                        ----------------------------------------------------------------------------------->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/HeadStart/HeadStart_WebAPI.js"></script>
+<script src="/HeadStart/HeadStart_WebAPIExtensions.js"></script>
+<script src="/HeadStart/domain.js"></script>
