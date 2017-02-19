@@ -114,10 +114,13 @@ apiRouter.post('/generateDefaultViews', function (req, res, next) {
             var file = hs.readFile(fn);
             var domain = hs.createDomainFromJSONString(file);
 
-            // Generate WebAPI and default views:
-            hs.applyTemplateFile(hs.getDir("templates")+'MonApp_WebAPI.hst', [domain]);
-            hs.applyTemplateFile(hs.getDir("templates")+'MonApp_DefaultViews.hst', [domain]);
-            // TBD - need better solution, e.g. hs.loadGeneratedHBSPartials();
+            // Apply all available template files:
+            dir = hs.getDir("templates");
+            var fileNames = [];
+            var files = fs.readdirSync(dir);
+            files.forEach(function (fn) {
+                hs.applyTemplateFile(hs.getDir("templates") + fn, [domain]);
+            });
 
             console.log("Generated new default views for " + domainName);
             response.success = true;

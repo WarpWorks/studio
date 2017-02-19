@@ -53,16 +53,18 @@ HeadStart.prototype = {
     // File i/o
     getDir: function (name) {
         var hsRoot = process.cwd()+"/";
-        var apps = hsRoot+this.getConfig().appPath+"/";
+        var cartridge = hsRoot+this.getConfig().cartridgePath+"/";
+        var project   = hsRoot+this.getConfig().projectPath+"/";
+        var output    = hsRoot+this.getConfig().outputPath+"/";
         switch (name) {
-            // Used for HeadStart Tool
-            case "domains": return hsRoot+ "appData/domains/";
-            case "smnDemos": return hsRoot+ "server/smnModels/Demo/";
-            case "templates": return hsRoot + "server/templates/";
-            case "public/HeadStart": return hsRoot + "public/HeadStart/";
-            // Used for generated apps:
-            case "appAPI": return apps + "public/app/";
-            case "appViews": return apps + "views/";
+            // HeadStart files
+            case "smnDemos": return hsRoot + "mda/smnModels/Demo/";
+            // Cartridge files
+            case "templates": return cartridge +"templates/";
+            // Project files
+            case "domains": return project + "domains/";
+            // Output
+            case "output": return output;
             throw "Invalid directory: "+name;
         }
     },

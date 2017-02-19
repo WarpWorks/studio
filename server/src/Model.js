@@ -271,7 +271,7 @@ Base.prototype.saveTemplateResults = function (result, target) {
         throw "Invalid target in 'onSave'-option!";
 
     var fn = this.evalWithContext(target[1]);
-    fn = this.getHeadStart().getDir(target[0]) + fn;
+    fn = this.getHeadStart().getDir("output")+target[0]+"/"+fn;
 
     var fs = require('fs');
     fs.writeFile(fn, result, function (err) {
