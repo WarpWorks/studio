@@ -675,6 +675,7 @@ Entity.prototype.canBeInstantiated = function () {
 
 Entity.prototype.createTestInstance = function () {
     var testInstance = {};
+    testInstance.type = this.name;
 
     // Basic Properties
     var properties = this.getBasicProperties();
@@ -702,24 +703,33 @@ Entity.prototype.getParentClass = function () {
     return this.parentClass[0];
 }
 
+Entity.prototype.getBaseClass = function () {
+    // BaseClass = Topmost, non-abstract class in the inheritance hierarchy
+    var res = this;
+    while (res.hasParentClass() && !res.getParentClass().isAbstract)
+        res = res.getParentClass();
+    if (res.isAbstract) return null;
+    return res;
+}
+
 Entity.prototype.setParentClass = function (pc) {
     this.parentClass = [pc];
 }
 
 Entity.prototype.getBasicProperties = function (ignoreInheritedProperties) {
     if (!ignoreInheritedProperties && this.hasParentClass())
-        return this.basicProperties.concat(this.getParentClass().getBasicProperties());
+        return this.getParentClass().getBasicProperties().concat(this.basicProperties);
     return this.basicProperties;
 }
 Entity.prototype.getEnums = function (ignoreInheritedEnums) {
     if (!ignoreInheritedEnums && this.hasParentClass())
-        return this.enums.concat(this.getParentClass().getEnums());
+        return this.getParentClass().getEnums().concat(this.enums);
     return this.enums;
 }
 
 Entity.prototype.getPageViews = function (ignoreInheritedPageViews) {
     if (!ignoreInheritedPageViews && this.hasParentClass())
-        return this.pageViews.concat(this.getParentClass().getPageViews());
+        return this.getParentClass().getPageViews().concat(this.pageViews);
     return this.pageViews;
 }
 Entity.prototype.getDefaultPageView = function () {
@@ -734,7 +744,7 @@ Entity.prototype.getDefaultPageView = function () {
 
 Entity.prototype.getTableViews= function (ignoreInheritedTableViews) {
     if (!ignoreInheritedTableViews && this.hasParentClass())
-        return this.tableViews.concat(this.getParentClass().getTableViews());
+        return this.getParentClass().getTableViews().concat(this.tableViews);
     return this.tableViews;
 }
 Entity.prototype.getDefaultTableView = function () {
@@ -749,7 +759,7 @@ Entity.prototype.getDefaultTableView = function () {
 
 Entity.prototype.getRelationships = function (ignoreInheritedRelationships) {
     if (!ignoreInheritedRelationships && this.hasParentClass())
-        return this.relationships.concat(this.getParentClass().getRelationships());
+        return this.getParentClass().getRelationships().concat(this.relationships);
     return this.relationships;
 }
 
@@ -757,7 +767,7 @@ Entity.prototype.getAggregations = function (ignoreInheritedAggregations) {
     var a = [];
     for (i in this.relationships) if (this.relationships[i].isAggregation) a.push(this.relationships[i]);
     if (!ignoreInheritedAggregations && this.hasParentClass())
-        return a.concat(this.getParentClass().getAggregations());
+        return this.getParentClass().getAggregations().concat(a);
     return a;
 }
 
@@ -765,7 +775,7 @@ Entity.prototype.getAssociations = function (ignoreIngeritedAssociations) {
     var a = [];
     for (i in this.relationships) if (!this.relationships[i].isAggregation) a.push(this.relationships[i]);
     if (!ignoreIngeritedAssociations && this.hasParentClass())
-        return a.concat(this.getParentClass().getAssociations());
+        return this.getParentClass().getAssociations().concat(a);
     return a;
 }
 
@@ -1031,9 +1041,9 @@ Domain.prototype.validateModel = function () {
         }
     }
 
-    // All entities should either be root entity or aggregated by another entity (directly or through inheritance):
+    // All entities should either be abstract, root entity or aggregated by another entity (directly or through inheritance):
     for (var i in this.entities) {
-        if (!this.entities[i].canBeInstantiated()) {
+        if (!this.entities[i].isAbstract && !this.entities[i].canBeInstantiated()) {
             wCount++;
             vRes += "<br>[" + wCount + "]: <strong>" + this.entities[i].name + "</strong> can not be instantiated (solution: make it a RootEntity or child of another entity)";
         }
@@ -1108,28 +1118,34 @@ Domain.prototype.getAllElements = function (includeSelf) {
     return r;
 }
 
-Domain.prototype.createTestDataForEntity = function (entityDef, relationship, parentInstance) {
+Domain.prototype.createTestDataForEntity = function (entityDef, relationship, parentInstanceID, parentBaseClass) {
     // TBD1: Change algorithm to  create as many entities as possible with one DB insert
     // TBD2: Leverage cardinality to "embedd" child objects with low cardinality into the parent document
 
+    if (entityDef.isAbstract)
+        return; // Don`t create test instances for abstract entity types!
     var testData = entityDef.createTestInstance();
-    if (parentInstance) {
-        testData.parentID = parentInstance;
+
+    if (parentInstanceID) {
+        testData.parentID = parentInstanceID;
         testData.parentRelnID = relationship.id;
-        testData.parentRelnName = relationship.name; // TBD: For debugging - remove later
+        testData.parentRelnName = relationship.name;
+        testData.parentBaseClassID = parentBaseClass.id;
+        testData.parentBaseClassName = parentBaseClass.name;
     }
     else {
         testData.isRootInstance = true;
         testData.parentID = null;
         testData.parentRelID = null;
+        testData.parentBaseClassID = null;
+        testData.parentBaseClassName = null;
     }
-    testData.type = entityDef.name;
     // TBD: TEST - var ObjectID = require("mongodb").ObjectID;
     // testData._id = new ObjectID().toString();
 
     var domain = this;
     this.getHeadStart().useDB(domain.name, function (db) {
-        var collection = db.collection(entityDef.name);
+        var collection = db.collection(entityDef.getBaseClass().name);
         collection.insertOne(testData, function (mongoErr, mongoRes) {
             if (mongoErr) {
                 console.log("Error creating test data: " + mongoErr);
@@ -1138,8 +1154,10 @@ Domain.prototype.createTestDataForEntity = function (entityDef, relationship, pa
                 var aggs = entityDef.getAggregations();
                 if (aggs) aggs.forEach(function (rel) {
                     var avg = rel.targetAverage;
+                    if (avg==="/")
+                        console.log("WARNING: Incomplete Quantity Model - Average for relationship '"+rel.name+"' not defined!");
                     for (var i = 0; i < avg; i++)
-                        domain.createTestDataForEntity(rel.getTargetEntity(), rel, mongoRes.ops[0]._id);
+                        domain.createTestDataForEntity(rel.getTargetEntity(), rel, mongoRes.ops[0]._id, entityDef.getBaseClass());
                 });
             }
         });

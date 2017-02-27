@@ -118,11 +118,12 @@ function generateTestData() {
     var cnt = $active.domain.updateQuantityData();
 
     var callbacks = [
-        { close: false, label: "Edit Quantity Structure", callback: quantityStructure },
+        { close: true, label: "Edit Quantity Structure", callback: quantityStructure },
+        { close: true, label: "Set all averages to '3'", callback: setDefaultAveragesAndGenerateTestData },
         { close: true, label: "Cancel"}
     ];
     if (cnt<2) {
-        createModal ("Warning", "Please go to the menu 'Quantity Structure' and select meaningful values before generating test data!", "warning", callbacks);
+        createModal ("Warning", "Quantity Structure is not properly defined. Please go to the 'Quantity Structure' menu and select meaningful values before generating test data! Or select 'Set all averages' to automatically create 3 instances of each Entity type.", "warning", callbacks);
         return;
     }
 

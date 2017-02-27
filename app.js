@@ -9,7 +9,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var apiRoutes   = require('./server/routes/apiRoutes');
-var appApiRoutes   = require('./server/routes/appApiRoutes');
 var pageRoutes  = require('./server/routes/pageRoutes');
 
 var app = express();
@@ -43,7 +42,6 @@ hs.loadGeneratedHBSPartials();
 
 app.use('/', pageRoutes.router);
 app.use('/api', apiRoutes);
-app.use('/appApi', appApiRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

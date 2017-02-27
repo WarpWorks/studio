@@ -53,7 +53,9 @@ function updateActiveDomain(activeEntityArg) {
             if (activeEntity)
                 active = hsCompareIDs(entity.id, activeEntity) ? "class='active'" : "";
 
-            var name = (entity.isRootInstance ? "#":"") + entity.name;
+            var name = entity.name;
+            if (entity.isRootInstance) name = "#"+name;
+            if (entity.isAbstract) name = "%"+name;
             var elem = $(
                 "<li " + active + "><a href='#' id='" + entity.id + "'data-toggle='tab'>" + name + "</a></li>");
             $("#entityOverviewNP").append(elem).append(" ");
@@ -97,7 +99,7 @@ function updateActiveEntity(entityID)
     $active.entity = entity;
 
     // Set panel heading
-    $("#entityPanelHeadingD").text("Entity: " + (entity.isRootInstance ? "#":"") + entity.name);
+    $("#entityPanelHeadingD").text("Entity: " + (entity.isRootInstance ? "#":"") + (entity.isAbstract ? "%":"") + entity.name);
 
     //
     // Basics
@@ -845,6 +847,14 @@ function updateMyNavBar() {
 function entityGraph() {
     postDomainDataToServer();
     window.location.href = "./../entityGraph/" + $active.domain.name;
+}
+
+function setDefaultAveragesAndGenerateTestData() {
+    var avg = 3;
+    $active.domain.setDefaultAverages(avg);
+    $("#aggregationTargetAvgI").val(avg);
+    postDomainDataToServer();
+    generateTestData();
 }
 
 function quantityStructure() {

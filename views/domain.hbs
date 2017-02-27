@@ -54,6 +54,17 @@
                                                    placeholder="Description">
                                         </div>
                                     </div>
+                                    <div class="form-group" id="parentEntityFG">
+                                        <label class="col-sm-3 control-label">Parent</label>
+                                        <div class="col-sm-9">
+                                            <ul class="nav nav-pills" id="parentEntityNP">
+                                                <li><a href="#" id="parentEntityNameA">undefined!</a></li>
+                                                <li><a href="#" onclick="selectTargetEntityForInheritance()"><span
+                                                        class="glyphicon glyphicon-circle-arrow-left"></span></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                     <div class="form-group" id="rootEntityFG">
                                         <label class="col-sm-3 control-label">Root Entity?</label>
                                         <div class="col-sm-9">
@@ -62,17 +73,6 @@
                                                 <li><a href="#" id="rootEntityMakeRootA"
                                                        onclick="makeRootEntity()">
                                                     <span class="glyphicon glyphicon-cog"></span> Make Root Entity</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="parentEntityFG">
-                                        <label class="col-sm-3 control-label">Parent Entity</label>
-                                        <div class="col-sm-9">
-                                            <ul class="nav nav-pills" id="parentEntityNP">
-                                                <li><a href="#" id="parentEntityNameA">undefined!</a></li>
-                                                <li><a href="#" onclick="selectTargetEntityForInheritance()"><span
-                                                        class="glyphicon glyphicon-circle-arrow-left"></span></a>
                                                 </li>
                                             </ul>
                                         </div>

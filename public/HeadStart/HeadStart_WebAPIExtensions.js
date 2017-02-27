@@ -31,6 +31,15 @@ Entity.prototype.setParentClass = function (pc) {
     this.parentClass = [pc];
 }
 
+Entity.prototype.getBaseClass = function () {
+    // BaseClass = Topmost, non-abstract class in the inheritance hierarchy
+    var res = this;
+    while (res.hasParentClass() && !res.getParentClass().isAbstract)
+        res = res.getParentClass();
+    if (res.isAbstract) return null;
+    return res;
+}
+
 Entity.prototype.getAggregations = function (sort) {
     var res = [];
     this.relationships.forEach (function (relation) {
@@ -231,6 +240,16 @@ Domain.prototype.updateQuantityData = function () {
         cnt += $active.domain.entities[i].updateQuantityData();
     }
     return cnt;
+}
+
+Domain.prototype.setDefaultAverages = function (avg) {
+    for (var i in this.entities) {
+        var entity = this.entities[i];
+        for (var j in entity.relationships) {
+            entity.relationships[j].targetAverage = avg;
+            console.log("Setting avg: "+entity.relationships[j].name);
+        }
+    }
 }
 
 //

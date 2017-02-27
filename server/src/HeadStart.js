@@ -80,7 +80,6 @@ HeadStart.prototype = {
 // Config
 //
 
-HeadStart.config=null;
 HeadStart.prototype.getConfig = function () {
     if (this.config) return this.config;
     var cfg = this.readFile(process.cwd()+"/config.json");
@@ -255,6 +254,7 @@ HeadStart.prototype.createModel = function (model, domain) {
         }
         else {
             var entity = domain.addNewEntity(m, "");
+            entity.isAbstract = elem.isAbstract;
             if (elem.baseClass) {
                 entity.baseClass = elem.baseClass;
                 newEntitiesWithParent.push(entity);
@@ -342,9 +342,12 @@ HeadStart.prototype.parseSMN = function (smn) {
     var smnFile = smn.split("\n");
 
     // If a line starts with "-", append it to previous line
+    // Also, remove comments
     var smnFileMerged = [];
     for (var idx in smnFile) {
         var currentLine = smnFile[idx];
+        if (currentLine.includes("//"))
+            currentLine = currentLine.split("//", 1)[0];
         if (currentLine.length>0 && currentLine[0] === "-")
             smnFileMerged[smnFileMerged.length-1] = smnFileMerged[smnFileMerged.length-1] + ","+ currentLine.substr(1);
         else
@@ -358,8 +361,6 @@ HeadStart.prototype.parseSMN = function (smn) {
     for (var idx in smnFileMerged) {
         // Remove '\r' and comments ('//'), ignore empty lines:
         var currentLine = smnFileMerged[idx].replace(/\r/g, '');
-        if (currentLine.includes("//"))
-            currentLine = currentLine.split("//", 1)[0];
         if (currentLine.length < 1) continue;
 
         var header = "";
@@ -383,6 +384,12 @@ HeadStart.prototype.parseSMN = function (smn) {
             body = "";
         }
 
+        var isAbstract = false;
+        if (header[0] === "%") {
+            isAbstract = true;
+            header = header.slice(1);
+        }
+
         // Inheritance?
         if (header.includes("(")) {
             if (!header.includes(")")) throw "Missing ')' in line " + (idx);
@@ -396,7 +403,7 @@ HeadStart.prototype.parseSMN = function (smn) {
 
         // Add entity to model, if not already there
         if (!model[entity])
-            model[entity] = {properties: [], aggregations: [], associations: [], isDomain: isDomainDefinition};
+            model[entity] = {properties: [], aggregations: [], associations: [], isDomain: isDomainDefinition, isAbstract: isAbstract };
 
         // Add baseClass?
         if (baseClass.length > 1)
