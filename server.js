@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./server/app');
 var debug = require('debug')('SimpleSite:server');
 var http = require('http');
-var hs = require('./../server/src/HeadStart.js').HeadStart;
+var hs = require('./server/src/HeadStart.js').HeadStart;
 
 /**
  * Get port from environment and store in Express.

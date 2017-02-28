@@ -2,7 +2,7 @@
 // Domain "Model"
 // ***************************************************************************************************** //
 
-var util = require("./Util.js");
+var utils = require("./utils");
 
 //
 // Class "Base"
@@ -126,7 +126,7 @@ Base.prototype.processTemplateWithChildElements = function (template, children) 
         var beginTag = this.getHeadStart().createBeginTag(type);
         var endTag = this.getHeadStart().createEndTag(type);
 
-        var tokenSeq = util.getTokenSeq(template, beginTag, endTag);
+        var tokenSeq = utils.getTokenSeq(template, beginTag, endTag);
         for (var i in tokenSeq) {
             if (tokenSeq[i].isTagValue) {
                 var ts = "";
@@ -169,7 +169,7 @@ Base.prototype.processTemplateWithChildElements = function (template, children) 
 
 Base.prototype.evaluateTemplateCondition = function (template) {
     if (!template.includes("{{Options}}")) return true;
-    var a = util.extractTagValue(template, "{{Options}}", "{{/Options}}");
+    var a = utils.extractTagValue(template, "{{Options}}", "{{/Options}}");
     var options = JSON.parse(a[1]);
     if (!options.condition) return true;
     return this.evalWithContext(options.condition);
@@ -177,7 +177,7 @@ Base.prototype.evaluateTemplateCondition = function (template) {
 
 Base.prototype.processOptions = function (template) {
     if (template.includes("{{Options}}")) {
-        var a = util.extractTagValue(template, "{{Options}}", "{{/Options}}");
+        var a = utils.extractTagValue(template, "{{Options}}", "{{/Options}}");
 
         // Re-construct template
         template = a[0] + a[2];
@@ -194,13 +194,13 @@ Base.prototype.processOptions = function (template) {
 
 Base.prototype.processIfThenElse = function (template) {
     while (template.includes("{{if}}")) {
-        var before_ite_after = util.extractTagValue(template, "{{if}}", "{{/if}}");
+        var before_ite_after = utils.extractTagValue(template, "{{if}}", "{{/if}}");
         var ifthenelse = null;
 
         if (before_ite_after[1].includes("{{else}}"))
-            ifthenelse = util.extractTagValue(before_ite_after[1], "{{then}}", "{{else}}");
+            ifthenelse = utils.extractTagValue(before_ite_after[1], "{{then}}", "{{else}}");
         else
-            ifthenelse = util.splitBySeparator(before_ite_after[1], "{{then}}");
+            ifthenelse = utils.splitBySeparator(before_ite_after[1], "{{then}}");
 
         var ifexp = ifthenelse[0];
         var condition = this.evalWithContext(ifexp);
@@ -222,7 +222,7 @@ Base.prototype.processConditionalTagValues = function (template, type, removeCon
     var end = this.getHeadStart().createEndTag(type, true);
 
     while (template.includes(begin)) {
-        var res = util.extractTagValue(template, begin, end);
+        var res = utils.extractTagValue(template, begin, end);
         if (res.length != 3) throw "Error";
         if (removeContent)
             template = res[0] + res[2]; // Remove content
@@ -237,7 +237,7 @@ Base.prototype.processScripts = function (template) {
     var begin = "{{js:";
     var end = "/}}";
     while (template.includes(begin)) {
-        var tokens = util.extractTagValue(template, begin, end);
+        var tokens = utils.extractTagValue(template, begin, end);
         var pre = tokens[0];
         var script = tokens[1];
         var post = tokens[2];

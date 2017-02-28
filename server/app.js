@@ -8,27 +8,29 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var apiRoutes   = require('./server/routes/apiRoutes');
-var pageRoutes  = require('./server/routes/pageRoutes');
+var apiRoutes   = require('./routes/apiRoutes');
+var pageRoutes  = require('./routes/pageRoutes');
 
 var app = express();
 
+var processCwd = process.cwd();
+
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(processCwd, 'views'));
 app.set('view engine', 'hbs');
 
-app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
+app.use(favicon(path.join(processCwd, 'public', 'images', 'favicon.ico')));
 //app.use(logger('dev'));
 app.use(bodyParser.json({limit:'10mb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Public/static
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'server/generated')));
+app.use(express.static(path.join(processCwd, 'public')));
+app.use(express.static(path.join(processCwd, 'server', 'generated')));
 
 // Deal with Express / Handlebar Partials:
-var partialsDir = __dirname + '/views';
+var partialsDir = path.join(processCwd, 'views');
 var hbs = require('hbs');
 //hbs.registerPartials(partialsDir);
 var hbsutils = require('hbs-utils')(hbs);

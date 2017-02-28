@@ -1,10 +1,12 @@
+const path = require('path');
+
 //
 // ------------------------------------------------------------------------------------------------------------
 // HeadStart
 // ------------------------------------------------------------------------------------------------------------
 //
 
-var util = require("./Util.js");
+var utils = require("./utils");
 var mongoClient=require('mongodb').MongoClient;
 
 //
@@ -15,8 +17,8 @@ function HeadStart() {
     this.parent = null;
     this.domains = [];
 
-    this.model = require('./Model.js');
-    this.view = require('./View.js');
+    this.model = require('./Model');
+    this.view = require('./View');
 
     this.config = null;
 
@@ -52,20 +54,26 @@ HeadStart.prototype = {
 
     // File i/o
     getDir: function (name) {
-        var hsRoot = process.cwd()+"/";
-        var cartridge = hsRoot+this.getConfig().cartridgePath+"/";
-        var project   = hsRoot+this.getConfig().projectPath+"/";
-        var output    = hsRoot+this.getConfig().outputPath+"/";
+        var hsRoot = process.cwd();
         switch (name) {
             // HeadStart files
-            case "smnDemos": return hsRoot + "mda/smnModels/Demo/";
+            case "smnDemos":
+                return path.join(hsRoot, "mda", "smnModels", "Demo");
+
             // Cartridge files
-            case "templates": return cartridge +"templates/";
+            case "templates":
+                return path.join(hsRoot, this.getConfig().cartridgePath, 'templates');
+
             // Project files
-            case "domains": return project + "domains/";
+            case "domains":
+                return path.join(this.getConfig().projectPath, 'domains');
+
             // Output
-            case "output": return output;
-            throw "Invalid directory: "+name;
+            case "output":
+                return path.join(hsRoot, this.getConfig().outputPath);
+
+            default:
+                throw "Invalid directory: "+name;
         }
     },
 
@@ -81,9 +89,10 @@ HeadStart.prototype = {
 //
 
 HeadStart.prototype.getConfig = function () {
-    if (this.config) return this.config;
-    var cfg = this.readFile(process.cwd()+"/config.json");
-    this.config = JSON.parse(cfg);
+    if (this.config) {
+        return this.config;
+    }
+    this.config = require('./../config');
     return this.config;
 }
 
@@ -200,7 +209,7 @@ HeadStart.prototype.applyTemplateFile = function (fn, domains) {
     var beginTag = this.createBeginTag("Domain");
     var endTag = this.createEndTag("Domain");
 
-    var tokenSeq = util.getTokenSeq(template, beginTag, endTag);
+    var tokenSeq = utils.getTokenSeq(template, beginTag, endTag);
     for (var i in tokenSeq) {
         if (tokenSeq[i].isTagValue) {
             var ts = "";
@@ -262,7 +271,7 @@ HeadStart.prototype.createModel = function (model, domain) {
             for (var n in elem.properties) {
                 var p = elem.properties[n];
                 if (p.type.includes("[")) {
-                    var a = util.extractTagValue(p.type, "[", "]");
+                    var a = utils.extractTagValue(p.type, "[", "]");
                     var en = entity.addNewEnum(p.property);
                     var literals = a[1].split("|");
                     for (var i in literals)
@@ -376,8 +385,8 @@ HeadStart.prototype.parseSMN = function (smn) {
         }
 
         if (currentLine.includes(":")) {
-            header = util.splitBySeparator(currentLine, ":")[0];
-            body = util.splitBySeparator(currentLine, ":")[1];
+            header = utils.splitBySeparator(currentLine, ":")[0];
+            body = utils.splitBySeparator(currentLine, ":")[1];
         }
         else {
             header = currentLine;
@@ -393,8 +402,8 @@ HeadStart.prototype.parseSMN = function (smn) {
         // Inheritance?
         if (header.includes("(")) {
             if (!header.includes(")")) throw "Missing ')' in line " + (idx);
-            entity = util.extractTagValue(header, "(", ")")[0];
-            baseClass = util.extractTagValue(header, "(", ")")[1];
+            entity = utils.extractTagValue(header, "(", ")")[0];
+            baseClass = utils.extractTagValue(header, "(", ")")[1];
         }
         else
             entity = header;
@@ -412,7 +421,7 @@ HeadStart.prototype.parseSMN = function (smn) {
         // Parse aggregations
         while (body.includes("{")) {
             if (!body.includes("}")) throw "Missing '}' in line " + idx;
-            var s = util.extractTagValue(body, "{", "}");
+            var s = utils.extractTagValue(body, "{", "}");
             var token = s[1];
             body = s[0] + (s.length>2?s[2]:"");
             var aggregations = token.split(",");

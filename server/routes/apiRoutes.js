@@ -1,11 +1,13 @@
-var hs = require('./../src/HeadStart.js').HeadStart;
+const path = require('path');
+
+var hs = require('./../src/HeadStart').HeadStart;
 var express = require('express');
 var apiRouter = express.Router();
 var fs = require('fs');
 
 apiRouter.get('/domain/:domain', function (req, res, next) {
     console.log("Get-Request for '/api/get/domain': " + req.params.domain);
-    var fn = hs.getDir("domains") + req.params.domain + '.jsn';
+    var fn = path.join(hs.getDir("domains"), req.params.domain + '.jsn');
     try {
         var file = hs.readFile(fn);
     }
@@ -33,7 +35,7 @@ apiRouter.get('/smnExamples', function (req, res, next) {
 
         result.smnExamples = [];
         files.forEach(function (fn) {
-            var templateData = fs.readFileSync(dir+"/"+fn, 'utf8');
+            var templateData = fs.readFileSync(path.join(dir, fn), 'utf8');
             var templateName = fn.split(".smn")[0];
             result.smnExamples.push({name: templateName, template: templateData});
         });
