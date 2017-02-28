@@ -6,7 +6,7 @@ const Base = require('./base');
 
 // Constructor and inheritance
 
-function BasicProperty (entity, id, name, desc, propertyType) {
+function BasicProperty(entity, id, name, desc, propertyType) {
     Base.call(this, "BasicProperty", entity, id, name, desc);
     this.propertyType = propertyType;
 
@@ -35,17 +35,19 @@ BasicProperty.prototype.constructor = BasicProperty;
 
 // Methods
 
-BasicProperty.prototype.getParent_Entity = function () {
+BasicProperty.prototype.getParent_Entity = function() {
     return this.parent;
 };
 
-BasicProperty.prototype.getTestData = function () {
+BasicProperty.prototype.getTestData = function() {
     var testData;
 
     switch (this.propertyType) {
         case this.getHeadStart().BasicTypes.String:
             testData = ["Lorem", "Ipsum", "Dolor", "Amet", "Consetetur", "Sadipscing"];
-            if (this.examples) testData = this.examples.split(",");
+            if (this.examples) {
+                testData = this.examples.split(",");
+            }
             return testData[Math.floor(Math.random() * testData.length)];
         case this.getHeadStart().BasicTypes.Number:
             return Math.floor(Math.random() * 1000);
@@ -59,11 +61,11 @@ BasicProperty.prototype.getTestData = function () {
     }
 };
 
-BasicProperty.prototype.toString = function () {
+BasicProperty.prototype.toString = function() {
     return this.name + ":" + this.propertyType;
 };
 
-BasicProperty.prototype.toJSON = function () {
+BasicProperty.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,

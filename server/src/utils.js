@@ -3,24 +3,21 @@
 // ***************************************************************************************************** //
 
 function splitBySeparator (str, separator) {
-    var res=[];
+    var res = [];
     if (!str.includes(separator)) return [str];
-    res[0] = str.split(separator,1)[0];
-    res[1] = str.slice(res[0].length+separator.length);
+    res[0] = str.split(separator, 1)[0];
+    res[1] = str.slice(res[0].length + separator.length);
     return res;
 }
 
-function extractTagValue(str, openTag, closeTag) {
+function extractTagValue (str, openTag, closeTag) {
     // Returns array with header, tag value (value between openTag and closeTag), footer
     // Only extracts first tag value
-    if (!str.includes(openTag))
-        throw "Missing opening tag '" + openTag + "'!";
-    if (!str.includes(closeTag))
-        throw "Missing closing tag '" + closeTag + "'!";
+    if (!str.includes(openTag)) { throw "Missing opening tag '" + openTag + "'!"; }
+    if (!str.includes(closeTag)) { throw "Missing closing tag '" + closeTag + "'!"; }
     var pos1 = str.indexOf(openTag);
     var pos2 = str.indexOf(closeTag);
-    if (pos1 > pos2)
-        throw "Opening tag '" + openTag + "' must come before closing tag '" + closeTag + "'!";
+    if (pos1 > pos2) { throw "Opening tag '" + openTag + "' must come before closing tag '" + closeTag + "'!"; }
 
     var res = [];
     res.push(str.slice(0, pos1));
@@ -29,25 +26,21 @@ function extractTagValue(str, openTag, closeTag) {
     return res;
 }
 
-function getTokenSeq (str, openTag, closeTag)
-{
+function getTokenSeq (str, openTag, closeTag) {
     // Parse str for tagValues enclosed between openTag and closeTag
     // Returns array of tokens as follows: { value: "text", isTagValue: true|false }
     var tokenSeq = [];
     while (str.includes(openTag)) {
-        var bs = extractTagValue (str, openTag, closeTag);
-        if (bs[0].length>0)
-            tokenSeq.push ({ value:bs[0], isTagValue: false });
-        if (bs[1].length>0) {
-            if (bs[1].includes(openTag))
-                throw "Opening tag '"+openTag+"' must be followed by closing tag '"+closeTag+"' before next opening tag!";
+        var bs = extractTagValue(str, openTag, closeTag);
+        if (bs[0].length > 0) { tokenSeq.push({ value: bs[0], isTagValue: false }); }
+        if (bs[1].length > 0) {
+            if (bs[1].includes(openTag)) { throw "Opening tag '" + openTag + "' must be followed by closing tag '" + closeTag + "' before next opening tag!"; }
             tokenSeq.push({value: bs[1], isTagValue: true});
         }
         str = bs[2];
     }
-    if (str.length>0) {
-        if (str.includes(closeTag))
-            throw "Missing opening tag '"+openTag+"'!";
+    if (str.length > 0) {
+        if (str.includes(closeTag)) { throw "Missing opening tag '" + openTag + "'!"; }
         tokenSeq.push({value: str, isTagValue: false});
     }
 

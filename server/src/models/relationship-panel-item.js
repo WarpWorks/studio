@@ -6,7 +6,7 @@ const PanelItem = require('./panel-item');
 
 // Constructor and inheritance
 
-function RelationshipPanelItem (parent, id, name, desc, relationship) {
+function RelationshipPanelItem(parent, id, name, desc, relationship) {
     PanelItem.call(this, "RelationshipPanelItem", parent, id, name, desc);
     this.label = name;
     this.style = 'CSV';
@@ -21,7 +21,9 @@ function RelationshipPanelItem (parent, id, name, desc, relationship) {
         var myEntity = this.parent.parent.parent;
         while (true) {
             var rel = myEntity.findElementByID(relationship.id, true);
-            if (rel) { break; } // ok!
+            if (rel) {
+                break;
+            } // ok!
             if (!myEntity.hasParentClass()) { // No more options...
                 throw new Error("Create RelationshipPanelItem: Target relationship '" + relationship.getPath() + "' does not belong to entity '" + myEntity.getPath() + "'");
             }
@@ -37,23 +39,23 @@ RelationshipPanelItem.prototype.constructor = RelationshipPanelItem;
 
 // Methods
 
-RelationshipPanelItem.prototype.hasRelationship = function () {
+RelationshipPanelItem.prototype.hasRelationship = function() {
     return this.relationship && this.relationship.length > 0 && this.relationship[0] != null;
 };
 
-RelationshipPanelItem.prototype.getRelationship = function () {
+RelationshipPanelItem.prototype.getRelationship = function() {
     return this.relationship[0];
 };
 
-RelationshipPanelItem.prototype.setRelationship = function (r) {
+RelationshipPanelItem.prototype.setRelationship = function(r) {
     this.relationship = [r];
 };
 
-RelationshipPanelItem.prototype.toString = function () {
+RelationshipPanelItem.prototype.toString = function() {
     return this.name + "[=>" + this.getRelationship().name + "]; ";
 };
 
-RelationshipPanelItem.prototype.toJSON = function () {
+RelationshipPanelItem.prototype.toJSON = function() {
     var rid = this.hasRelationship() ? [this.getRelationship().idToJSON()] : [];
     return {
         name: this.name,

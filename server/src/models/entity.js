@@ -2,6 +2,7 @@ const Base = require('./base');
 const BasicProperty = require('./basic-property');
 const Enumeration = require('./enumeration');
 const Relationship = require('./relationship');
+const views = require('./views');
 
 //
 // Class "Entity"
@@ -9,7 +10,7 @@ const Relationship = require('./relationship');
 
 // Constructor and inheritance
 
-function Entity (domain, id, name, desc, parentClass, isRootEntity, isRootInstance) {
+function Entity(domain, id, name, desc, parentClass, isRootEntity, isRootInstance) {
     Base.call(this, "Entity", domain, id, name, desc);
     this.isRootEntity = isRootEntity;
     this.isRootInstance = isRootInstance;
@@ -36,17 +37,19 @@ Entity.prototype.constructor = Entity;
 
 // Methods
 
-Entity.prototype.getParent_Domain = function () {
+Entity.prototype.getParent_Domain = function() {
     return this.parent;
 };
 
-Entity.prototype.setRootEntityStatus = function (declareAsRootEntity) {
+Entity.prototype.setRootEntityStatus = function(declareAsRootEntity) {
     if (this.isRootInstance) {
         throw new Error("Can not convert RootInstance to RootEntity!");
     } else if (!declareAsRootEntity) {
         throw new Error("Currently not supported, sorry - TBD!");
     } else {
-        if (this.isRootEntity) { return; } // Is already a root instance, ignore...
+        if (this.isRootEntity) {
+            return;
+        } // Is already a root instance, ignore...
         var relName = this.namePlural.charAt(0).toUpperCase() + this.namePlural.slice(1);
         var rel = this.getDomain().getRootInstance().addNewRelationship(this, true, relName);
         rel.targetMax = '*';
@@ -189,22 +192,28 @@ Entity.prototype.createNewDefaultPageView = function () {
     }
 };
 
-Entity.prototype.canBeInstantiated = function () {
-    if (this.isRootEntity || this.isRootInstance) return true;
+Entity.prototype.canBeInstantiated = function() {
+    if (this.isRootEntity || this.isRootInstance) {
+        return true;
+    }
     var parrentAggs = this.getAllParentAggregations();
-    if (parrentAggs !== null && parrentAggs.length !== 0) return true;
-    if (this.hasParentClass()) return this.getParentClass().canBeInstantiated();
+    if (parrentAggs !== null && parrentAggs.length !== 0) {
+        return true;
+    }
+    if (this.hasParentClass()) {
+        return this.getParentClass().canBeInstantiated();
+    }
     return false;
 };
 
-Entity.prototype.createTestInstance = function () {
+Entity.prototype.createTestInstance = function() {
     var testInstance = {};
     testInstance.type = this.name;
 
     // Basic Properties
     var properties = this.getBasicProperties();
     if (properties && properties.length > 0) {
-        properties.forEach(function (property) {
+        properties.forEach(function(property) {
             testInstance[property.name] = property.getTestData();
         });
     }
@@ -212,87 +221,125 @@ Entity.prototype.createTestInstance = function () {
     // Enums
     var enums = this.getEnums();
     if (enums && enums.length > 0) {
-        enums.forEach(function (anEnum) {
+        enums.forEach(function(anEnum) {
             testInstance[anEnum.name] = anEnum.getTestData();
         });
     }
     return testInstance;
 };
 
-Entity.prototype.hasParentClass = function () {
+Entity.prototype.hasParentClass = function() {
     return this.parentClass && this.parentClass.length > 0 && this.parentClass[0] != null;
 };
 
-Entity.prototype.getParentClass = function () {
+Entity.prototype.getParentClass = function() {
     return this.parentClass[0];
 };
 
-Entity.prototype.getBaseClass = function () {
+Entity.prototype.getBaseClass = function() {
     // BaseClass = Topmost, non-abstract class in the inheritance hierarchy
     var res = this;
-    while (res.hasParentClass() && !res.getParentClass().isAbstract) { res = res.getParentClass(); }
-    if (res.isAbstract) return null;
+    while (res.hasParentClass() && !res.getParentClass().isAbstract) {
+        res = res.getParentClass();
+    }
+    if (res.isAbstract) {
+        return null;
+    }
     return res;
 };
 
-Entity.prototype.setParentClass = function (pc) {
+Entity.prototype.setParentClass = function(pc) {
     this.parentClass = [pc];
 };
 
-Entity.prototype.getBasicProperties = function (ignoreInheritedProperties) {
-    if (!ignoreInheritedProperties && this.hasParentClass()) { return this.getParentClass().getBasicProperties().concat(this.basicProperties); }
+Entity.prototype.getBasicProperties = function(ignoreInheritedProperties) {
+    if (!ignoreInheritedProperties && this.hasParentClass()) {
+        return this.getParentClass().getBasicProperties().concat(this.basicProperties);
+    }
     return this.basicProperties;
 };
-Entity.prototype.getEnums = function (ignoreInheritedEnums) {
-    if (!ignoreInheritedEnums && this.hasParentClass()) { return this.getParentClass().getEnums().concat(this.enums); }
+Entity.prototype.getEnums = function(ignoreInheritedEnums) {
+    if (!ignoreInheritedEnums && this.hasParentClass()) {
+        return this.getParentClass().getEnums().concat(this.enums);
+    }
     return this.enums;
 };
 
-Entity.prototype.getPageViews = function (ignoreInheritedPageViews) {
-    if (!ignoreInheritedPageViews && this.hasParentClass()) { return this.getParentClass().getPageViews().concat(this.pageViews); }
+Entity.prototype.getPageViews = function(ignoreInheritedPageViews) {
+    if (!ignoreInheritedPageViews && this.hasParentClass()) {
+        return this.getParentClass().getPageViews().concat(this.pageViews);
+    }
     return this.pageViews;
 };
-Entity.prototype.getDefaultPageView = function () {
+Entity.prototype.getDefaultPageView = function() {
     for (var idx = 0; idx < this.pageViews.length; idx++) {
-        if (this.pageViews[idx].isDefault) { return this.pageViews[idx]; }
+        if (this.pageViews[idx].isDefault) {
+            return this.pageViews[idx];
+        }
     }
-    if (this.hasParentClass()) { return this.getParentClass().getDefaulPageViews(); } else { return null; }
+    if (this.hasParentClass()) {
+        return this.getParentClass().getDefaulPageViews();
+    } else {
+        return null;
+    }
 };
 
-Entity.prototype.getTableViews = function (ignoreInheritedTableViews) {
-    if (!ignoreInheritedTableViews && this.hasParentClass()) { return this.getParentClass().getTableViews().concat(this.tableViews); }
+Entity.prototype.getTableViews = function(ignoreInheritedTableViews) {
+    if (!ignoreInheritedTableViews && this.hasParentClass()) {
+        return this.getParentClass().getTableViews().concat(this.tableViews);
+    }
     return this.tableViews;
 };
-Entity.prototype.getDefaultTableView = function () {
+Entity.prototype.getDefaultTableView = function() {
     for (var idx = 0; idx < this.tableViews.length; idx++) {
-        if (this.tableViews[idx].isDefault) { return this.tableViews[idx]; }
+        if (this.tableViews[idx].isDefault) {
+            return this.tableViews[idx];
+        }
     }
-    if (this.hasParentClass()) { return this.getParentClass().getDefaulTableViews(); } else { return null; }
+    if (this.hasParentClass()) {
+        return this.getParentClass().getDefaulTableViews();
+    } else {
+        return null;
+    }
 };
 
-Entity.prototype.getRelationships = function (ignoreInheritedRelationships) {
-    if (!ignoreInheritedRelationships && this.hasParentClass()) { return this.getParentClass().getRelationships().concat(this.relationships); }
+Entity.prototype.getRelationships = function(ignoreInheritedRelationships) {
+    if (!ignoreInheritedRelationships && this.hasParentClass()) {
+        return this.getParentClass().getRelationships().concat(this.relationships);
+    }
     return this.relationships;
 };
 
-Entity.prototype.getAggregations = function (ignoreInheritedAggregations) {
+Entity.prototype.getAggregations = function(ignoreInheritedAggregations) {
     var i;
     var a = [];
-    for (i in this.relationships) if (this.relationships[i].isAggregation) a.push(this.relationships[i]);
-    if (!ignoreInheritedAggregations && this.hasParentClass()) { return this.getParentClass().getAggregations().concat(a); }
+    for (i in this.relationships) {
+        if (this.relationships[i].isAggregation) {
+            a.push(this.relationships[i]);
+        }
+    }
+    if (!ignoreInheritedAggregations && this.hasParentClass()) {
+        return this.getParentClass().getAggregations().concat(a);
+    }
     return a;
 };
 
-Entity.prototype.getAssociations = function (ignoreIngeritedAssociations) {
+Entity.prototype.getAssociations = function(ignoreIngeritedAssociations) {
     var i;
     var a = [];
-    for (i in this.relationships) if (!this.relationships[i].isAggregation) a.push(this.relationships[i]);
-    if (!ignoreIngeritedAssociations && this.hasParentClass()) { return this.getParentClass().getAssociations().concat(a); }
+    for (i in this.relationships) {
+        if (!this.relationships[i].isAggregation) {
+            a.push(this.relationships[i]);
+        }
+    }
+    if (!ignoreIngeritedAssociations && this.hasParentClass()) {
+        return this.getParentClass().getAssociations().concat(a);
+    }
     return a;
 };
 
 // TBD: What about multiple levels of inheritance...? (eg C is B, B is A?)
-Entity.prototype.getAllDerivedEntities = function () {
+Entity.prototype.getAllDerivedEntities = function() {
     // Return all entities that inherit from this entity
     var domain = this.parent;
     var derivedEntities = [];
@@ -309,7 +356,7 @@ Entity.prototype.getAllDerivedEntities = function () {
 };
 
 // TBD - support inheritance!
-Entity.prototype.getAllParentAggregations = function () {
+Entity.prototype.getAllParentAggregations = function() {
     // Return all aggregations which link to this entity (returns the aggregation, not the parent entity!)
     var domain = this.parent;
     var parentAggs = [];
@@ -327,7 +374,7 @@ Entity.prototype.getAllParentAggregations = function () {
     return parentAggs;
 };
 
-Entity.prototype.processLocalTemplateFunctions = function (template) {
+Entity.prototype.processLocalTemplateFunctions = function(template) {
     var children = [
         // Without parent elements...
         ["BasicProperty", this.getBasicProperties(true)],
@@ -353,78 +400,94 @@ Entity.prototype.processLocalTemplateFunctions = function (template) {
     return Base.prototype.processLocalTemplateFunctions.call(this, template);
 };
 
-Entity.prototype.addNewBasicProperty = function (name, desc, propertyType) {
+Entity.prototype.addNewBasicProperty = function(name, desc, propertyType) {
     var id = this.getDomain().createNewID();
     var newBasicProperty = new BasicProperty(this, id, name, desc, propertyType);
     this.basicProperties.push(newBasicProperty);
     return newBasicProperty;
 };
 
-Entity.prototype.addNewEnum = function (name, desc) {
+Entity.prototype.addNewEnum = function(name, desc) {
     var id = this.getDomain().createNewID();
     var newEnum = new Enumeration(this, id, name, desc);
     this.enums.push(newEnum);
     return newEnum;
 };
 
-Entity.prototype.addNewRelationship = function (target, isAggregation, name) {
+Entity.prototype.addNewRelationship = function(target, isAggregation, name) {
     var id = this.getDomain().createNewID();
-    if (!name) { name = target.namePlural; }
+    if (!name) {
+        name = target.namePlural;
+    }
     var newRelationship = new Relationship(this, target, id, isAggregation, name);
     this.relationships.push(newRelationship);
     return newRelationship;
 };
 
-Entity.prototype.addNewPageView = function (name, desc) {
-    var hs = this.getHeadStart();
+Entity.prototype.addNewPageView = function(name, desc) {
     var id = this.getDomain().createNewID();
-    var vf = hs.getViews();
-    var newPageView = new vf.PageView(this, id, name, desc);
+    var newPageView = new views.PageView(this, id, name, desc);
 
     this.pageViews.push(newPageView);
     return newPageView;
 };
 
-Entity.prototype.addNewTableView = function (name, desc) {
-    var hs = this.getHeadStart();
+Entity.prototype.addNewTableView = function(name, desc) {
     var id = this.getDomain().createNewID();
-    var vf = hs.getViews();
-    var newTableView = new vf.TableView(this, id, name, desc);
+    var newTableView = new views.TableView(this, id, name, desc);
     this.tableViews.push(newTableView);
     return newTableView;
 };
 
-Entity.prototype.getAllElements = function (includeSelf) {
+Entity.prototype.getAllElements = function(includeSelf) {
     var i;
     var r = [];
-    if (includeSelf) { r = r.concat(this); }
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     // Add children with no own children directly:
     r = r.concat(this.relationships);
     r = r.concat(this.basicProperties);
     // Children with children:
-    for (i in this.enums) { r = r.concat(this.enums[i].getAllElements(true)); }
-    for (i in this.pageViews) { r = r.concat(this.pageViews[i].getAllElements(true)); }
-    for (i in this.tableViews) { r = r.concat(this.tableViews[i].getAllElements(true)); }
+    for (i in this.enums) {
+        r = r.concat(this.enums[i].getAllElements(true));
+    }
+    for (i in this.pageViews) {
+        r = r.concat(this.pageViews[i].getAllElements(true));
+    }
+    for (i in this.tableViews) {
+        r = r.concat(this.tableViews[i].getAllElements(true));
+    }
     return r;
 };
 
-Entity.prototype.toString = function (t) {
+Entity.prototype.toString = function(t) {
     var comma;
     var i;
     var isFirst;
     var j;
     var result = "";
-    if (!t) return result;
+    if (!t) {
+        return result;
+    }
 
     var name = (this.isRootInstance ? '#' : '') + this.name;
 
     switch (t) {
         case 'properties':
             result += this.hasParentClass() ? "(" + this.getParentClass().name + ")" : "";
-            if (this.enums.length + this.basicProperties.length > 0) result += ": ";
-            for (i in this.basicProperties) result += (i > 0 ? ", " : "") + this.basicProperties[i].toString();
-            if (this.enums.length > 0) result += ", ";
-            for (j in this.enums) result += (j > 0 ? ", " : "") + this.enums[j].toString();
+            if (this.enums.length + this.basicProperties.length > 0) {
+                result += ": ";
+            }
+            for (i in this.basicProperties) {
+                result += (i > 0 ? ", " : "") + this.basicProperties[i].toString();
+            }
+            if (this.enums.length > 0) {
+                result += ", ";
+            }
+            for (j in this.enums) {
+                result += (j > 0 ? ", " : "") + this.enums[j].toString();
+            }
             return name + result;
         case 'aggregations':
             isFirst = true;
@@ -450,24 +513,34 @@ Entity.prototype.toString = function (t) {
     throw new Error("Invalid option: " + t);
 };
 
-Entity.prototype.toJSON = function () {
+Entity.prototype.toJSON = function() {
     var i;
     var pc = this.hasParentClass() ? [this.getParentClass().id] : [];
 
     var bp = [];
-    for (i in this.basicProperties) bp.push(this.basicProperties[i].toJSON());
+    for (i in this.basicProperties) {
+        bp.push(this.basicProperties[i].toJSON());
+    }
 
     var e = [];
-    for (i in this.enums) e.push(this.enums[i].toJSON());
+    for (i in this.enums) {
+        e.push(this.enums[i].toJSON());
+    }
 
     var r = [];
-    for (i in this.relationships) r.push(this.relationships[i].toJSON());
+    for (i in this.relationships) {
+        r.push(this.relationships[i].toJSON());
+    }
 
     var pv = [];
-    for (i in this.pageViews) pv.push(this.pageViews[i].toJSON());
+    for (i in this.pageViews) {
+        pv.push(this.pageViews[i].toJSON());
+    }
 
     var tv = [];
-    for (i in this.tableViews) tv.push(this.tableViews[i].toJSON());
+    for (i in this.tableViews) {
+        tv.push(this.tableViews[i].toJSON());
+    }
 
     var res = {
         name: this.name,

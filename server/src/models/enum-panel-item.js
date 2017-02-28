@@ -1,6 +1,6 @@
 const PanelItem = require('./panel-item');
 
-function EnumPanelItem (parent, id, name, desc, enumeration) {
+function EnumPanelItem(parent, id, name, desc, enumeration) {
     PanelItem.call(this, "EnumPanelItem", parent, id, name, desc);
     this.label = name;
 
@@ -14,7 +14,9 @@ function EnumPanelItem (parent, id, name, desc, enumeration) {
         var myEntity = this.parent.parent.parent;
         while (true) {
             var rel = myEntity.findElementByID(enumeration.id, true);
-            if (rel) { break; } // ok!
+            if (rel) {
+                break;
+            } // ok!
             if (!myEntity.getParentClass()) { // No more options...
                 throw new Error("Create BasicPropertyPanelItem: Target enum '" + enumeration.getPath() + "' does not belong to entity '" + myEntity.getPath() + "'");
             }
@@ -30,23 +32,23 @@ EnumPanelItem.prototype.constructor = EnumPanelItem;
 
 // Methods
 
-EnumPanelItem.prototype.hasEnumeration = function () {
+EnumPanelItem.prototype.hasEnumeration = function() {
     return this.enumeration && this.enumeration.length > 0 && this.enumeration[0] != null;
 };
 
-EnumPanelItem.prototype.getEnumeration = function () {
+EnumPanelItem.prototype.getEnumeration = function() {
     return this.enumeration[0];
 };
 
-EnumPanelItem.prototype.setEnumeration = function (e) {
+EnumPanelItem.prototype.setEnumeration = function(e) {
     this.enumeration = [e];
 };
 
-EnumPanelItem.prototype.toString = function () {
+EnumPanelItem.prototype.toString = function() {
     return this.name + "[=>" + this.enumeration.name + "]; ";
 };
 
-EnumPanelItem.prototype.toJSON = function () {
+EnumPanelItem.prototype.toJSON = function() {
     var eid = this.hasEnumeration() ? [this.getEnumeration().idToJSON()] : [];
     return {
         name: this.name,

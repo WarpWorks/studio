@@ -1,4 +1,13 @@
+const fs = require('fs');
+var mongoClient = require('mongodb').MongoClient;
 const path = require('path');
+
+const BasicTypes = require('./basic-types');
+const ComplexTypes = require('./complex-types');
+const config = require('./../config');
+const models = require('./models');
+const ValidEnumSelections = require('./valid-enum-selections');
+const views = models.views;
 
 //
 // ------------------------------------------------------------------------------------------------------------
@@ -7,7 +16,6 @@ const path = require('path');
 //
 
 var utils = require("./utils");
-var mongoClient=require('mongodb').MongoClient;
 
 //
 // Class "HeadStart"
@@ -17,43 +25,30 @@ function HeadStart() {
     this.parent = null;
     this.domains = [];
 
-    this.model = require('./models');
-    this.view = this.model.views;
-
     this.config = null;
 
     this.mongoDBs = {};
 }
 
+function isValidID(id) {
+    return Number.isInteger(id);
+}
+
 HeadStart.prototype = {
-    createNewDomain: function (name, desc, recreate) {
-        newDomain = new this.model.Domain(this, name, desc, recreate);
+    createNewDomain(name, desc, recreate) {
+        var newDomain = new models.Domain(this, name, desc, recreate);
         this.domains.push(newDomain);
         return newDomain;
     },
-    getAllDomains: function () {
+    getAllDomains() {
         return this.domains;
     },
-    isValidID: function (id) {
-    return Number.isInteger(id);
-    },
-    getModels: function () {
-        return this.model;
-    },
-    getViews: function () {
-        return this.view;
-    },
-    getEngine: function () {
-        return this._engine;
-    },
-    toString: function () {
-        var s = "";
-        for (i in this.domains) s += this.domains[i].toString() + "\n";
-        return s;
+    toString() {
+        return this.domains.map((domain) => domain.toString()).join('\n') + '\n';
     },
 
     // File i/o
-    getDir: function (name) {
+    getDir(name) {
         var hsRoot = process.cwd();
         switch (name) {
             // HeadStart files
@@ -62,91 +57,75 @@ HeadStart.prototype = {
 
             // Cartridge files
             case "templates":
-                return path.join(hsRoot, this.getConfig().cartridgePath, 'templates');
+                return path.join(hsRoot, config.cartridgePath, 'templates');
 
             // Project files
             case "domains":
-                return path.join(this.getConfig().projectPath, 'domains');
+                return path.join(config.projectPath, 'domains');
 
             // Output
             case "output":
-                return path.join(hsRoot, this.getConfig().outputPath);
+                return path.join(hsRoot, config.outputPath);
 
             default:
-                throw "Invalid directory: "+name;
+                throw new Error("Invalid directory: " + name);
         }
     },
 
-    readFile: function (fn) {
-        fs = require('fs');
+    readFile(fn) {
         var txt = fs.readFileSync(fn, 'utf8');
         return txt;
     }
-}
-
-//
-// Config
-//
-
-HeadStart.prototype.getConfig = function () {
-    if (this.config) {
-        return this.config;
-    }
-    this.config = require('./../config');
-    return this.config;
-}
+};
 
 //
 // MongoDB
 //
 
-HeadStart.prototype.getMongoURL = function (dbName) {
-    return "mongodb://"+this.getConfig().mongoServer+"/"+dbName;
+function getMongoURL(dbName) {
+    return `mongodb://${config.mongoServer}/${dbName}`;
 }
 
-HeadStart.prototype.useDB = function (dbName, nextFunction) {
-    var db = this.mongoDBs[dbName];
-    var mDBs = this.mongoDBs;
-    if (db) {
+HeadStart.prototype.useDB = function(dbName, nextFunction) {
+    if (this.mongoDBs[dbName]) {
         // TBD: Check, if the connection is still valid!
-        nextFunction(db);
-    }
-    else {
+        nextFunction(this.mongoDBs[dbName]);
+    } else {
         try {
-            mongoClient.connect(this.getMongoURL(dbName), function (err, db) {
-                if (err)
+            mongoClient.connect(getMongoURL(dbName), function(err, db) {
+                if (err) {
                     console.log("Error connecting to DB: " + err);
-                else {
-                    mDBs[dbName] = db;
+                } else {
+                    this.mongoDBs[dbName] = db;
                     nextFunction(db);
                 }
             });
-        }
-        catch (err) {
-            console.log("Error connecting to DB: "+err);
+        } catch (err) {
+            console.log("Error connecting to DB: " + err);
         }
     }
-}
+};
 
-HeadStart.prototype.removeAllDataFromDB = function (dbName) {
+HeadStart.prototype.removeAllDataFromDB = function(dbName) {
     // TBD: Why not drop DB instead (I remember there was a reason, but...)?
-    this.useDB(dbName, function (db) {
-        db.collections(function (err, collections) {
-            if (err)
+    this.useDB(dbName, function(db) {
+        db.collections(function(err, collections) {
+            if (err) {
                 console.log("Error retrieving collection names: " + err);
-            else {
+            } else {
                 console.log("*** Collection:");
-                collections.forEach(function (collection) {
+                collections.forEach(function(collection) {
                     console.log("Dropping collection: " + collection.collectionName);
-                    collection.drop(function (err, res) {
-                        if (err)
+                    collection.drop(function(err, res) {
+                        if (err) {
                             console.log("Error dropping collection: " + err);
+                        }
                     });
                 });
             }
         });
     });
-}
+};
 
 /* TBD:
 
@@ -155,7 +134,6 @@ HeadStart.prototype.removeAllDataFromDB = function (dbName) {
 //
 
 HeadStart.prototype.loadGeneratedHBSPartials = function () {
-    var fs = require('fs');
     var hbs = require('hbs');
 
     // TBD: Load all project partials:
@@ -185,65 +163,78 @@ HeadStart.prototype.loadGeneratedHBSPartials = function () {
 // [!]: For children of Entity only. Used to include inherited elements. Can be combined with [?]
 //
 
-
 // TBD:
 // - Currently JavaScript is not executed if embedded in {{if}}...{{then}}...
 
-HeadStart.prototype.createBeginTag = function (tagName, conditional) {
-    if (conditional)
+HeadStart.prototype.createBeginTag = function(tagName, conditional) {
+    if (conditional) {
         return '{{' + tagName + '?}}';
-    else
-        return begin = "{{" + tagName + "*}}";
-}
+    } else {
+        return "{{" + tagName + "*}}";
+    }
+};
 
-HeadStart.prototype.createEndTag = function (tagName, conditional) {
-    if (conditional)
+HeadStart.prototype.createEndTag = function(tagName, conditional) {
+    if (conditional) {
         return '{{/' + tagName + '?}}';
-    else
-        return end = "{{/" + tagName + "}}";
-}
+    } else {
+        return "{{/" + tagName + "}}";
+    }
+};
 
-HeadStart.prototype.applyTemplateFile = function (fn, domains) {
+HeadStart.prototype.applyTemplateFile = function(fn, domains) {
     var template = this.readFile(fn);
 
     var beginTag = this.createBeginTag("Domain");
     var endTag = this.createEndTag("Domain");
 
     var tokenSeq = utils.getTokenSeq(template, beginTag, endTag);
-    for (var i in tokenSeq) {
-        if (tokenSeq[i].isTagValue) {
+    tokenSeq.forEach((token) => {
+        if (token.isTagValue) {
             var ts = "";
-            for (var j in domains)
-                ts += domains[j].processLocalTemplateFunctions(tokenSeq[i].value);
-            tokenSeq[i].value = ts;
+            domains.forEach((domain) => {
+                ts += domain.processLocalTemplateFunctions(token.value);
+            });
+            token.value = ts;
         }
-    }
+    });
 
-    template = "";
-    for (var i in tokenSeq)
-        template += tokenSeq[i].value;
+    template = tokenSeq.map((token) => token.value).join('');
 
     return template;
-}
+};
 
 //
 // Simplified Model Notation (SMN)
 //
 
-
-HeadStart.prototype.createModelElementsFromSMN = function (smn, domain) {
+HeadStart.prototype.createModelElementsFromSMN = function(smn, domain) {
     var model = this.parseSMN(smn);
-    //console.log(JSON.stringify(model, null, 2));
+    // console.log(JSON.stringify(model, null, 2));
 
     return this.createModel(model, domain);
-}
+};
 
-HeadStart.prototype.createModel = function (model, domain) {
+HeadStart.prototype.createModel = function(model, domain) {
+    var i;
+    var r;
+    var rel;
+
     var domainFromModel = null;
-    for (var i in model) if (model[i].isDomain) domainFromModel = i;
-    if (domain && domainFromModel) throw "Error: trying to add new domain #" + domainFromModel + " while also giving " + domain.name;
-    if (!domain && domainFromModel) domain = this.createNewDomain(domainFromModel, domainFromModel + " from SMN");
-    if (!domain || domain==null) throw "Error creating model from SMN - no domain specified!";
+    for (i in model) {
+        if (model[i].isDomain) {
+            domainFromModel = i;
+        }
+    }
+    if (domain && domainFromModel) {
+        throw new Error("Error: trying to add new domain #" + domainFromModel + " while also giving " + domain.name);
+    }
+    if (!domain && domainFromModel) {
+        domain = this.createNewDomain(domainFromModel, domainFromModel + " from SMN");
+    }
+    if (!domain || domain == null) {
+        throw new Error("Error creating model from SMN - no domain specified!");
+    }
 
     // Remember new entities with unresolved parentClass
     var newEntitiesWithParent = [];
@@ -258,92 +249,105 @@ HeadStart.prototype.createModel = function (model, domain) {
     for (var m in model) {
         var elem = model[m];
         if (elem.isDomain) {
-            if (domainElem) throw "Only one domain should be declared per SMN file!";
+            if (domainElem) {
+                throw new Error("Only one domain should be declared per SMN file!");
+            }
             domainElem = elem;
-        }
-        else {
+        } else {
             var entity = domain.addNewEntity(m, "");
             entity.isAbstract = elem.isAbstract;
             if (elem.baseClass) {
                 entity.baseClass = elem.baseClass;
                 newEntitiesWithParent.push(entity);
             }
-            for (var n in elem.properties) {
-                var p = elem.properties[n];
+
+            elem.properties.forEach((p) => {
                 if (p.type.includes("[")) {
                     var a = utils.extractTagValue(p.type, "[", "]");
                     var en = entity.addNewEnum(p.property);
                     var literals = a[1].split("|");
-                    for (var i in literals)
-                        en.addNewLiteral(literals[i]);
-                }
-                else
+                    literals.forEach((literal) => {
+                        en.addNewLiteral(literal);
+                    });
+                } else {
                     entity.addNewBasicProperty(p.property, "", p.type);
-            }
-            for (var o in elem.aggregations) {
-                var agg = elem.aggregations[o];
-                var r = entity.addNewRelationship(null, true, agg.sourceRole);
-                if (agg.targetType.includes("*"))
+                }
+            });
+
+            elem.aggregations.forEach((agg) => {
+                r = entity.addNewRelationship(null, true, agg.sourceRole);
+                if (agg.targetType.includes("*")) {
                     r.targetMax = "*";
-                else if (agg.targetType.includes("+"))
+                } else if (agg.targetType.includes("+")) {
                     r.targetMax = "+";
+                }
                 newRelationships.push([agg.targetType, r]);
-            }
-            for (var p in elem.associations) {
-                var ass = elem.associations[p];
-                var r = entity.addNewRelationship(null, false, ass.sourceRole);
-                newRelationships.push([ass.targetType, r]);
-            }
+            });
+
+            elem.associations.forEach((association) => {
+                r = entity.addNewRelationship(null, false, association.sourceRole);
+                newRelationships.push([association.targetType, r]);
+            });
         }
     }
 
     // Mark rootEntity instances
     if (domainElem) {
-        if (domainElem.aggregations.length === 0) throw "Domain definition does not define child elements. Include '#MyDomain: {MyEntity*}' to do so!";
-        for (var rel in domainElem.aggregations) {
+        if (domainElem.aggregations.length === 0) {
+            throw new Error("Domain definition does not define child elements. Include '#MyDomain: {MyEntity*}' to do so!");
+        }
+        for (rel in domainElem.aggregations) {
             var targetType = domainElem.aggregations[rel].targetType;
             if (targetType.includes('*')) {
                 targetType = targetType.replace("*", "");
-            }
-            else {
+            } else {
                 console.log("Warning: Assuming cardinality '*' for rootEntity instance " + targetType);
                 if (targetType.includes('+')) {
                     targetType = targetType.replace("+", "");
                 }
             }
             var target = domain.findElementByName(targetType, "Entity");
-            if (!target)
-                throw "Error creating new relationship: No matching entity '" + targetType + "'!";
+            if (!target) {
+                throw new Error("Error creating new relationship: No matching entity '" + targetType + "'!");
+            }
             target.setRootEntityStatus(true);
         }
     }
 
     // Resolve targets for parent classes
-    var allElems = domain.getAllElements(true);
-    for (var i in newEntitiesWithParent) {
-        var entity = newEntitiesWithParent[i];
-        var target = domain.findElementByName(entity.baseClass, "Entity");
-        if (!target) throw "No matching parent entity '" + entity.baseClass + "' found for entity'" + entity.name + "'!";
+    for (i in newEntitiesWithParent) {
+        entity = newEntitiesWithParent[i];
+        target = domain.findElementByName(entity.baseClass, "Entity");
+        if (!target) {
+            throw new Error("No matching parent entity '" + entity.baseClass + "' found for entity'" + entity.name + "'!");
+        }
         entity.setParentClass(target);
     }
 
     // Finally, resolve missing targets in relations
-    for (var i in newRelationships) {
+    for (i in newRelationships) {
         var targetName = newRelationships[i][0];
-        if (targetName.includes('*'))
+        if (targetName.includes('*')) {
             targetName = targetName.split("*")[0];
-        if (targetName.includes('+'))
+        }
+        if (targetName.includes('+')) {
             targetName = targetName.split("+")[0];
-        var rel = newRelationships[i][1];
-        var target = domain.findElementByName(targetName, "Entity");
-        if (!target) throw "No matching entity '" + targetName + "' for relationship '" + rel.name + "'!";
+        }
+        rel = newRelationships[i][1];
+        target = domain.findElementByName(targetName, "Entity");
+        if (!target) {
+            throw new Error("No matching entity '" + targetName + "' for relationship '" + rel.name + "'!");
+        }
         rel.setTargetEntity(target);
         rel.updateDesc();
     }
     return domain;
-}
+};
 
-HeadStart.prototype.parseSMN = function (smn) {
+HeadStart.prototype.parseSMN = function(smn) {
+    var currentLine;
+    var idx;
+
     // Remove whitespaces
     smn = smn.replace(/ /g, '');
 
@@ -353,24 +357,30 @@ HeadStart.prototype.parseSMN = function (smn) {
     // If a line starts with "-", append it to previous line
     // Also, remove comments
     var smnFileMerged = [];
-    for (var idx in smnFile) {
-        var currentLine = smnFile[idx];
-        if (currentLine.includes("//"))
+    for (idx in smnFile) {
+        currentLine = smnFile[idx];
+        if (currentLine.includes("//")) {
             currentLine = currentLine.split("//", 1)[0];
-        if (currentLine.length>0 && currentLine[0] === "-")
-            smnFileMerged[smnFileMerged.length-1] = smnFileMerged[smnFileMerged.length-1] + ","+ currentLine.substr(1);
-        else
+        }
+        if (currentLine.length > 0 && currentLine[0] === "-") {
+            smnFileMerged[smnFileMerged.length - 1] = smnFileMerged[smnFileMerged.length - 1] + "," + currentLine.substr(1);
+        } else {
             smnFileMerged.push(currentLine);
+        }
     }
 
     // Start with empty model
     var model = {};
 
     // Now process each line:
-    for (var idx in smnFileMerged) {
+    for (idx in smnFileMerged) {
+        var token;
+
         // Remove '\r' and comments ('//'), ignore empty lines:
-        var currentLine = smnFileMerged[idx].replace(/\r/g, '');
-        if (currentLine.length < 1) continue;
+        currentLine = smnFileMerged[idx].replace(/\r/g, '');
+        if (currentLine.length < 1) {
+            continue;
+        }
 
         var header = "";
         var body = "";
@@ -387,8 +397,7 @@ HeadStart.prototype.parseSMN = function (smn) {
         if (currentLine.includes(":")) {
             header = utils.splitBySeparator(currentLine, ":")[0];
             body = utils.splitBySeparator(currentLine, ":")[1];
-        }
-        else {
+        } else {
             header = currentLine;
             body = "";
         }
@@ -401,82 +410,103 @@ HeadStart.prototype.parseSMN = function (smn) {
 
         // Inheritance?
         if (header.includes("(")) {
-            if (!header.includes(")")) throw "Missing ')' in line " + (idx);
+            if (!header.includes(")")) {
+                throw new Error("Missing ')' in line " + idx);
+            }
             entity = utils.extractTagValue(header, "(", ")")[0];
             baseClass = utils.extractTagValue(header, "(", ")")[1];
-        }
-        else
+        } else {
             entity = header;
+        }
 
-        if (entity.length < 3) throw "Not a valid entity name: '" + entity + "' in line " + idx + " (name must have more than 2 characters)";
+        if (entity.length < 3) {
+            throw new Error("Not a valid entity name: '" + entity + "' in line " + idx + " (name must have more than 2 characters)");
+        }
 
         // Add entity to model, if not already there
-        if (!model[entity])
-            model[entity] = {properties: [], aggregations: [], associations: [], isDomain: isDomainDefinition, isAbstract: isAbstract };
+        if (!model[entity]) {
+            model[entity] = {
+                properties: [],
+                aggregations: [],
+                associations: [],
+                isDomain: isDomainDefinition,
+                isAbstract: isAbstract
+            };
+        }
 
         // Add baseClass?
-        if (baseClass.length > 1)
+        if (baseClass.length > 1) {
             model[entity].baseClass = baseClass;
+        }
 
         // Parse aggregations
         while (body.includes("{")) {
-            if (!body.includes("}")) throw "Missing '}' in line " + idx;
+            if (!body.includes("}")) {
+                throw new Error("Missing '}' in line " + idx);
+            }
             var s = utils.extractTagValue(body, "{", "}");
-            var token = s[1];
-            body = s[0] + (s.length>2?s[2]:"");
+            token = s[1];
+            body = s[0] + (s.length > 2 ? s[2] : "");
             var aggregations = token.split(",");
-            for (j in aggregations) {
+            for (var j in aggregations) {
                 var agg = aggregations[j].split(":");
                 if (agg.length === 1) {
                     var sr = agg[0].replace("*", "");
                     sr = sr.replace("+", "");
                     sr += "s";
                     agg = {sourceRole: sr, targetType: agg[0]};
-                }
-                else
+                } else {
                     agg = {sourceRole: agg[0], targetType: agg[1]};
+                }
                 model[entity].aggregations.push(agg);
             }
         }
 
-
         // Now parse definitions of attributes and associations
-        if (body.replace(/\s/g, '').length>0) // Body is not empty
-        {
+        if (body.replace(/\s/g, '').length > 0) {
+            // Body is not empty
             var tokens = body.split(",");
-            for (var idx = 0; idx < tokens.length; idx++) {
-                var token = tokens[idx];
-                if (!token.replace(/\s/g, '').length>0) continue;
+            for (idx = 0; idx < tokens.length; idx++) {
+                token = tokens[idx];
+                if (!token.replace(/\s/g, '').length > 0) {
+                    continue;
+                }
                 if (token.includes("=>")) { // Association
                     var assoc = token.split("=>");
-                    if (assoc.length === 1 || assoc[0].length === 0)
+                    if (assoc.length === 1 || assoc[0].length === 0) {
                         assoc = {sourceRole: assoc[1], targetType: assoc[1]};
-                    else
+                    } else {
                         assoc = {sourceRole: assoc[0], targetType: assoc[1]};
+                    }
                     model[entity].associations.push(assoc);
-                }
-                else { // Property
+                } else { // Property
                     var prop = token.split(":");
-                    if (prop.length === 1) // No type information supplied, use string as default
-                        prop = {property: prop[0], type: HeadStart.me.BasicTypes.String};
-                    else
+                    if (prop.length === 1) {
+                        // No type information supplied, use string as default
+                        prop = {property: prop[0], type: BasicTypes.String};
+                    } else {
                         prop = {property: prop[0], type: prop[1]};
-                    if (!this.isValidBasicType(prop.type) && !prop.type.includes("[")) throw "Invalid basic type '" + prop.type + "' in line " + idx;
+                    }
+                    if (!BasicTypes.isValid(prop.type) && !prop.type.includes("[")) {
+                        throw new Error("Invalid basic type '" + prop.type + "' in line " + idx);
+                    }
                     model[entity].properties.push(prop);
                 }
             }
         }
     }
     return model;
-}
+};
 
 //
 // Re-create model hierarchy from JSON data
 //
 
-HeadStart.prototype.createDomainFromJSONString = function (jsonData) {
+HeadStart.prototype.createDomainFromJSONString = function(jsonData) {
+    var i;
+
     // Re-create model hierarchy:
-    var domain = this.createInstanceFromJSON(JSON.parse(jsonData), this.ComplexTypes.Domain, this);
+    var domain = this.createInstanceFromJSON(JSON.parse(jsonData), ComplexTypes.Domain, this);
 
     // In the JSON format, in-memory references have been replaces with OIDs.
     // Now we must replace any of these OIDs with in-memory object references again
@@ -487,19 +517,21 @@ HeadStart.prototype.createDomainFromJSONString = function (jsonData) {
         if (e.hasParentClass()) {
             oid = e.getParentClass();
             target = domain.findElementByID(oid);
-            if (target)
+            if (target) {
                 e.setParentClass(target);
-            else
-                throw "Internal Error: Cannot find parent class for "+this.name;
+            } else {
+                throw new Error("Internal Error: Cannot find parent class for " + this.name);
+            }
         }
         for (i in e.relationships) {
             var r = e.relationships[i];
             oid = r.getTargetEntity();
             target = domain.findElementByID(oid);
-            if (target)
+            if (target) {
                 r.setTargetEntity(target);
-            else
-                throw "Internal Error: Cannot find target entity for "+this.name;
+            } else {
+                throw new Error("Internal Error: Cannot find target entity for " + this.name);
+            }
         }
         for (i in e.tableViews) {
             var tv = e.tableViews[i];
@@ -507,182 +539,205 @@ HeadStart.prototype.createDomainFromJSONString = function (jsonData) {
                 var ti = tv.tableItems[j];
                 oid = ti.property;
                 target = domain.findElementByID(oid);
-                if (target)
+                if (target) {
                     ti.setProperty(target);
-                else
-                    throw "Internal Error: Cannot find property for "+ti.name;
+                } else {
+                    throw new Error("Internal Error: Cannot find property for " + ti.name);
+                }
             }
         }
         for (i in e.pageViews) {
             var pv = e.pageViews[i];
-            for (j in pv.panels) {
+            for (var j in pv.panels) {
                 var p = pv.panels[j];
-                for (k in p.relationshipPanelItems) {
+                for (var k in p.relationshipPanelItems) {
                     var rpi = p.relationshipPanelItems[k];
                     oid = rpi.relationship;
                     target = domain.findElementByID(oid);
-                    if (target)
+                    if (target) {
                         rpi.setRelationship(target);
-                    else
-                        throw "Internal Error: Cannot find relationship for "+rpi.name;
+                    } else {
+                        throw new Error("Internal Error: Cannot find relationship for " + rpi.name);
+                    }
                 }
-                for (l in p.basicPropertyPanelItems) {
+                for (var l in p.basicPropertyPanelItems) {
                     var bppi = p.basicPropertyPanelItems[l];
                     oid = bppi.basicProperty;
                     target = domain.findElementByID(oid);
-                    if (target)
+                    if (target) {
                         bppi.setBasicProperty(target);
-                    else
-                        throw "Internal Error: Cannot find basic property for "+bppi.name;
+                    } else {
+                        throw new Error("Internal Error: Cannot find basic property for " + bppi.name);
+                    }
                 }
-                for (m in p.enumPanelItems) {
+                for (var m in p.enumPanelItems) {
                     var epi = p.enumPanelItems[m];
                     oid = epi.enumeration;
                     target = domain.findElementByID(oid);
-                    if (target)
+                    if (target) {
                         epi.setEnumeration(target);
-                    else
-                        throw "Internal Error: Cannot find enumeration for "+epi.name;
+                    } else {
+                        throw new Error("Internal Error: Cannot find enumeration for " + epi.name);
+                    }
                 }
             }
         }
     }
     return domain;
-}
+};
 
 // Ugly, but necessary:
-HeadStart.prototype.createInstanceFromJSON = function (jsonData, type, parent) {
+HeadStart.prototype.createInstanceFromJSON = function(jsonData, type, parent) {
+    var i;
     var t = jsonData.type;
     var id = jsonData.id;
     var name = jsonData.name;
     var desc = jsonData.desc;
 
     // Some basic validations
-    if (t != type) throw "Element is of type '" + t + "'. Expected was '" + type + "'! ";
-    if (!this.isValidID(id)) throw "Invalid ID!";
-    if (!name) throw "No name specified for element of type: "+t;
+    if (t !== type) {
+        throw new Error("Element is of type '" + t + "'. Expected was '" + type + "'! ");
+    }
+    if (!isValidID(id)) {
+        throw new Error("Invalid ID!");
+    }
+    if (!name) {
+        throw new Error("No name specified for element of type: " + t);
+    }
 
     switch (type) {
-        case this.ComplexTypes.Domain:
-            var newDomain =                 this.createNewDomain(name, desc, true); // Recreate = true!
-            newDomain.entities =            [];
-            newDomain.definitionOfMany =    jsonData.definitionOfMany;
-            for (i in jsonData.entities)
-                newDomain.entities.push(this.createInstanceFromJSON(jsonData.entities[i], this.ComplexTypes.Entity, newDomain));
+        case ComplexTypes.Domain:
+            var newDomain = this.createNewDomain(name, desc, true); // Recreate = true!
+            newDomain.entities = [];
+            newDomain.definitionOfMany = jsonData.definitionOfMany;
+            for (i in jsonData.entities) {
+                newDomain.entities.push(this.createInstanceFromJSON(jsonData.entities[i], ComplexTypes.Entity, newDomain));
+            }
             return newDomain;
-        case this.ComplexTypes.Entity:
-            var newEntity =             new this.model.Entity(parent, id, name, desc);
-            newEntity.isAbstract =      jsonData.isAbstract;
-            newEntity.namePlural =      jsonData.namePlural;
-            newEntity.isRootEntity =    jsonData.isRootEntity;
-            newEntity.isRootInstance =  jsonData.isRootInstance;
-            newEntity.parentClass =     jsonData.parentClass; // Convert OID to reference later!
+        case ComplexTypes.Entity:
+            var newEntity = new models.Entity(parent, id, name, desc);
+            newEntity.isAbstract = jsonData.isAbstract;
+            newEntity.namePlural = jsonData.namePlural;
+            newEntity.isRootEntity = jsonData.isRootEntity;
+            newEntity.isRootInstance = jsonData.isRootInstance;
+            newEntity.parentClass = jsonData.parentClass; // Convert OID to reference later!
             newEntity.basicProperties = [];
-            for (i in jsonData.basicProperties)
-                newEntity.basicProperties.push(this.createInstanceFromJSON(jsonData.basicProperties[i], this.ComplexTypes.BasicProperty, newEntity));
+            for (i in jsonData.basicProperties) {
+                newEntity.basicProperties.push(this.createInstanceFromJSON(jsonData.basicProperties[i], ComplexTypes.BasicProperty, newEntity));
+            }
             newEntity.enums = [];
-            for (i in jsonData.enums)
-                newEntity.enums.push(this.createInstanceFromJSON(jsonData.enums[i], this.ComplexTypes.Enumeration, newEntity));
+            for (i in jsonData.enums) {
+                newEntity.enums.push(this.createInstanceFromJSON(jsonData.enums[i], ComplexTypes.Enumeration, newEntity));
+            }
             newEntity.relationships = [];
-            for (i in jsonData.relationships)
-                newEntity.relationships.push(this.createInstanceFromJSON(jsonData.relationships[i], this.ComplexTypes.Relationship, newEntity));
+            for (i in jsonData.relationships) {
+                newEntity.relationships.push(this.createInstanceFromJSON(jsonData.relationships[i], ComplexTypes.Relationship, newEntity));
+            }
             newEntity.pageViews = [];
-            for (i in jsonData.pageViews)
-                newEntity.pageViews.push(this.createInstanceFromJSON(jsonData.pageViews[i], this.ComplexTypes.PageView, newEntity));
+            for (i in jsonData.pageViews) {
+                newEntity.pageViews.push(this.createInstanceFromJSON(jsonData.pageViews[i], ComplexTypes.PageView, newEntity));
+            }
             newEntity.tableViews = [];
-            for (i in jsonData.tableViews)
-                newEntity.tableViews.push(this.createInstanceFromJSON(jsonData.tableViews[i], this.ComplexTypes.TableView, newEntity));
+            for (i in jsonData.tableViews) {
+                newEntity.tableViews.push(this.createInstanceFromJSON(jsonData.tableViews[i], ComplexTypes.TableView, newEntity));
+            }
             return newEntity;
-        case this.ComplexTypes.BasicProperty:
-            var newProperty =           new this.model.BasicProperty(parent, id, name, desc, jsonData.propertyType);
-            newProperty.defaultValue =  jsonData.defaultValue;
-            newProperty.constraints =   jsonData.constraints;
-            newProperty.examples =      jsonData.examples;
+        case ComplexTypes.BasicProperty:
+            var newProperty = new models.BasicProperty(parent, id, name, desc, jsonData.propertyType);
+            newProperty.defaultValue = jsonData.defaultValue;
+            newProperty.constraints = jsonData.constraints;
+            newProperty.examples = jsonData.examples;
             return newProperty;
-        case this.ComplexTypes.Enumeration:
-            var newEnumeration = new this.model.Enumeration(parent, id, name, desc);
-            for (i in jsonData.literals)
-                newEnumeration.literals.push(this.createInstanceFromJSON(jsonData.literals[i], this.ComplexTypes.Literal, newEnumeration));
+        case ComplexTypes.Enumeration:
+            var newEnumeration = new models.Enumeration(parent, id, name, desc);
+            for (i in jsonData.literals) {
+                newEnumeration.literals.push(this.createInstanceFromJSON(jsonData.literals[i], ComplexTypes.Literal, newEnumeration));
+            }
             return newEnumeration;
-        case this.ComplexTypes.Literal:
-            var newLiteral = new this.model.Literal(parent, id, name, desc);
+        case ComplexTypes.Literal:
+            var newLiteral = new models.Literal(parent, id, name, desc);
             return newLiteral;
-        case this.ComplexTypes.Relationship:
-            var newRelationship =               new this.model.Relationship(parent, jsonData.targetEntity, id, jsonData.isAggregation, name, desc);
-            newRelationship.sourceRole =        jsonData.sourceRole;
-            newRelationship.sourceMax =         jsonData.sourceMax;
-            newRelationship.sourceMin =         jsonData.sourceMin;
-            newRelationship.sourceAverage =     jsonData.sourceAverage;
-            newRelationship.targetRole =        jsonData.targetRole;
-            newRelationship.targetMin =         jsonData.targetMin;
-            newRelationship.targetMax =         jsonData.targetMax;
-            newRelationship.targetAverage =     jsonData.targetAverage;
+        case ComplexTypes.Relationship:
+            var newRelationship = new models.Relationship(parent, jsonData.targetEntity, id, jsonData.isAggregation, name, desc);
+            newRelationship.sourceRole = jsonData.sourceRole;
+            newRelationship.sourceMax = jsonData.sourceMax;
+            newRelationship.sourceMin = jsonData.sourceMin;
+            newRelationship.sourceAverage = jsonData.sourceAverage;
+            newRelationship.targetRole = jsonData.targetRole;
+            newRelationship.targetMin = jsonData.targetMin;
+            newRelationship.targetMax = jsonData.targetMax;
+            newRelationship.targetAverage = jsonData.targetAverage;
             return newRelationship;
-        case this.ComplexTypes.PageView:
-            var newPageView =           new this.view.PageView(parent, id, name, desc);
-            newPageView.isDefault =     jsonData.isDefault;
-            newPageView.label =         jsonData.label;
-            for (i in jsonData.panels)
-                newPageView.panels.push(this.createInstanceFromJSON(jsonData.panels[i], this.ComplexTypes.Panel, newPageView));
+        case ComplexTypes.PageView:
+            var newPageView = new views.PageView(parent, id, name, desc);
+            newPageView.isDefault = jsonData.isDefault;
+            newPageView.label = jsonData.label;
+            for (i in jsonData.panels) {
+                newPageView.panels.push(this.createInstanceFromJSON(jsonData.panels[i], ComplexTypes.Panel, newPageView));
+            }
             return newPageView;
-        case this.ComplexTypes.Panel:
-            var newPanel =                  new this.view.Panel(parent, id, name, desc);
-            newPanel.label =                jsonData.label;
-            newPanel.position =             jsonData.position;
-            newPanel.columns =              jsonData.columns;
-            newPanel.alternatingColors =    jsonData.alternatingColors;
-            for (i in jsonData.separatorPanelItems)
-                newPanel.separatorPanelItems.push(this.createInstanceFromJSON(jsonData.separatorPanelItems[i], this.ComplexTypes.SeparatorPanelItem, newPanel));
+        case ComplexTypes.Panel:
+            var newPanel = new views.Panel(parent, id, name, desc);
+            newPanel.label = jsonData.label;
+            newPanel.position = jsonData.position;
+            newPanel.columns = jsonData.columns;
+            newPanel.alternatingColors = jsonData.alternatingColors;
+            for (i in jsonData.separatorPanelItems) {
+                newPanel.separatorPanelItems.push(this.createInstanceFromJSON(jsonData.separatorPanelItems[i], ComplexTypes.SeparatorPanelItem, newPanel));
+            }
             for (i in jsonData.relationshipPanelItems) {
                 var newRelationshipPanelItem = this.createInstanceFromJSON(jsonData.relationshipPanelItems[i], this.ComplexTypes.RelationshipPanelItem, newPanel);
                 newRelationshipPanelItem.style = jsonData.relationshipPanelItems[i].style;
                 newPanel.relationshipPanelItems.push(newRelationshipPanelItem);
             }
-            for (i in jsonData.basicPropertyPanelItems)
-                newPanel.basicPropertyPanelItems.push(this.createInstanceFromJSON(jsonData.basicPropertyPanelItems[i], this.ComplexTypes.BasicPropertyPanelItem, newPanel));
-            for (i in jsonData.enumPanelItems)
-                newPanel.enumPanelItems.push(this.createInstanceFromJSON(jsonData.enumPanelItems[i], this.ComplexTypes.EnumPanelItem, newPanel));
+            for (i in jsonData.basicPropertyPanelItems) {
+                newPanel.basicPropertyPanelItems.push(this.createInstanceFromJSON(jsonData.basicPropertyPanelItems[i], ComplexTypes.BasicPropertyPanelItem, newPanel));
+            }
+            for (i in jsonData.enumPanelItems) {
+                newPanel.enumPanelItems.push(this.createInstanceFromJSON(jsonData.enumPanelItems[i], ComplexTypes.EnumPanelItem, newPanel));
+            }
             return newPanel;
-        case this.ComplexTypes.SeparatorPanelItem:
-            var newSeparatorPanelItem =         new this.view.SeparatorPanelItem(parent, id, name, desc);
-            newSeparatorPanelItem.position =    jsonData.position;
-            newSeparatorPanelItem.label =       jsonData.label;
+        case ComplexTypes.SeparatorPanelItem:
+            var newSeparatorPanelItem = new views.SeparatorPanelItem(parent, id, name, desc);
+            newSeparatorPanelItem.position = jsonData.position;
+            newSeparatorPanelItem.label = jsonData.label;
             return newSeparatorPanelItem;
-        case this.ComplexTypes.RelationshipPanelItem:
-            var newRelationshipPanelItem =          new this.view.RelationshipPanelItem(parent, id, name, desc);
-            newRelationshipPanelItem.position =     jsonData.position;
-            newRelationshipPanelItem.label =        jsonData.label;
+        case ComplexTypes.RelationshipPanelItem:
+            var newRelationshipPanelItem = new views.RelationshipPanelItem(parent, id, name, desc);
+            newRelationshipPanelItem.position = jsonData.position;
+            newRelationshipPanelItem.label = jsonData.label;
             newRelationshipPanelItem.relationship = jsonData.relationship;
             return newRelationshipPanelItem;
-        case this.ComplexTypes.BasicPropertyPanelItem:
-            var newBasicPropertyPanelItem =             new this.view.BasicPropertyPanelItem(parent, id, name, desc);
-            newBasicPropertyPanelItem.basicProperty =   jsonData.basicProperty;
-            newBasicPropertyPanelItem.position =        jsonData.position;
-            newBasicPropertyPanelItem.label =           jsonData.label;
+        case ComplexTypes.BasicPropertyPanelItem:
+            var newBasicPropertyPanelItem = new views.BasicPropertyPanelItem(parent, id, name, desc);
+            newBasicPropertyPanelItem.basicProperty = jsonData.basicProperty;
+            newBasicPropertyPanelItem.position = jsonData.position;
+            newBasicPropertyPanelItem.label = jsonData.label;
             return newBasicPropertyPanelItem;
-        case this.ComplexTypes.EnumPanelItem:
-            var newEnumPanelItem =          new this.view.EnumPanelItem(parent, id, name, desc);
-            newEnumPanelItem.position =     jsonData.position;
-            newEnumPanelItem.label =        jsonData.label;
-            newEnumPanelItem.enumeration =  jsonData.enumeration;
+        case ComplexTypes.EnumPanelItem:
+            var newEnumPanelItem = new views.EnumPanelItem(parent, id, name, desc);
+            newEnumPanelItem.position = jsonData.position;
+            newEnumPanelItem.label = jsonData.label;
+            newEnumPanelItem.enumeration = jsonData.enumeration;
             return newEnumPanelItem;
-        case this.ComplexTypes.TableView:
-            var newTableView =              new this.view.TableView(parent, id, name, desc);
-            newTableView.isDefault =        jsonData.isDefault;
-            newTableView.label =            jsonData.label;
-            for (i in jsonData.tableItems)
-                newTableView.tableItems.push(this.createInstanceFromJSON(jsonData.tableItems[i], this.ComplexTypes.TableItem, newTableView));
+        case ComplexTypes.TableView:
+            var newTableView = new views.TableView(parent, id, name, desc);
+            newTableView.isDefault = jsonData.isDefault;
+            newTableView.label = jsonData.label;
+            for (i in jsonData.tableItems) {
+                newTableView.tableItems.push(this.createInstanceFromJSON(jsonData.tableItems[i], ComplexTypes.TableItem, newTableView));
+            }
             return newTableView;
-        case this.ComplexTypes.TableItem:
-            var newTableItem = new this.view.TableItem(parent, id, name, desc);
-            newTableItem.position   = jsonData.position;
-            newTableItem.label      = jsonData.label;
-            newTableItem.property   = jsonData.property;
+        case ComplexTypes.TableItem:
+            var newTableItem = new views.TableItem(parent, id, name, desc);
+            newTableItem.position = jsonData.position;
+            newTableItem.label = jsonData.label;
+            newTableItem.property = jsonData.property;
             return newTableItem;
         default:
-            throw "Invalid type: " + type;
+            throw new Error("Invalid type: " + type);
     }
-}
+};
 
 //
 // Create single instance
@@ -694,37 +749,9 @@ HeadStart.me = new HeadStart();
 // Type-related Definitions
 //
 
-// TBD - move these definitions from "me" to "prototype"
-
-HeadStart.me.BasicTypes = {String: "string", Number: "number", Boolean: "boolean", Date: "date"};
-HeadStart.prototype.isValidBasicType = function (t) {
-    for (i in HeadStart.me.BasicTypes) if (t === HeadStart.me.BasicTypes[i]) return true;
-    return false;
-}
-
-HeadStart.me.ValidEnumSelections = {
-    One: "Exactly One",
-    ZeroOne: "Zero or One",
-    ZeroMany: "Zero to Many",
-    OneMany: "One to Many"
-};
-
-HeadStart.me.ComplexTypes = {
-    Domain: "Domain",
-    Entity: "Entity",
-    BasicProperty: "BasicProperty",
-    Enumeration: "Enumeration",
-    Literal: "Literal",
-    Relationship: "Relationship",
-    PageView: "PageView",
-    Panel: "Panel",
-    SeparatorPanelItem: "SeparatorPanelItem",
-    RelationshipPanelItem: "RelationshipPanelItem",
-    BasicPropertyPanelItem: "BasicPropertyPanelItem",
-    EnumPanelItem: "EnumPanelItem",
-    TableView: "TableView",
-    TableItem: "TableItem"
-};
+HeadStart.prototype.BasicTypes = BasicTypes;
+HeadStart.prototype.ValidEnumSelections = ValidEnumSelections;
+HeadStart.prototype.ComplexTypes = ComplexTypes;
 
 //
 // ------------------------------------------------------------------------------------------------------------

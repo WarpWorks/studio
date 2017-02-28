@@ -1,6 +1,6 @@
 const PanelItem = require('./panel-item');
 
-function BasicPropertyPanelItem (parent, id, name, desc, basicProperty) {
+function BasicPropertyPanelItem(parent, id, name, desc, basicProperty) {
     PanelItem.call(this, "BasicPropertyPanelItem", parent, id, name, desc);
     this.label = name;
 
@@ -14,7 +14,9 @@ function BasicPropertyPanelItem (parent, id, name, desc, basicProperty) {
         var myEntity = this.parent.parent.parent;
         while (true) {
             var rel = myEntity.findElementByID(basicProperty.id, true);
-            if (rel) { break; } // ok!
+            if (rel) {
+                break;
+            } // ok!
             if (!myEntity.hasParentClass()) { // No more options...
                 throw new Error("Create BasicPropertyPanelItem: Target property '" + basicProperty.getPath() + "' does not belong to entity '" + myEntity.getPath() + "'");
             }
@@ -30,23 +32,23 @@ BasicPropertyPanelItem.prototype.constructor = BasicPropertyPanelItem;
 
 // Methods
 
-BasicPropertyPanelItem.prototype.hasBasicProperty = function () {
+BasicPropertyPanelItem.prototype.hasBasicProperty = function() {
     return this.basicProperty && this.basicProperty.length > 0 && this.basicProperty[0] != null;
 };
 
-BasicPropertyPanelItem.prototype.getBasicProperty = function () {
+BasicPropertyPanelItem.prototype.getBasicProperty = function() {
     return this.basicProperty[0];
 };
 
-BasicPropertyPanelItem.prototype.setBasicProperty = function (bp) {
+BasicPropertyPanelItem.prototype.setBasicProperty = function(bp) {
     this.basicProperty = [bp];
 };
 
-BasicPropertyPanelItem.prototype.toString = function () {
+BasicPropertyPanelItem.prototype.toString = function() {
     return this.name + "[=>" + (this.hasBasicProperty() ? this.getBasicProperty().name : "undefined") + "]; ";
 };
 
-BasicPropertyPanelItem.prototype.toJSON = function () {
+BasicPropertyPanelItem.prototype.toJSON = function() {
     var bp = this.hasBasicProperty() ? [this.getBasicProperty().idToJSON()] : [];
     return {
         name: this.name,

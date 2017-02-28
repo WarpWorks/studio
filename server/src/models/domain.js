@@ -7,7 +7,7 @@ const Entity = require('./entity');
 
 // Constructor and inheritance
 
-function Domain (headstart, name, desc, recreate) {
+function Domain(headstart, name, desc, recreate) {
     // Special case - the parent of domain is headstart, which is not of type "Base"
     this.id_counter = 1;
     Base.call(this, "Domain", headstart, this.id_counter, name, desc);
@@ -24,27 +24,31 @@ Domain.prototype.constructor = Domain;
 
 // Methods
 
-Domain.prototype.save = function () {
+Domain.prototype.save = function() {
     var fn = this.getHeadStart().getDir("domains") + this.name + ".jsn";
     var fs = require('fs');
     fs.writeFileSync(fn, JSON.stringify(this, null, 2));
 };
 
-Domain.prototype.createNewID = function () {
+Domain.prototype.createNewID = function() {
     if (this.id_counter < 2) {
         var max = 1;
         var all = this.getAllElements();
-        for (var i in all) if (all[i].id > max) max = all[i].id;
+        for (var i in all) {
+            if (all[i].id > max) {
+                max = all[i].id;
+            }
+        }
         this.id_counter = max + 1;
     }
     return this.id_counter++;
 };
 
-Domain.prototype.compareIDs = function (id1, id2) {
+Domain.prototype.compareIDs = function(id1, id2) {
     return id1.toString() === id2.toString();
 };
 
-Domain.prototype.validateModel = function () {
+Domain.prototype.validateModel = function() {
     var i;
     var vRes = "";
     var wCount = 0;
@@ -72,12 +76,16 @@ Domain.prototype.validateModel = function () {
         }
     }
 
-    if (wCount === 0) return null;
+    if (wCount === 0) {
+        return null;
+    }
     return wCount === 1 ? "<strong>1 Warning:</strong>" + vRes : "<strong>" + wCount + " Warnings:</strong>" + vRes;
 };
 
-Domain.prototype.getEntities = function (sortByInheritance) {
-    if (!sortByInheritance) { return this.entities; }
+Domain.prototype.getEntities = function(sortByInheritance) {
+    if (!sortByInheritance) {
+        return this.entities;
+    }
     for (var i in this.entities) {
         var entity = this.entities[i];
         entity.longName = entity.name;
@@ -87,35 +95,43 @@ Domain.prototype.getEntities = function (sortByInheritance) {
             entity.longName = tmpEntity.name + ":" + entity.longName;
         }
     }
-    return this.entities.sort(function (a, b) {
-        if (a.longName < b.longName) return -1;
-        if (a.longName > b.longName) return 1;
+    return this.entities.sort(function(a, b) {
+        if (a.longName < b.longName) {
+            return -1;
+        }
+        if (a.longName > b.longName) {
+            return 1;
+        }
         return 0;
     });
 };
 
-Domain.prototype.getRootEntities = function () {
+Domain.prototype.getRootEntities = function() {
     var allEntities = this.entities;
     var rootEntities = [];
     for (var i in allEntities) {
-        if (allEntities[i].isRootEntity) { rootEntities.push(allEntities[i]); }
+        if (allEntities[i].isRootEntity) {
+            rootEntities.push(allEntities[i]);
+        }
     }
     return allEntities;
 };
 
-Domain.prototype.getRootInstance = function () {
+Domain.prototype.getRootInstance = function() {
     var allEntities = this.entities;
     for (var i in allEntities) {
-        if (allEntities[i].isRootInstance) { return allEntities[i]; }
+        if (allEntities[i].isRootInstance) {
+            return allEntities[i];
+        }
     }
     throw new Error("Domain without root instance!");
 };
 
-Domain.prototype.addEntity = function (newEntity) {
+Domain.prototype.addEntity = function(newEntity) {
     return this.entities.push(newEntity);
 };
 
-Domain.prototype.addNewEntity = function (name, desc, parentClass, isRootEntity, isRootInstance) {
+Domain.prototype.addNewEntity = function(name, desc, parentClass, isRootEntity, isRootInstance) {
     var id = this.getDomain().createNewID();
     var newEntity = new Entity(this, id, name, desc, parentClass, isRootEntity, isRootInstance);
 
@@ -123,25 +139,31 @@ Domain.prototype.addNewEntity = function (name, desc, parentClass, isRootEntity,
     return newEntity;
 };
 
-Domain.prototype.createNewDefaultViews = function () {
-    this.getEntities().forEach(function (elem) {
+Domain.prototype.createNewDefaultViews = function() {
+    this.getEntities().forEach(function(elem) {
         elem.createNewDefaultViews();
     });
 };
 
-Domain.prototype.getAllElements = function (includeSelf) {
+Domain.prototype.getAllElements = function(includeSelf) {
     // Returns an array containing all child elements; optional: also include self
     var r = [];
-    if (includeSelf) { r = r.concat(this); }
-    for (var i in this.getEntities()) { r = r.concat(this.getEntities()[i].getAllElements(true)); }
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (var i in this.getEntities()) {
+        r = r.concat(this.getEntities()[i].getAllElements(true));
+    }
     return r;
 };
 
-Domain.prototype.createTestDataForEntity = function (entityDef, relationship, parentInstanceID, parentBaseClass) {
+Domain.prototype.createTestDataForEntity = function(entityDef, relationship, parentInstanceID, parentBaseClass) {
     // TBD1: Change algorithm to  create as many entities as possible with one DB insert
     // TBD2: Leverage cardinality to "embedd" child objects with low cardinality into the parent document
 
-    if (entityDef.isAbstract) { return; } // Don't create test instances for abstract entity types!
+    if (entityDef.isAbstract) {
+        return;
+    } // Don't create test instances for abstract entity types!
     var testData = entityDef.createTestInstance();
 
     if (parentInstanceID) {
@@ -161,18 +183,22 @@ Domain.prototype.createTestDataForEntity = function (entityDef, relationship, pa
     // testData._id = new ObjectID().toString();
 
     var domain = this;
-    this.getHeadStart().useDB(domain.name, function (db) {
+    this.getHeadStart().useDB(domain.name, function(db) {
         var collection = db.collection(entityDef.getBaseClass().name);
-        collection.insertOne(testData, function (mongoErr, mongoRes) {
+        collection.insertOne(testData, function(mongoErr, mongoRes) {
             if (mongoErr) {
                 console.log("Error creating test data: " + mongoErr);
             } else {
                 var aggs = entityDef.getAggregations();
                 if (aggs) {
-                    aggs.forEach(function (rel) {
+                    aggs.forEach(function(rel) {
                         var avg = rel.targetAverage;
-                        if (avg === "/") { console.log("WARNING: Incomplete Quantity Model - Average for relationship '" + rel.name + "' not defined!"); }
-                        for (var i = 0; i < avg; i++) { domain.createTestDataForEntity(rel.getTargetEntity(), rel, mongoRes.ops[0]._id, entityDef.getBaseClass()); }
+                        if (avg === "/") {
+                            console.log("WARNING: Incomplete Quantity Model - Average for relationship '" + rel.name + "' not defined!");
+                        }
+                        for (var i = 0; i < avg; i++) {
+                            domain.createTestDataForEntity(rel.getTargetEntity(), rel, mongoRes.ops[0]._id, entityDef.getBaseClass());
+                        }
                     });
                 }
             }
@@ -180,15 +206,17 @@ Domain.prototype.createTestDataForEntity = function (entityDef, relationship, pa
     });
 };
 
-Domain.prototype.processLocalTemplateFunctions = function (template) {
+Domain.prototype.processLocalTemplateFunctions = function(template) {
     var children = [["Entity", this.getEntities(true)]];
     template = this.processTemplateWithChildElements(template, children);
     return Base.prototype.processLocalTemplateFunctions.call(this, template);
 };
 
-Domain.prototype.toJSON = function () {
+Domain.prototype.toJSON = function() {
     var e = [];
-    for (var i in this.getEntities()) e.push(this.getEntities()[i].toJSON());
+    for (var i in this.getEntities()) {
+        e.push(this.getEntities()[i].toJSON());
+    }
     return {
         name: this.name,
         desc: this.desc,
@@ -199,7 +227,7 @@ Domain.prototype.toJSON = function () {
     };
 };
 
-Domain.prototype.toString = function () {
+Domain.prototype.toString = function() {
     var e;
     var es;
     var i;
@@ -215,20 +243,24 @@ Domain.prototype.toString = function () {
     for (i in this.getEntities()) {
         e = this.getEntities()[i];
         es = e.toString("aggregations");
-        if (es.length > 0) { s += es + "\n"; }
+        if (es.length > 0) {
+            s += es + "\n";
+        }
     }
 
     s += "\n// Associations:\n";
     for (i in this.getEntities()) {
         e = this.getEntities()[i];
         es = e.toString("associations");
-        if (es.length > 0) { s += es + "\n"; }
+        if (es.length > 0) {
+            s += es + "\n";
+        }
     }
 
     return s;
 };
 
-Domain.prototype.getFileName = function (folder) {
+Domain.prototype.getFileName = function(folder) {
     var f = folder ? folder + "\\" : "";
     var fn = '.\\generated\\' + f + this.name + '.html';
     return fn;

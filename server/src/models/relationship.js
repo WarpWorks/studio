@@ -6,7 +6,7 @@ const Base = require('./base');
 
 // Constructor and inheritance
 
-function Relationship (parent, target, id, isAggregation, name) {
+function Relationship(parent, target, id, isAggregation, name) {
     Base.call(this, "Relationship", parent, id, name, "");
     this.isAggregation = isAggregation;
     this.targetEntity = [target];
@@ -26,37 +26,47 @@ Relationship.prototype.constructor = Relationship;
 
 // Methods
 
-Relationship.prototype.getParent_Entity = function () {
+Relationship.prototype.getParent_Entity = function() {
     return this.parent;
 };
 
-Relationship.prototype.updateDesc = function () {
+Relationship.prototype.updateDesc = function() {
     var target = this.hasTargetEntity() && typeof this.getTargetEntity() === "object" ? this.targetEntity[0].name : "undefined";
-    if (this.isAggregation) { this.desc = this.name + ": " + this.parent.name + "[" + target + "] (1:" + this.getTargetCardinality() + ")"; } else { this.desc = this.name + ": " + this.parent.name + "=>" + target + " (" + this.getSourceCardinality() + ":" + this.getTargetCardinality() + ")"; }
+    if (this.isAggregation) {
+        this.desc = this.name + ": " + this.parent.name + "[" + target + "] (1:" + this.getTargetCardinality() + ")";
+    } else {
+        this.desc = this.name + ": " + this.parent.name + "=>" + target + " (" + this.getSourceCardinality() + ":" + this.getTargetCardinality() + ")";
+    }
 };
 
-Relationship.prototype.hasTargetEntity = function () {
+Relationship.prototype.hasTargetEntity = function() {
     return this.targetEntity && this.targetEntity.length > 0 && this.targetEntity[0] != null && typeof this.targetEntity[0] === "object" && this.targetEntity[0].constructor !== Array;
 };
 
-Relationship.prototype.getTargetEntity = function () {
+Relationship.prototype.getTargetEntity = function() {
     return this.targetEntity[0];
 };
 
-Relationship.prototype.setTargetEntity = function (te) {
+Relationship.prototype.setTargetEntity = function(te) {
     this.targetEntity = [te];
 };
 
-Relationship.prototype.getTargetCardinality = function () {
-    if (this.targetAverage === "1") return "1";
-    else return parseInt(this.targetAverage) < parseInt(this.getDomain().definitionOfMany) ? "Few" : "Many";
+Relationship.prototype.getTargetCardinality = function() {
+    if (this.targetAverage === "1") {
+        return "1";
+    } else {
+        return parseInt(this.targetAverage) < parseInt(this.getDomain().definitionOfMany) ? "Few" : "Many";
+    }
 };
-Relationship.prototype.getSourceCardinality = function () {
-    if (this.sourceAverage === "1") return "1";
-    else return parseInt(this.sourceAverage) < parseInt(this.getDomain().definitionOfMany) ? "Few" : "Many";
+Relationship.prototype.getSourceCardinality = function() {
+    if (this.sourceAverage === "1") {
+        return "1";
+    } else {
+        return parseInt(this.sourceAverage) < parseInt(this.getDomain().definitionOfMany) ? "Few" : "Many";
+    }
 };
 
-Relationship.prototype.toJSON = function () {
+Relationship.prototype.toJSON = function() {
     var tid = this.hasTargetEntity() ? [this.getTargetEntity().idToJSON()] : [];
     var res = {
         name: this.name,
@@ -77,7 +87,7 @@ Relationship.prototype.toJSON = function () {
     return res;
 };
 
-Relationship.prototype.toString = function () {
+Relationship.prototype.toString = function() {
     var s = this.isAggregation ? ":" : "=>";
     var target = this.hasTargetEntity() ? this.getTargetEntity().name : "undefined";
     return this.name + s + target + (this.targetMax === '*' ? '*' : '');

@@ -1,6 +1,6 @@
 const Base = require('./base');
 
-function PanelItem (type, parent, id, name, desc, position) {
+function PanelItem(type, parent, id, name, desc, position) {
     Base.call(this, type, parent, id, name, desc);
     this.position = position || -1;
     this.label = name;
@@ -8,7 +8,7 @@ function PanelItem (type, parent, id, name, desc, position) {
 PanelItem.prototype = Object.create(Base.prototype);
 PanelItem.prototype.constructor = PanelItem;
 
-PanelItem.prototype.getParent_Panel = function () {
+PanelItem.prototype.getParent_Panel = function() {
     return this.parent;
 };
 

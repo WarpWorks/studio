@@ -6,7 +6,7 @@ const Base = require('./base');
 
 // Constructor and inheritance
 
-function Literal (enumeration, id, name, desc) {
+function Literal(enumeration, id, name, desc) {
     Base.call(this, "Literal", enumeration, id, name, desc);
     this.position = null;
     this.icon = null;
@@ -16,15 +16,15 @@ Literal.prototype.constructor = Literal;
 
 // Methods
 
-Literal.prototype.getParent_Enumeration = function () {
+Literal.prototype.getParent_Enumeration = function() {
     return this.parent;
 };
 
-Literal.prototype.toString = function () {
+Literal.prototype.toString = function() {
     return this.name;
 };
 
-Literal.prototype.toJSON = function () {
+Literal.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,

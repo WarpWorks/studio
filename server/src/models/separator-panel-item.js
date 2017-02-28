@@ -6,7 +6,7 @@ const PanelItem = require('./panel-item');
 
 // Constructor and inheritance
 
-function SeparatorPanelItem (parent, id, position) {
+function SeparatorPanelItem(parent, id, position) {
     var name = "Separator";
     var desc = "---------";
     PanelItem.call(this, "SeparatorPanelItem", parent, id, name, desc, position);
@@ -17,11 +17,11 @@ SeparatorPanelItem.prototype.constructor = SeparatorPanelItem;
 
 // Methods
 
-SeparatorPanelItem.prototype.toString = function () {
+SeparatorPanelItem.prototype.toString = function() {
     return this.name + "; ";
 };
 
-SeparatorPanelItem.prototype.toJSON = function () {
+SeparatorPanelItem.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,

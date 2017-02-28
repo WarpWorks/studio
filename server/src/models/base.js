@@ -8,7 +8,7 @@ const utils = require('./../utils');
 
 // Constructor
 
-function Base (type, parent, id, name, desc) {
+function Base(type, parent, id, name, desc) {
     // Set basic attributes first (needed for validation below)
     this.type = type;
     this.parent = parent;
@@ -35,20 +35,22 @@ function Base (type, parent, id, name, desc) {
 
 // Methods
 
-Base.prototype.isValidName = function (name) {
+Base.prototype.isValidName = function(name) {
     return !/\W/i.test(name) && name.length > 1;
 };
 
-Base.prototype.getHeadStart = function () {
+Base.prototype.getHeadStart = function() {
     if (!this.headstart) {
         this.headstart = this;
-        while (this.headstart.parent) this.headstart = this.headstart.parent;
+        while (this.headstart.parent) {
+            this.headstart = this.headstart.parent;
+        }
     }
     var res = this.headstart;
     return res;
 };
 
-Base.prototype.getDomain = function () {
+Base.prototype.getDomain = function() {
     var domain = this;
     while (domain.type !== "Domain") {
         domain = domain.parent;
@@ -56,19 +58,19 @@ Base.prototype.getDomain = function () {
     return domain;
 };
 
-Base.prototype.isOfType = function (t) {
+Base.prototype.isOfType = function(t) {
     return this.type === t;
 };
 
-Base.prototype.compareToMyID = function (id) {
+Base.prototype.compareToMyID = function(id) {
     return this.getDomain().compareIDs(this.id, id);
 };
 
-Base.prototype.idToJSON = function () {
+Base.prototype.idToJSON = function() {
     return this.id;
 };
 
-Base.prototype.findElementByID = function (id) {
+Base.prototype.findElementByID = function(id) {
     var allElems = this.getAllElements(true);
     for (var i in allElems) {
         if (this.getDomain().compareIDs(id, allElems[i].id)) {
@@ -79,7 +81,7 @@ Base.prototype.findElementByID = function (id) {
     return null;
 };
 
-Base.prototype.findElementByName = function (name, type) {
+Base.prototype.findElementByName = function(name, type) {
     var allElems = this.getAllElements(true);
     for (var i in allElems) {
         if ((allElems[i].name === name) &&
@@ -90,7 +92,7 @@ Base.prototype.findElementByName = function (name, type) {
     return null;
 };
 
-Base.prototype.getPath = function () {
+Base.prototype.getPath = function() {
     var s = this.name;
     var p = this.parent;
     while (p) {
@@ -104,9 +106,11 @@ Base.prototype.getPath = function () {
 // Template Processing
 //
 
-Base.prototype.processLocalTemplateFunctions = function (template) {
+Base.prototype.processLocalTemplateFunctions = function(template) {
     // Evaluate "condition" in "{{Options}}"
-    if (!this.evaluateTemplateCondition(template)) return null;
+    if (!this.evaluateTemplateCondition(template)) {
+        return null;
+    }
 
     // Process if/then/else tags
     template = this.processIfThenElse(template);
@@ -120,7 +124,7 @@ Base.prototype.processLocalTemplateFunctions = function (template) {
     return template;
 };
 
-Base.prototype.processTemplateWithChildElements = function (template, children) {
+Base.prototype.processTemplateWithChildElements = function(template, children) {
     var i;
     for (var idx in children) {
         var child = children[idx];
@@ -136,7 +140,7 @@ Base.prototype.processTemplateWithChildElements = function (template, children) 
                 var itemPos = 0;
                 var hasExecutedAtLeastOnce = false;
                 if (elements) {
-                    elements.forEach(function (childElem) {
+                    elements.forEach(function(childElem) {
                         // Declare some temporary variables that can be used in the template`s java scriptlets:
                         childElem.itemPos = itemPos;
                         childElem.itemIsFirst = itemPos === 0;
@@ -170,15 +174,19 @@ Base.prototype.processTemplateWithChildElements = function (template, children) 
     return template;
 };
 
-Base.prototype.evaluateTemplateCondition = function (template) {
-    if (!template.includes("{{Options}}")) return true;
+Base.prototype.evaluateTemplateCondition = function(template) {
+    if (!template.includes("{{Options}}")) {
+        return true;
+    }
     var a = utils.extractTagValue(template, "{{Options}}", "{{/Options}}");
     var options = JSON.parse(a[1]);
-    if (!options.condition) return true;
+    if (!options.condition) {
+        return true;
+    }
     return this.evalWithContext(options.condition);
 };
 
-Base.prototype.processOptions = function (template) {
+Base.prototype.processOptions = function(template) {
     if (template.includes("{{Options}}")) {
         var a = utils.extractTagValue(template, "{{Options}}", "{{/Options}}");
 
@@ -197,12 +205,16 @@ Base.prototype.processOptions = function (template) {
     return template;
 };
 
-Base.prototype.processIfThenElse = function (template) {
+Base.prototype.processIfThenElse = function(template) {
     while (template.includes("{{if}}")) {
         var beforeIteAfter = utils.extractTagValue(template, "{{if}}", "{{/if}}");
         var ifthenelse = null;
 
-        if (beforeIteAfter[1].includes("{{else}}")) { ifthenelse = utils.extractTagValue(beforeIteAfter[1], "{{then}}", "{{else}}"); } else { ifthenelse = utils.splitBySeparator(beforeIteAfter[1], "{{then}}"); }
+        if (beforeIteAfter[1].includes("{{else}}")) {
+            ifthenelse = utils.extractTagValue(beforeIteAfter[1], "{{then}}", "{{else}}");
+        } else {
+            ifthenelse = utils.splitBySeparator(beforeIteAfter[1], "{{then}}");
+        }
 
         var ifexp = ifthenelse[0];
         var condition = this.evalWithContext(ifexp);
@@ -223,7 +235,7 @@ Base.prototype.processIfThenElse = function (template) {
     return template;
 };
 
-Base.prototype.processConditionalTagValues = function (template, type, removeContent) {
+Base.prototype.processConditionalTagValues = function(template, type, removeContent) {
     var begin = this.getHeadStart().createBeginTag(type, true);
     var end = this.getHeadStart().createEndTag(type, true);
 
@@ -243,7 +255,7 @@ Base.prototype.processConditionalTagValues = function (template, type, removeCon
     return template;
 };
 
-Base.prototype.processScripts = function (template) {
+Base.prototype.processScripts = function(template) {
     if (template === null) {
         throw new Error("Internal error");
     }
@@ -269,15 +281,15 @@ Base.prototype.processScripts = function (template) {
     return template;
 };
 
-Base.prototype.evalWithContext = function (js) {
+Base.prototype.evalWithContext = function(js) {
     // Return the results of the in-line anonymous function we call with the passed context
-    return (function () {
+    return (function() {
         // eslint-disable-next-line no-eval
         return eval(js);
     }.call(this));
 };
 
-Base.prototype.saveTemplateResults = function (result, target) {
+Base.prototype.saveTemplateResults = function(result, target) {
     if (!target || target.length !== 2) {
         throw new Error("Invalid target in 'onSave'-option!");
     }
@@ -290,8 +302,10 @@ Base.prototype.saveTemplateResults = function (result, target) {
     }
 
     var fs = require('fs');
-    fs.writeFile(fn, result, function (err) {
-        if (err) return console.log("*** Error: " + err);
+    fs.writeFile(fn, result, function(err) {
+        if (err) {
+            return console.log("*** Error: " + err);
+        }
         console.log("New file generated: '" + fn + "'");
     });
 };

@@ -4,7 +4,7 @@ const EnumPanelItem = require('./enum-panel-item');
 const RelationshipPanelItem = require('./relationship-panel-item');
 const SeparatorPanelItem = require('./separator-panel-item');
 
-function Panel (parent, id, name, desc) {
+function Panel(parent, id, name, desc) {
     Base.call(this, "Panel", parent, id, name, desc);
     this.position = null;
     this.columns = 1;
@@ -22,39 +22,39 @@ Panel.prototype.constructor = Panel;
 
 // Methods
 
-Panel.prototype.getParent_PageView = function () {
+Panel.prototype.getParent_PageView = function() {
     return this.parent;
 };
 
-Panel.prototype.addNewSeparatorPanelItem = function () {
+Panel.prototype.addNewSeparatorPanelItem = function() {
     var id = this.getDomain().createNewID();
     var newSeparatorPanelItem = new SeparatorPanelItem(this, id);
     this.separatorPanelItems.push(newSeparatorPanelItem);
     return newSeparatorPanelItem;
 };
 
-Panel.prototype.addNewRelationshipPanelItem = function (name, desc, relationship) {
+Panel.prototype.addNewRelationshipPanelItem = function(name, desc, relationship) {
     var id = this.getDomain().createNewID();
     var newRelationshipPanelItem = new RelationshipPanelItem(this, id, name, desc, relationship);
     this.relationshipPanelItems.push(newRelationshipPanelItem);
     return newRelationshipPanelItem;
 };
 
-Panel.prototype.addNewBasicPropertyPanelItem = function (name, desc, basicProperty) {
+Panel.prototype.addNewBasicPropertyPanelItem = function(name, desc, basicProperty) {
     var id = this.getDomain().createNewID();
     var newBasicPropertyPanelItem = new BasicPropertyPanelItem(this, id, name, desc, basicProperty);
     this.basicPropertyPanelItems.push(newBasicPropertyPanelItem);
     return newBasicPropertyPanelItem;
 };
 
-Panel.prototype.addNewEnumPanelItem = function (name, desc, enumeration) {
+Panel.prototype.addNewEnumPanelItem = function(name, desc, enumeration) {
     var id = this.getDomain().createNewID();
     var newEnumPanelItem = new EnumPanelItem(this, id, name, desc, enumeration);
     this.enumPanelItems.push(newEnumPanelItem);
     return newEnumPanelItem;
 };
 
-Panel.prototype.getAllPanelItems = function () {
+Panel.prototype.getAllPanelItems = function() {
     var r = new Array(10);
     r = r.concat(this.separatorPanelItems);
     r = r.concat(this.relationshipPanelItems);
@@ -63,29 +63,41 @@ Panel.prototype.getAllPanelItems = function () {
     return r;
 };
 
-Panel.prototype.getAllElements = function (includeSelf) {
+Panel.prototype.getAllElements = function(includeSelf) {
     var r = [];
-    if (includeSelf) { r = r.concat(this); }
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     r = r.concat(this.getAllPanelItems());
     return r;
 };
 
-Panel.prototype.toString = function () {
+Panel.prototype.toString = function() {
     var s = this.name + " [";
     var panelItems = this.getAllPanelItems();
-    for (var i in panelItems) s += panelItems[i].toString();
+    for (var i in panelItems) {
+        s += panelItems[i].toString();
+    }
     return s + "]; ";
 };
 
-Panel.prototype.toJSON = function () {
+Panel.prototype.toJSON = function() {
     var spi = [];
     var rpi = [];
     var bppi = [];
     var epi = [];
-    for (i in this.separatorPanelItems) spi.push(this.separatorPanelItems[i].toJSON());
-    for (i in this.relationshipPanelItems) rpi.push(this.relationshipPanelItems[i].toJSON());
-    for (i in this.basicPropertyPanelItems) bppi.push(this.basicPropertyPanelItems[i].toJSON());
-    for (var i in this.enumPanelItems) epi.push(this.enumPanelItems[i].toJSON());
+    for (i in this.separatorPanelItems) {
+        spi.push(this.separatorPanelItems[i].toJSON());
+    }
+    for (i in this.relationshipPanelItems) {
+        rpi.push(this.relationshipPanelItems[i].toJSON());
+    }
+    for (i in this.basicPropertyPanelItems) {
+        bppi.push(this.basicPropertyPanelItems[i].toJSON());
+    }
+    for (var i in this.enumPanelItems) {
+        epi.push(this.enumPanelItems[i].toJSON());
+    }
 
     return {
         name: this.name,
@@ -104,13 +116,17 @@ Panel.prototype.toJSON = function () {
     };
 };
 
-Panel.prototype.processLocalTemplateFunctions = function (template) {
+Panel.prototype.processLocalTemplateFunctions = function(template) {
     var aggregationPanelItems = [];
     var associationPanelItems = [];
     for (var i in this.relationshipPanelItems) {
         var rpi = this.relationshipPanelItems[i];
         // var reln = rpi.getRelationship();
-        if (rpi.getRelationship().isAggregation) { aggregationPanelItems.push(rpi); } else { associationPanelItems.push(rpi); }
+        if (rpi.getRelationship().isAggregation) {
+            aggregationPanelItems.push(rpi);
+        } else {
+            associationPanelItems.push(rpi);
+        }
     }
 
     var children = [
