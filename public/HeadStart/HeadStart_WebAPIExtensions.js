@@ -246,7 +246,8 @@ Domain.prototype.setDefaultAverages = function (avg) {
     for (var i in this.entities) {
         var entity = this.entities[i];
         for (var j in entity.relationships) {
-            entity.relationships[j].targetAverage = avg;
+            var max = parseInt(""+entity.relationships[j].targetMax);
+            entity.relationships[j].targetAverage = max > avg ? max : avg;
             console.log("Setting avg: "+entity.relationships[j].name);
         }
     }
