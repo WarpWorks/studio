@@ -20,6 +20,9 @@
   },
   "devDependencies": {
     "eslint": "^3.16.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.2",
+    "eslint-plugin-standard": "^2.0.1",
     "express": "4.14.1",
     "serve-favicon": "2.4.0"
   },

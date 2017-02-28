@@ -17,8 +17,8 @@ function HeadStart() {
     this.parent = null;
     this.domains = [];
 
-    this.model = require('./Model');
-    this.view = require('./View');
+    this.model = require('./models');
+    this.view = this.model.views;
 
     this.config = null;
 
