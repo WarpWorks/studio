@@ -5,13 +5,12 @@ var express = require('express');
 var apiRouter = express.Router();
 var fs = require('fs');
 
-apiRouter.get('/domain/:domain', function (req, res, next) {
+apiRouter.get('/domain/:domain', function(req, res, next) {
     console.log("Get-Request for '/api/get/domain': " + req.params.domain);
     var fn = path.join(hs.getDir("domains"), req.params.domain + '.jsn');
     try {
         var file = hs.readFile(fn);
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
         result.success = false;
         result.err = "Invalid file name: " + fn;
@@ -24,7 +23,7 @@ apiRouter.get('/domain/:domain', function (req, res, next) {
     res.send(result);
 });
 
-apiRouter.get('/smnExamples', function (req, res, next) {
+apiRouter.get('/smnExamples', function(req, res, next) {
     console.log("Get-Request for '/api/smnExamples'!");
     var result = {};
     result.success = true;
@@ -34,7 +33,7 @@ apiRouter.get('/smnExamples', function (req, res, next) {
         var files = fs.readdirSync(dir);
 
         result.smnExamples = [];
-        files.forEach(function (fn) {
+        files.forEach(function(fn) {
             var templateData = fs.readFileSync(path.join(dir, fn), 'utf8');
             var templateName = fn.split(".smn")[0];
             result.smnExamples.push({name: templateName, template: templateData});
@@ -48,7 +47,7 @@ apiRouter.get('/smnExamples', function (req, res, next) {
     res.send(result);
 });
 
-apiRouter.get('/availableDomains', function (req, res, next) {
+apiRouter.get('/availableDomains', function(req, res, next) {
     console.log("Get-Request for '/api/availableDomains'!");
     var result = {};
     result.success = true;
@@ -63,14 +62,14 @@ apiRouter.get('/availableDomains', function (req, res, next) {
     }
 
     result.domains = [];
-    files.forEach(function (elem) {
+    files.forEach(function(elem) {
         var name = elem.split(".jsn")[0];
         result.domains.push({name: name, desc: "TBD: Description"});
     });
     res.send(result);
 });
 
-apiRouter.post('/saveDomain', function (req, res, next) {
+apiRouter.post('/saveDomain', function(req, res, next) {
     console.log("Post-Request '/api/saveDomain'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -79,7 +78,9 @@ apiRouter.post('/saveDomain', function (req, res, next) {
         try {
             console.log("Creating domain: " + domainName);
             var domain = hs.createDomainFromJSONString(domainData);
-            if (domainName !== domain.name) throw "Domain name does not match file name: "+domainName+" != "+domain.name;
+            if (domainName !== domain.name) {
+                throw "Domain name does not match file name: " + domainName + " != " + domain.name;
+            }
 
             console.log("Saving: " + domainName);
             domain.save();
@@ -97,13 +98,12 @@ apiRouter.post('/saveDomain', function (req, res, next) {
             console.log("Error Saving Domain: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/generateDefaultViews', function (req, res, next) {
+apiRouter.post('/generateDefaultViews', function(req, res, next) {
     console.log("Post-Request '/api/generateDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -120,7 +120,7 @@ apiRouter.post('/generateDefaultViews', function (req, res, next) {
             dir = hs.getDir("templates");
             var fileNames = [];
             var files = fs.readdirSync(dir);
-            files.forEach(function (fn) {
+            files.forEach(function(fn) {
                 hs.applyTemplateFile(hs.getDir("templates") + fn, [domain]);
             });
 
@@ -132,13 +132,12 @@ apiRouter.post('/generateDefaultViews', function (req, res, next) {
             console.log("Error while generating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/createDefaultViews', function (req, res, next) {
+apiRouter.post('/createDefaultViews', function(req, res, next) {
     console.log("Post-Request '/api/createDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -163,15 +162,14 @@ apiRouter.post('/createDefaultViews', function (req, res, next) {
             console.log("Error while creating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
 // TBD: Test Data Mgmt should be moved into a separate package, since it is generator-specific
 
-apiRouter.post('/generateTestData', function (req, res, next) {
+apiRouter.post('/generateTestData', function(req, res, next) {
     console.log("Post-Request '/api/generateTestData'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -189,13 +187,12 @@ apiRouter.post('/generateTestData', function (req, res, next) {
             console.log("Error while creating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/removeTestData', function (req, res, next) {
+apiRouter.post('/removeTestData', function(req, res, next) {
     console.log("Post-Request '/api/generateDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -209,13 +206,12 @@ apiRouter.post('/removeTestData', function (req, res, next) {
             console.log("Error while dropping test data: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/createDomainFromSMN', function (req, res, next) {
+apiRouter.post('/createDomainFromSMN', function(req, res, next) {
     console.log("Post-Request '/api/createDomainFromSMN'"); // TBD - change name to "domain/createFromSMN"
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
@@ -227,7 +223,6 @@ apiRouter.post('/createDomainFromSMN', function (req, res, next) {
             response.newDomain = domain.name;
             response.success = true;
             console.log("Created new Domain from SMN: " + domain.name);
-
         } catch (err) {
             response.success = false;
             response.error = err.toString();
@@ -235,8 +230,7 @@ apiRouter.post('/createDomainFromSMN', function (req, res, next) {
             console.log(err.stack);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });

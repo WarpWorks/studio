@@ -2,24 +2,25 @@
 // Test
 // **********************************************************
 
- writeFile = function (fn, data) {
- var fs = require('fs');
- fn = "./../generated/"+fn;
- fs.writeFile(fn, data, function (err) {
- if (err) return console.log("*** Error: " + err);
- console.log("New file generated: '" + fn + "'");
- });
- }
+ writeFile = function(fn, data) {
+     var fs = require('fs');
+     fn = "./../generated/" + fn;
+     fs.writeFile(fn, data, function(err) {
+         if (err) {
+             return console.log("*** Error: " + err);
+         }
+         console.log("New file generated: '" + fn + "'");
+     });
+ };
 
- readFile = function (fn) {
- fs = require('fs');
- var txt = fs.readFileSync(fn, 'utf8');
- return txt;
- }
-
+ readFile = function(fn) {
+     fs = require('fs');
+     var txt = fs.readFileSync(fn, 'utf8');
+     return txt;
+ };
 
  var hs = get_HeadStart();
- var domain =  hs.addNew_Domain("MyShop", "Test Domain");
+ var domain = hs.addNew_Domain("MyShop", "Test Domain");
 
  var customerEntity = domain.addNew_Entity("Customer", "");
  customerEntity.addNew_BasicProperty("DoB", "").propertyType = "date";
@@ -48,11 +49,10 @@
  customer2order.targetMax = '*';
 
  var hsJson = domain.toJSON();
- writeFile ("HeadStartWeb.jsn", JSON.stringify(hsJson, null, 2));
+ writeFile("HeadStartWeb.jsn", JSON.stringify(hsJson, null, 2));
 
- var myFile = readFile ("HeadStartServer.jsn");
+ var myFile = readFile("HeadStartServer.jsn");
  hsJson = JSON.parse(myFile);
 
- var domainCopy = get_Domain_fromJSON (hsJson);
+ var domainCopy = get_Domain_fromJSON(hsJson);
  console.log(JSON.stringify(domainCopy.toJSON(), null, 2));
- 

@@ -6,7 +6,7 @@
     "node": ">=6.9.0"
   },
   "scripts": {
-    "eslint": "eslint server"
+    "eslint": "eslint --fix server"
   },
   "dependencies": {
     "body-parser": "1.16.1",
