@@ -16,15 +16,15 @@ function extractTagValue(str, openTag, closeTag) {
     // Returns array with header, tag value (value between openTag and closeTag), footer
     // Only extracts first tag value
     if (!str.includes(openTag)) {
-        throw "Missing opening tag '" + openTag + "'!";
+        throw new Error("Missing opening tag '" + openTag + "'!");
     }
     if (!str.includes(closeTag)) {
-        throw "Missing closing tag '" + closeTag + "'!";
+        throw new Error("Missing closing tag '" + closeTag + "'!");
     }
     var pos1 = str.indexOf(openTag);
     var pos2 = str.indexOf(closeTag);
     if (pos1 > pos2) {
-        throw "Opening tag '" + openTag + "' must come before closing tag '" + closeTag + "'!";
+        throw new Error("Opening tag '" + openTag + "' must come before closing tag '" + closeTag + "'!");
     }
 
     var res = [];
@@ -45,7 +45,7 @@ function getTokenSeq(str, openTag, closeTag) {
         }
         if (bs[1].length > 0) {
             if (bs[1].includes(openTag)) {
-                throw "Opening tag '" + openTag + "' must be followed by closing tag '" + closeTag + "' before next opening tag!";
+                throw new Error("Opening tag '" + openTag + "' must be followed by closing tag '" + closeTag + "' before next opening tag!");
             }
             tokenSeq.push({value: bs[1], isTagValue: true});
         }
@@ -53,7 +53,7 @@ function getTokenSeq(str, openTag, closeTag) {
     }
     if (str.length > 0) {
         if (str.includes(closeTag)) {
-            throw "Missing opening tag '" + openTag + "'!";
+            throw new Error("Missing opening tag '" + openTag + "'!");
         }
         tokenSeq.push({value: str, isTagValue: false});
     }

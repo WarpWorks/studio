@@ -7,7 +7,7 @@ const processCwd = process.cwd();
 
 const baseConfig = {
     serverVersion: packageJson.version,
-    serverStarted: new Date(),
+    serverStarted: (new Date()).toString(),
     port: process.env.PORT || '3000',
     mongoServer: process.env.MONGODB_HOST || 'localhost',
     cartridgePath: process.env.CARTRIDGE_PATH || path.join(processCwd, "..", "MonApp"),

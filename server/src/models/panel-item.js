@@ -1,15 +1,16 @@
 const Base = require('./base');
 
-function PanelItem(type, parent, id, name, desc, position) {
-    Base.call(this, type, parent, id, name, desc);
-    this.position = position || -1;
-    this.label = name;
-}
-PanelItem.prototype = Object.create(Base.prototype);
-PanelItem.prototype.constructor = PanelItem;
+class PanelItem extends Base {
+    constructor(type, parent, id, name, desc, position) {
+        super(type, parent, id, name, desc);
+        this.position = position || -1;
+        this.label = name;
+    }
 
-PanelItem.prototype.getParent_Panel = function() {
-    return this.parent;
-};
+    // eslint-disable-next-line camelcase
+    getParent_Panel() {
+        return this.parent;
+    }
+}
 
 module.exports = PanelItem;

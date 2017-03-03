@@ -1,14 +1,15 @@
 const Base = require('./base');
 
-function View(type, parent, id, name, desc) {
-    Base.call(this, type, parent, id, name, desc);
-    this.isDefault = false;
-}
-View.prototype = Object.create(Base.prototype);
-View.prototype.constructor = View;
+class View extends Base {
+    constructor(type, parent, id, name, desc) {
+        super(type, parent, id, name, desc);
+        this.isDefault = false;
+    }
 
-View.prototype.getParent_Entity = function() {
-    return this.parent;
-};
+    // eslint-disable-next-line camelcase
+    getParent_Entity() {
+        return this.parent;
+    }
+}
 
 module.exports = View;

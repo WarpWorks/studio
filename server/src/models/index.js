@@ -1,5 +1,6 @@
 const Base = require('./base');
 const BasicProperty = require('./basic-property');
+const Domain = require('./domain');
 const Entity = require('./entity');
 const Enumeration = require('./enumeration');
 const Literal = require('./literal');
@@ -8,10 +9,11 @@ const views = require('./views');
 
 module.exports = {
     Base,
-    Literal,
-    Enumeration,
     BasicProperty,
-    Relationship,
+    Domain,
     Entity,
+    Enumeration,
+    Literal,
+    Relationship,
     views
 };

@@ -1,31 +1,41 @@
 {
   "name": "HeadStart",
-  "version": "0.5.0",
-  "private": true,
+  "version": "0.6.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dslama/HeadStart.git"
+  },
   "engines": {
     "node": ">=6.9.0"
   },
+  "main": "server/src/HeadStart.js",
   "scripts": {
-    "eslint": "eslint --fix server"
+    "eslint": "eslint --fix server",
+    "test:unit": "mocha 'server/**/*.spec.unit.js'",
+    "coverage:unit": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'server/**/*.spec.unit.js'"
   },
   "dependencies": {
-    "body-parser": "1.16.1",
-    "cookie-parser": "~1.4.3",
-    "hbs": "~4.0.0",
-    "hbs-utils": "0.0.4",
+    "bluebird": "3.5.0",
     "lodash": "4.17.4",
     "mongodb": "2.2.24",
-    "morgan": "1.8.1",
     "rc": "1.1.7"
   },
   "devDependencies": {
+    "body-parser": "1.17.0",
+    "cookie-parser": "1.4.3",
     "debug": "2.6.1",
-    "eslint": "^3.16.1",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.4.2",
-    "eslint-plugin-standard": "^2.0.1",
-    "express": "4.14.1",
-    "serve-favicon": "2.4.0"
+    "eslint": "3.17.0",
+    "eslint-config-standard": "7.0.0",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "2.1.1",
+    "express": "4.15.0",
+    "hbs": "4.0.1",
+    "hbs-utils": "0.0.4",
+    "istanbul": "0.4.5",
+    "mocha": "3.2.0",
+    "morgan": "1.8.1",
+    "node-test-helpers": "git+https://github.com/Quoin/node-test-helpers.git",
+    "serve-favicon": "2.4.1"
   },
   "peerDependencies": {
     "express": ">=4.0.0"

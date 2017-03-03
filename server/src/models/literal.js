@@ -1,36 +1,29 @@
 const Base = require('./base');
 
-//
-// Class "Literal"
-//
+class Literal extends Base {
+    constructor(enumeration, id, name, desc) {
+        super("Literal", enumeration, id, name, desc);
+        this.position = null;
+        this.icon = null;
+    }
 
-// Constructor and inheritance
+    // eslint-disable-next-line camelcase
+    getParent_Enumeration() {
+        return this.parent;
+    }
 
-function Literal(enumeration, id, name, desc) {
-    Base.call(this, "Literal", enumeration, id, name, desc);
-    this.position = null;
-    this.icon = null;
+    toString() {
+        return this.name;
+    }
+
+    toJSON() {
+        return {
+            name: this.name,
+            desc: this.desc,
+            type: this.type,
+            id: this.idToJSON()
+        };
+    }
 }
-Literal.prototype = Object.create(Base.prototype);
-Literal.prototype.constructor = Literal;
-
-// Methods
-
-Literal.prototype.getParent_Enumeration = function() {
-    return this.parent;
-};
-
-Literal.prototype.toString = function() {
-    return this.name;
-};
-
-Literal.prototype.toJSON = function() {
-    return {
-        name: this.name,
-        desc: this.desc,
-        type: this.type,
-        id: this.idToJSON()
-    };
-};
 
 module.exports = Literal;

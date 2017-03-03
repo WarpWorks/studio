@@ -5,7 +5,7 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+// var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var apiRoutes = require('./routes/apiRoutes');
@@ -38,7 +38,7 @@ hbsutils.registerWatchedPartials(partialsDir);
 
 /*
 // Load partials for express
-var hs = require ('./server/src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./server/src/HeadStart');
 hs.loadGeneratedHBSPartials();
 */
 
