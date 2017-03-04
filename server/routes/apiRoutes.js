@@ -1,6 +1,6 @@
 const path = require('path');
 
-var hs = require('./../src/HeadStart');
+var hs = require('./../../lib/headstart');
 var express = require('express');
 var apiRouter = express.Router();
 var fs = require('fs');
@@ -12,6 +12,7 @@ apiRouter.get('/domain/:domain', function(req, res, next) {
     log("Get-Request for '/api/get/domain': " + req.params.domain);
     var fn = path.join(hs.getDir("domains"), req.params.domain + '.jsn');
     log("    fn=", fn);
+    var result = {};
     try {
         var file = hs.readFile(fn);
     } catch (err) {
@@ -21,7 +22,6 @@ apiRouter.get('/domain/:domain', function(req, res, next) {
         res.send(result);
         return;
     }
-    var result = {};
     result.success = true;
     result.domain = JSON.parse(file);
     res.send(result);

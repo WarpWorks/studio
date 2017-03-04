@@ -38,7 +38,7 @@ hbsutils.registerWatchedPartials(partialsDir);
 
 /*
 // Load partials for express
-var hs = require('./server/src/HeadStart');
+var hs = require('./server/src/headstart');
 hs.loadGeneratedHBSPartials();
 */
 

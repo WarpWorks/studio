@@ -8,11 +8,11 @@
   "engines": {
     "node": ">=6.9.0"
   },
-  "main": "server/src/HeadStart.js",
+  "main": "lib/headstart.js",
   "scripts": {
     "eslint": "eslint --fix server",
-    "test:unit": "mocha 'server/**/*.spec.unit.js'",
-    "coverage:unit": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'server/**/*.spec.unit.js'"
+    "test:unit": "mocha 'lib/**/*.spec.unit.js'",
+    "coverage:unit": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'lib/**/*.spec.unit.js'"
   },
   "dependencies": {
     "bluebird": "3.5.0",

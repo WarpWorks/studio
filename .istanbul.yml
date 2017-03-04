@@ -1,11 +1,9 @@
 instrumentation:
     verbose: true
-    root: .
+    root: lib
     include-all-sources: true
     excludes:
-        - '*.js'
         - '**/*.spec.*.js'
-        - 'coverage/**/*'
 reporting:
     print: summary
     reports:
