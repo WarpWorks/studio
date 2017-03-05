@@ -1,5 +1,5 @@
+verbose: false
 instrumentation:
-    verbose: true
     root: lib
     include-all-sources: true
     excludes:

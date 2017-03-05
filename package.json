@@ -10,9 +10,22 @@
   },
   "main": "lib/headstart.js",
   "scripts": {
-    "eslint": "eslint --fix server",
-    "test:unit": "mocha 'lib/**/*.spec.unit.js'",
-    "coverage:unit": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'lib/**/*.spec.unit.js'"
+    "watch": "npm-watch",
+    "eslint:node": "eslint --fix --ignore-pattern *.spec.*.js lib server",
+    "eslint:test": "eslint --fix --config=.eslintrc.spec.json  **/*.spec.*.js",
+    "eslint": "npm run -s eslint:node && npm run -s eslint:test",
+    "test": "mocha 'lib/**/*.spec.unit.js'",
+    "coverage": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'lib/**/*.spec.unit.js'"
+  },
+  "watch": {
+    "coverage": {
+      "patterns": [
+          "lib",
+          "server"
+      ],
+      "extensions": "js",
+      "quiet": true
+    }
   },
   "dependencies": {
     "bluebird": "3.5.0",
@@ -35,6 +48,7 @@
     "mocha": "3.2.0",
     "morgan": "1.8.1",
     "node-test-helpers": "git+https://github.com/Quoin/node-test-helpers.git",
+    "npm-watch": "0.1.8",
     "serve-favicon": "2.4.1"
   },
   "peerDependencies": {
