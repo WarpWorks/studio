@@ -11,17 +11,19 @@
   "main": "lib/headstart.js",
   "scripts": {
     "watch": "npm-watch",
-    "eslint:node": "eslint --fix --ignore-pattern *.spec.*.js lib server",
-    "eslint:test": "eslint --fix --config=.eslintrc.spec.json  **/*.spec.*.js",
+    "eslint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
+    "eslint:test": "eslint --fix --config=.eslintrc.test.json  **/*.test.js",
     "eslint": "npm run -s eslint:node && npm run -s eslint:test",
-    "test": "mocha 'lib/**/*.spec.unit.js'",
-    "coverage": "istanbul cover --dir coverage/unit node_modules/.bin/_mocha -- 'lib/**/*.spec.unit.js'"
+    "test:unit": "mocha 'lib/**/*.unit.test.js'",
+    "test": "npm run test:unit",
+    "coverage:unit": "nyc --report-dir=coverage/unit npm run test:unit",
+    "coverage": "npm run coverage:unit"
   },
   "watch": {
-    "coverage": {
+    "coverage:unit": {
       "patterns": [
-          "lib",
-          "server"
+        "lib",
+        "server"
       ],
       "extensions": "js",
       "quiet": true
@@ -44,11 +46,11 @@
     "express": "4.15.0",
     "hbs": "4.0.1",
     "hbs-utils": "0.0.4",
-    "istanbul": "0.4.5",
     "mocha": "3.2.0",
     "morgan": "1.8.1",
     "node-test-helpers": "git+https://github.com/Quoin/node-test-helpers.git",
     "npm-watch": "0.1.8",
+    "nyc": "10.1.2",
     "serve-favicon": "2.4.1"
   },
   "peerDependencies": {
