@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var debug = require('debug')('SimpleSite:server');
+var debug = require('debug')('HS:server');
 var http = require('http');
 
 var app = require('./server/app');
