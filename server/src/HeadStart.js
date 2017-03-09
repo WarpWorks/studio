@@ -624,8 +624,11 @@ HeadStart.prototype.createInstanceFromJSON = function (jsonData, type, parent) {
             newPanel.alternatingColors =    jsonData.alternatingColors;
             for (i in jsonData.separatorPanelItems)
                 newPanel.separatorPanelItems.push(this.createInstanceFromJSON(jsonData.separatorPanelItems[i], this.ComplexTypes.SeparatorPanelItem, newPanel));
-            for (i in jsonData.relationshipPanelItems)
-                newPanel.relationshipPanelItems.push(this.createInstanceFromJSON(jsonData.relationshipPanelItems[i], this.ComplexTypes.RelationshipPanelItem, newPanel));
+            for (i in jsonData.relationshipPanelItems) {
+                var newRelationshipPanelItem = this.createInstanceFromJSON(jsonData.relationshipPanelItems[i], this.ComplexTypes.RelationshipPanelItem, newPanel);
+                newRelationshipPanelItem.style = jsonData.relationshipPanelItems[i].style;
+                newPanel.relationshipPanelItems.push(newRelationshipPanelItem);
+            }
             for (i in jsonData.basicPropertyPanelItems)
                 newPanel.basicPropertyPanelItems.push(this.createInstanceFromJSON(jsonData.basicPropertyPanelItems[i], this.ComplexTypes.BasicPropertyPanelItem, newPanel));
             for (i in jsonData.enumPanelItems)

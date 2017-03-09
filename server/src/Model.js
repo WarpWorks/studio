@@ -271,8 +271,12 @@ Base.prototype.saveTemplateResults = function (result, target) {
         throw "Invalid target in 'onSave'-option!";
 
     var fn = this.evalWithContext(target[1]);
-    fn = this.getHeadStart().getDir("output")+target[0]+"/"+fn;
-
+    if (target[0]===".") {
+        fn = process.cwd()+"/public/HeadStart/"+fn;
+    }
+    else {
+        fn = this.getHeadStart().getDir("output") + target[0] + "/" + fn;
+    }
     var fs = require('fs');
     fs.writeFile(fn, result, function (err) {
         if (err) return console.log("*** Error: " + err);
@@ -603,8 +607,86 @@ Entity.prototype.setRootEntityStatus = function (declareAsRootEntity) {
 }
 
 Entity.prototype.createNewDefaultViews = function () {
+    this.createNewDefaultTableView();
+    this.createNewDefaultPageView();
+    this.createNewDefaultPortalView();
+}
 
+Entity.prototype.createNewDefaultTableView = function () {
+    // Create new default table view
+    var newDefaultTableView = this.addNewTableView("DefaultTableView", "");
+    newDefaultTableView.setAsDefault();
+    var pos = 0;
+    var properties = this.getBasicProperties();
+    for (var i in properties) {
+        var property = properties[i];
+        var tableItem = newDefaultTableView.addNewTableItem(property.name, "Tooltip", property);
+        tableItem.position = pos++;
+    }
+}
+
+Entity.prototype.createNewDefaultPortalView = function () {
     // Create new default page view
+    var newDefaultPageView = this.addNewPageView("DefaultPortalView", "");
+
+    // First Tab: properties, enums and associations
+    var assocs = this.getAssociations();
+    var properties = this.getBasicProperties();
+    var enums = this.getEnums();
+    var aggs = this.getAggregations();
+    var basicCount = properties.length + enums.length + assocs.length + aggs.length;
+    var createdAtLeastOne = false;
+    if (basicCount > 0) {
+        var pos = 0;
+        var item = null;
+        var panel = newDefaultPageView.addNewPanel("Basics", "Properties, Enums, Associations and Aggregations");
+        panel.position = 0;
+        for (var i in properties) {
+            var property = properties[i];
+            item = panel.addNewBasicPropertyPanelItem(property.name, "Tooltip for " + property.name, property);
+            item.position = pos++;
+        }
+        createdAtLeastOne = properties.length>0;
+        if (createdAtLeastOne && enums.length>0) {
+            item = panel.addNewSeparatorPanelItem();
+            item.position = pos++;
+        }
+        for (var i in enums) {
+            var enumeration = enums[i];
+            item = panel.addNewEnumPanelItem(enumeration.name, "Tooltip for " + enumeration.name, enumeration);
+            item.position = pos++;
+        }
+        createdAtLeastOne = createdAtLeastOne || enums.length>0;
+        if (createdAtLeastOne && assocs.length>2) {
+            item = panel.addNewSeparatorPanelItem();
+            item.position = pos++;
+        }
+        for (var i in assocs) {
+            var assoc = assocs[i];
+            if (assoc.name!="ReadAccess" && assoc.name!="WriteAccess") {
+                item = panel.addNewRelationshipPanelItem(assoc.name, "Tooltip for " + assocs[i].name, assocs[i]);
+                item.style = "CSV";
+                item.position = pos++;
+            }
+        }
+        createdAtLeastOne = createdAtLeastOne || assocs.length>0;
+        if (createdAtLeastOne && aggs.length>1) {
+            item = panel.addNewSeparatorPanelItem();
+            item.position = pos++;
+        }
+        for (var i in aggs) {
+            var agg = aggs[i];
+            if (agg.name!="Overview") {
+                var item = panel.addNewRelationshipPanelItem(agg.name, "Tooltip", aggs[i]);
+                item.style = "CSV";
+                item.position = pos++;
+            }
+        }
+    }
+}
+
+Entity.prototype.createNewDefaultPageView = function () {
+        // Create new default page view
     var newDefaultPageView = this.addNewPageView("DefaultPageView", "");
     newDefaultPageView.setAsDefault();
 
@@ -613,8 +695,7 @@ Entity.prototype.createNewDefaultViews = function () {
     var properties = this.getBasicProperties();
     var enums = this.getEnums();
     var basicCount = properties.length + enums.length + assocs.length;
-    var hasEnumsAndAssocs = enums.length>0 && assocs.length>0;
-    var hasAssocs = assocs.length>0;
+    var createdAtLeastOne = false;
     if (basicCount > 0) {
         var pos = 0;
         var item = null;
@@ -625,21 +706,25 @@ Entity.prototype.createNewDefaultViews = function () {
             item = propertyPanel.addNewBasicPropertyPanelItem(property.name, "Tooltip for "+property.name, property);
             item.position = pos++;
         }
-        if (hasEnumsAndAssocs) {
+        createdAtLeastOne = properties.length>0;
+        if (createdAtLeastOne && enums.length>0) {
             item = propertyPanel.addNewSeparatorPanelItem();
             item.position = pos++;
         }
+        createdAtLeastOne = createdAtLeastOne || enums.length>0;
         for (var i in enums) {
             var enumeration = enums[i];
             item = propertyPanel.addNewEnumPanelItem(enumeration.name, "Tooltip for "+enumeration.name, enumeration);
             item.position = pos++;
         }
-        if (hasAssocs) {
+        if (createdAtLeastOne && assocs.length>0) {
             item = propertyPanel.addNewSeparatorPanelItem();
             item.position = pos++;
+            createdAtLeastOne = true;
         }
         for (var i in assocs) {
             item = propertyPanel.addNewRelationshipPanelItem(assocs[i].name, "Tooltip for "+assocs[i].name, assocs[i]);
+            item.style = "CSV";
             item.position = pos++;
         }
     }
@@ -650,18 +735,9 @@ Entity.prototype.createNewDefaultViews = function () {
     for (var i in aggs) {
         var relationshipPanel = newDefaultPageView.addNewPanel(aggs[i].name, "Tooltip");
         relationshipPanel.position = pos++;
-        var panelItem = relationshipPanel.addNewRelationshipPanelItem(aggs[i].name, "Tooltip", aggs[i]);
-        panelItem.position = 0;
-    }
-
-    // Create new default table view
-    var newDefaultTableView = this.addNewTableView("DefaultTableView", "");
-    newDefaultTableView.setAsDefault();
-    pos = 0;
-    for (var i in properties) {
-        var property = properties[i];
-        var tableItem = newDefaultTableView.addNewTableItem(property.name, "Tooltip", property);
-        tableItem.position = pos++;
+        var item = relationshipPanel.addNewRelationshipPanelItem(aggs[i].name, "Tooltip", aggs[i]);
+        item.style = "Table";
+        item.position = 0;
     }
 }
 

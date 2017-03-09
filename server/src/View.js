@@ -65,6 +65,7 @@ SeparatorPanelItem.prototype.toJSON = function () {
 function RelationshipPanelItem (parent, id, name, desc, relationship) {
     PanelItem.call(this, "RelationshipPanelItem", parent, id, name, desc);
     this.label = name;
+    this.style = "CSV";
 
     if (relationship) {
 
@@ -114,6 +115,7 @@ RelationshipPanelItem.prototype.toJSON = function () {
         name: this.name,
         desc: this.desc,
         type: this.type,
+        style: this.style,
         id: this.idToJSON(),
         position: this.position,
         label: this.label,

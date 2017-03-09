@@ -130,6 +130,7 @@ function updatePanelOverview (panel) {
     $("#panelPositionI").val(panel.position);
     $("#panelLabelI").val(panel.label);
     $("#panelDescI").val(panel.desc);
+    var el = $("#panelDescI");
 
     // Callback to deal with new position
     $("#panelPositionI").on("change", function() {
@@ -196,11 +197,12 @@ function updatePanelOverview (panel) {
         count++;
         var pItem = pItems[i];
         var piType = "";
+        var piGlyph = "";
         switch (pItem.type) {
-            case "SeparatorPanelItem":     piType = "Separator"; break;
-            case "RelationshipPanelItem":  piType = "List"; break;
-            case "BasicPropertyPanelItem": piType = "Property"; break;
-            case "EnumPanelItem":          piType = "Enum"; break;
+            case "SeparatorPanelItem":     piType = "Separator"; piGlyph = "glyphicon-minus"; break;
+            case "RelationshipPanelItem":  piType = "List";      piGlyph = "glyphicon-th-list";break;
+            case "BasicPropertyPanelItem": piType = "Property";  piGlyph = "glyphicon-tag";break;
+            case "EnumPanelItem":          piType = "Enum";      piGlyph = "glyphicon-option-vertical";break;
             default: throw "Unknown type: "+pItems[i].type;
         }
 
@@ -248,7 +250,14 @@ function updatePanelOverview (panel) {
                     "           <li><a href='#' id='panelItemTargetViewNameA-"+pItem.id+"' onclick='selectView(event)'>"+viewName+"</a></li>"+
                     "       </ul>"+
                     "   </div>"+
+                    "</div>"+
+                    "<div class='form-group'>"+
+                    "   <label for='panelStypeI' class='col-sm-2 control-label'>Style</label>"+
+                    "   <div class='col-sm-3'>"+
+                    "       <input type='text' class='form-control' id='panelItemListStyleI"+pItem.id+"'>"+
+                    "   </div>"+
                     "</div>";
+
                 break;
             case "BasicPropertyPanelItem":
                 var property = pItem.hasBasicProperty() ? pItem.getBasicProperty() : {name:"undefined"};
@@ -283,8 +292,8 @@ function updatePanelOverview (panel) {
             $("<form class='form-horizontal' id='panelItemBasicsF'>"+
             "   <div class='form-group'>"+
             "       <div class='col-sm-2'>"+
-            "           <ul class='nav nav-pills pull-right' id='piRemoveNP-"+pItem.id+"' type='"+pItem.type+"'>"+
-            "               <li><a href='#' id='piRemoveA"+pItem.id+"' data-toggle='tab' title='Remove Panel Item'><span class='glyphicon glyphicon-th-list'></span> List</a></li>"+
+            "           <ul class='nav nav-pills pull-right' type='"+pItem.type+"'>"+
+            "               <li><a href='#'><span class='glyphicon "+piGlyph+"'></span> "+piType+"</a></li>"+
             "           </ul>"+
             "       </div>"+
 
@@ -306,6 +315,16 @@ function updatePanelOverview (panel) {
             "</form>");
         li.append(piForm);
         $("#pvPanelItemDetailsUL").append(li);
+
+        // Update panel items
+        var pItems = $active.panel.getAllPanelItems(true);
+        for (var i in pItems) {
+            var pItem = pItems[i];
+            if (pItem.type === "RelationshipPanelItem") {
+                var elem = $("#panelItemListStyleI"+pItem.id);
+                elem.val(pItem.style);
+            }
+        }
 
         // Callback to remove PanelItems:
         $("#piRemoveNP-"+pItem.id).on("click", function () {
@@ -361,6 +380,9 @@ function savePageView() {
             pItem.position = $("#piPositionI"+pItem.id).val();
             pItem.label = $("#piLabelI"+pItem.id).val();
             pItem.desc = $("#piDescI"+pItem.id).val();
+            if (pItem.type === "RelationshipPanelItem") {
+                pItem.style = $("#panelItemListStyleI"+pItem.id).val();
+            }
         }
     }
 

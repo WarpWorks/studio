@@ -33,7 +33,7 @@ PageView(View)
 Panel: position:number, label:string, columns:number, alternatingColors:boolean
 PanelItem: position:number, label:string
 SeparatorPanelItem(PanelItem)
-RelationshipPanelItem(PanelItem)
+RelationshipPanelItem(PanelItem): style:[CSV|Table|Preview]
 BasicPropertyPanelItem(PanelItem)
 EnumPanelItem(PanelItem)
 
