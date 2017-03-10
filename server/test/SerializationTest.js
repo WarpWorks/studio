@@ -2,12 +2,12 @@
 // Test serialization / deserialization
 //
 
-var hs = require ('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
 
 // Create test model
 
 var smn = hs.readFile("./../smn/CustomerData.smn");
-var testDomain  = hs.createNewDomain ("CustomerData_APITest", "For testing purposes");
+var testDomain = hs.createNewDomain("CustomerData_APITest", "For testing purposes");
 hs.createModelElementsFromSMN(testDomain, smn);
 
 console.log(testDomain.toString());

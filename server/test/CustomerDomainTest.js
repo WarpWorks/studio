@@ -2,13 +2,13 @@
 // Test for Model API
 //
 
-var hs = require ('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
 
 // Customer Domain
-var customerDomain  = hs.createNewDomain ("CustomerData", "Customer entities, including contact details");
+var customerDomain = hs.createNewDomain("CustomerData", "Customer entities, including contact details");
 
 // Customer Entity + Properties
-var customer    =   customerDomain.addNewEntity ("Customer", "The core customer entity");
+var customer = customerDomain.addNewEntity("Customer", "The core customer entity");
 var fn = customer.addNewBasicProperty("FirstName", "First name of customer", hs.BasicTypes.String);
 fn.constraints = "$.len > 3";
 fn.examples = "Joe, Bob, Billy";
@@ -25,7 +25,7 @@ customerType.addNewLiteral("Private", "Consumer customer");
 customerType.addNewLiteral("Company", "Corporate customer");
 
 // Address Entity
-var address = customerDomain.addNewEntity ("Address", "Address data for customer");
+var address = customerDomain.addNewEntity("Address", "Address data for customer");
 address.namePlural = "Addresses";
 address.addNewBasicProperty("Street", "Street name + house number", hs.BasicTypes.String);
 address.addNewBasicProperty("ZIP", "ZIP Code", hs.BasicTypes.String);
@@ -46,13 +46,13 @@ country.addNewLiteral("Germany", "'schland!");
 country.addNewLiteral("USA", "U.S.A.!");
 
 // Payment Method Entities
-var paymentMeth =   customerDomain.addNewEntity (
+var paymentMeth = customerDomain.addNewEntity(
     "PaymentMethod",
     "Abstract class for different payment methods");
 paymentMeth.isAbstract = true;
-var cc = customerDomain.addNewEntity (
-    "CreditCard", 
-    "All data needed to process different credit card payments", 
+var cc = customerDomain.addNewEntity(
+    "CreditCard",
+    "All data needed to process different credit card payments",
     paymentMeth);
 cc.addNewBasicProperty("Name", "Name on Billing Address", hs.BasicTypes.String);
 cc.addNewBasicProperty("Number", "Number on front side", hs.BasicTypes.String);
@@ -60,9 +60,9 @@ cc.addNewBasicProperty("Month", "Valid until", hs.BasicTypes.String);
 cc.addNewBasicProperty("Year", "Valid until", hs.BasicTypes.String);
 cc.addNewBasicProperty("SecurityCode", "3 digit code on backside", hs.BasicTypes.String);
 
-var ppal = customerDomain.addNewEntity (
+var ppal = customerDomain.addNewEntity(
     "Paypal", "All data needed to process paypal payments", paymentMeth);
-    ppal.addNewBasicProperty("eMail", "Your eMail used for paypal", hs.BasicTypes.String);
+ppal.addNewBasicProperty("eMail", "Your eMail used for paypal", hs.BasicTypes.String);
 
 // Aggregation relationship for Address:
 var customer2payment = customer.addNewRelationship(paymentMeth, true);
@@ -93,9 +93,9 @@ myCustomerTableView.addNewTableItem("TableItem3_DoB", "...", dob);
 //
 // Order Data Domain
 //
-var orderDomain = hs.createNewDomain ("OrderData", "All entities related to orders; Notice: No rootEntity instances!");
-var order       = orderDomain.addNewEntity("Order", "Customer order with potentially multiple items");
-var orderItem   = orderDomain.addNewEntity("OrderItem", "Individual Item of customer order");
+var orderDomain = hs.createNewDomain("OrderData", "All entities related to orders; Notice: No rootEntity instances!");
+var order = orderDomain.addNewEntity("Order", "Customer order with potentially multiple items");
+var orderItem = orderDomain.addNewEntity("OrderItem", "Individual Item of customer order");
 var date = order.addNewBasicProperty("Date", "Date of Order Confirmation by Customer", hs.BasicTypes.Date);
 date.constraints = "today";
 date.examples = "10.12.1970";
@@ -145,5 +145,5 @@ hs.applyTemplateFile('./../templates/BasicViews.hst', [customerDomain, orderDoma
 // Print Domain Overview
 //
 
-//console.log(hs.toString());
+// console.log(hs.toString());
 

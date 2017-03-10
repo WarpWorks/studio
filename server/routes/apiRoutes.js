@@ -1,41 +1,41 @@
-var hs = require('./../src/HeadStart.js').HeadStart;
-var express = require('express');
-var apiRouter = express.Router();
-var fs = require('fs');
+const apiRouter = require('express').Router();
+const path = require('path');
 
-apiRouter.get('/domain/:domain', function (req, res, next) {
-    console.log("Get-Request for '/api/get/domain': " + req.params.domain);
-    var fn = hs.getDir("domains") + req.params.domain + '.jsn';
+const hs = require('./../../lib/headstart');
+
+const debug = require('debug')('HS:apiRoutes');
+
+apiRouter.get('/domain/:domain', function(req, res, next) {
+    debug("Get-Request for '/api/get/domain': " + req.params.domain);
     try {
-        var file = hs.readFile(fn);
-    }
-    catch (err) {
+        res.send({
+            success: true,
+            domain: hs.getDomainByName(req.params.domain)
+        });
+    } catch (err) {
         console.log(err);
-        result.success = false;
-        result.err = "Invalid file name: " + fn;
-        res.send(result);
-        return;
+        res.send({
+            success: false,
+            err: `Invalid domain name: ${req.params.domain}`
+        });
     }
-    var result = {};
-    result.success = true;
-    result.domain = JSON.parse(file);
-    res.send(result);
 });
 
-apiRouter.get('/smnExamples', function (req, res, next) {
-    console.log("Get-Request for '/api/smnExamples'!");
-    var result = {};
-    result.success = true;
+apiRouter.get('/smnExamples', function(req, res, next) {
+    debug("Get-Request for '/api/smnExamples'!");
+    var result = {
+        success: true
+    };
     try {
-        var dir = hs.getDir("smnDemos");
-        var fileNames = [];
-        var files = fs.readdirSync(dir);
+        var files = hs.readDir('smnDemos');
 
-        result.smnExamples = [];
-        files.forEach(function (fn) {
-            var templateData = fs.readFileSync(dir+"/"+fn, 'utf8');
-            var templateName = fn.split(".smn")[0];
-            result.smnExamples.push({name: templateName, template: templateData});
+        result.smnExamples = files.map((fn) => {
+            const templateData = hs.readFile(fn, 'utf8');
+            const name = path.basename(fn, '.smn');
+            return {
+                name,
+                template: templateData
+            };
         });
     } catch (err) {
         console.log("*** " + err);
@@ -46,43 +46,48 @@ apiRouter.get('/smnExamples', function (req, res, next) {
     res.send(result);
 });
 
-apiRouter.get('/availableDomains', function (req, res, next) {
-    console.log("Get-Request for '/api/availableDomains'!");
-    var result = {};
-    result.success = true;
+apiRouter.get('/availableDomains', function(req, res, next) {
+    debug("Get-Request for '/api/availableDomains'!");
+    const result = {
+        success: true
+    };
+
     try {
-        var dir = hs.getDir("domains");
-        var fileNames = [];
-        var files = fs.readdirSync(dir);
+        const files = hs.readDir('domains');
+
+        result.domains = files.map((fn) => {
+            const name = path.basename(fn, '.jsn');
+            return {
+                name,
+                desc: "TBD: Description"
+            };
+        });
     } catch (err) {
         console.log("*** " + err);
         result.success = false;
         result.error = err.toString();
     }
 
-    result.domains = [];
-    files.forEach(function (elem) {
-        var name = elem.split(".jsn")[0];
-        result.domains.push({name: name, desc: "TBD: Description"});
-    });
     res.send(result);
 });
 
-apiRouter.post('/saveDomain', function (req, res, next) {
-    console.log("Post-Request '/api/saveDomain'");
+apiRouter.post('/saveDomain', function(req, res, next) {
+    debug("Post-Request '/api/saveDomain'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
         var domainData = req.body.domainData;
         var domainName = req.body.domainName;
         try {
-            console.log("Creating domain: " + domainName);
+            debug("Creating domain: " + domainName);
             var domain = hs.createDomainFromJSONString(domainData);
-            if (domainName !== domain.name) throw "Domain name does not match file name: "+domainName+" != "+domain.name;
+            if (domainName !== domain.name) {
+                throw new Error("Domain name does not match file name: " + domainName + " != " + domain.name);
+            }
 
-            console.log("Saving: " + domainName);
-            domain.save();
+            debug("Saving: " + domainName);
+            domain.save(hs);
 
-            console.log("Validating: " + domainName);
+            debug("Validating: " + domainName);
             var vRes = domain.validateModel();
             if (vRes) {
                 response.warnings = true;
@@ -90,19 +95,18 @@ apiRouter.post('/saveDomain', function (req, res, next) {
             }
             response.success = true;
         } catch (err) {
+            console.log("Error Saving Domain: " + err);
             response.success = false;
             response.error = err.toString();
-            console.log("Error Saving Domain: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/generateDefaultViews', function (req, res, next) {
-    console.log("Post-Request '/api/generateDefaultViews'");
+apiRouter.post('/generateDefaultViews', function(req, res, next) {
+    debug("Post-Request '/api/generateDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
         var domainName = req.body.domainName;
@@ -110,91 +114,82 @@ apiRouter.post('/generateDefaultViews', function (req, res, next) {
             //
             // Generate default views:
             //
-            var fn = hs.getDir("domains") + domainName + '.jsn';
-            var file = hs.readFile(fn);
-            var domain = hs.createDomainFromJSONString(file);
+            var domain = hs.getDomainByName(domainName);
 
             // Apply all available template files:
-            dir = hs.getDir("templates");
-            var fileNames = [];
-            var files = fs.readdirSync(dir);
-            files.forEach(function (fn) {
-                hs.applyTemplateFile(hs.getDir("templates") + fn, [domain]);
+            var files = hs.readDir('templates');
+            files.forEach(function(fn) {
+                hs.applyTemplateFile(fn, [domain]);
             });
 
-            console.log("Generated new default views for " + domainName);
+            debug("Generated new default views for " + domainName);
             response.success = true;
         } catch (err) {
+            console.log("Error while generating default view: " + err);
+            console.log(err.stack);
             response.success = false;
             response.error = err.toString();
-            console.log("Error while generating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/createDefaultViews', function (req, res, next) {
-    console.log("Post-Request '/api/createDefaultViews'");
+apiRouter.post('/createDefaultViews', function(req, res, next) {
+    debug("Post-Request '/api/createDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
-        var response = {};
+        var response = {
+            success: true
+        };
         var domainName = req.body.domainName;
         try {
             //
             // Generate default views:
             //
-            var fn = hs.getDir("domains") + domainName + '.jsn';
-            var file = hs.readFile(fn);
-            var domain = hs.createDomainFromJSONString(file);
+            var domain = hs.getDomainByName(domainName);
 
             // Create new default views - TBD: Remove old ones? Persist new ones?
-            domain.createNewDefaultViews();
-            domain.save();
+            domain.createNewDefaultViews(hs);
+            domain.save(hs);
 
-            console.log("Created new default views for " + domainName);
-            response.success = true;
+            debug("Created new default views for " + domainName);
         } catch (err) {
+            console.log("Error while creating default view: " + err);
             response.success = false;
             response.error = err.toString();
-            console.log("Error while creating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
 // TBD: Test Data Mgmt should be moved into a separate package, since it is generator-specific
 
-apiRouter.post('/generateTestData', function (req, res, next) {
-    console.log("Post-Request '/api/generateTestData'");
+apiRouter.post('/generateTestData', function(req, res, next) {
+    debug("Post-Request '/api/generateTestData'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
         var domainName = req.body.domainName;
         try {
-            var fn = hs.getDir("domains") + domainName + '.jsn';
-            var file = hs.readFile(fn);
-            var domain = hs.createDomainFromJSONString(file);
+            const domain = hs.getDomainByName(domainName);
             domain.createTestDataForEntity(domain.getRootInstance(), null);
-            console.log("Generated test data for " + domainName);
+            debug("Generated test data for " + domainName);
             response.success = true;
         } catch (err) {
+            console.log("Error while creating default view: " + err);
             response.success = false;
             response.error = err.toString();
-            console.log("Error while creating default view: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/removeTestData', function (req, res, next) {
-    console.log("Post-Request '/api/generateDefaultViews'");
+apiRouter.post('/removeTestData', function(req, res, next) {
+    debug("Post-Request '/api/generateDefaultViews'");
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
         var domainName = req.body.domainName;
@@ -202,39 +197,36 @@ apiRouter.post('/removeTestData', function (req, res, next) {
             hs.removeAllDataFromDB(domainName); // Remove test data!
             response.success = true;
         } catch (err) {
+            console.log("Error while dropping test data: " + err);
             response.success = false;
             response.error = err.toString();
-            console.log("Error while dropping test data: " + err);
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
 
-apiRouter.post('/createDomainFromSMN', function (req, res, next) {
-    console.log("Post-Request '/api/createDomainFromSMN'"); // TBD - change name to "domain/createFromSMN"
+apiRouter.post('/createDomainFromSMN', function(req, res, next) {
+    debug("Post-Request '/api/createDomainFromSMN'"); // TBD - change name to "domain/createFromSMN"
     if (req.xhr || req.accepts('json,html') === 'json') {
         var response = {};
         var smnValue = req.body.value;
         try {
             var domain = hs.createModelElementsFromSMN(smnValue);
-            domain.createNewDefaultViews();
-            domain.save();
+            domain.createNewDefaultViews(hs);
+            domain.save(hs);
             response.newDomain = domain.name;
             response.success = true;
-            console.log("Created new Domain from SMN: " + domain.name);
-
+            debug("Created new Domain from SMN: " + domain.name);
         } catch (err) {
-            response.success = false;
-            response.error = err.toString();
             console.log("Error creating Domain from SMN: " + err);
             console.log(err.stack);
+            response.success = false;
+            response.error = err.toString();
         }
         res.send(response);
-    }
-    else {
+    } else {
         res.redirect(303, '/error');
     }
 });
