@@ -895,7 +895,7 @@ function openTestAppModal() {
     $("#removeTestDataB").on("click", removeTestData);
     $("#viewTestAppB").on("click", function () {
         setTimeout(function () {
-            window.location.href = "http://localhost:3001/app/" + $active.domain.name;
+            window.location.href = window.location.protocol + "//" + window.location.hostname + ":3001/app/" + $active.domain.name;
         }, 750);
     });
 
