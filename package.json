@@ -1,6 +1,6 @@
 {
   "name": "HeadStart",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/dslama/HeadStart.git"
@@ -14,7 +14,7 @@
     "eslint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
     "eslint:test": "eslint --fix --config=.eslintrc.test.json  **/*.test.js",
     "eslint": "npm run -s eslint:node && npm run -s eslint:test",
-    "test:unit": "mocha 'lib/**/*.unit.test.js'",
+    "test:unit": "mocha lib/**/*.unit.test.js",
     "test": "npm run test:unit",
     "coverage:unit": "nyc --report-dir=coverage/unit npm run test:unit",
     "coverage": "npm run coverage:unit"
