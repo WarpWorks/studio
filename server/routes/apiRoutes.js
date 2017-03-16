@@ -96,6 +96,7 @@ apiRouter.post('/saveDomain', function(req, res, next) {
             response.success = true;
         } catch (err) {
             console.log("Error Saving Domain: " + err);
+            debug(err.stack);
             response.success = false;
             response.error = err.toString();
         }
