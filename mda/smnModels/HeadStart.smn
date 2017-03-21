@@ -36,10 +36,11 @@ SeparatorPanelItem(PanelItem)
 RelationshipPanelItem(PanelItem): style:[CSV|Table|Preview]
 BasicPropertyPanelItem(PanelItem)
 EnumPanelItem(PanelItem)
+Action: icon:string, label:string, functionName:string
 
 // Aggregation Hierarchy:
 PageView:{panels:Panel*}
-Panel:{separatorPanelItems:SeparatorPanelItem*, relationshipPanelItems:RelationshipPanelItem*, basicPropertyPanelItems:BasicPropertyPanelItem*, enumPanelItems:EnumPanelItem*}
+Panel:{separatorPanelItems:SeparatorPanelItem*, relationshipPanelItems:RelationshipPanelItem*, basicPropertyPanelItems:BasicPropertyPanelItem*, enumPanelItems:EnumPanelItem*, actions:Action* }
 TableView:{tableItems:TableItem*}
 
 // Associations:

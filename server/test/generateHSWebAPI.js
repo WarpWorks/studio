@@ -1,6 +1,7 @@
 const path = require('path');
 console.log("Generating HeadStart WebAPI:");
-var hs = require(path.join(process.cwd(), 'server', 'src', 'HeadStart')).HeadStart;
+var fn = path.join(process.cwd(), 'lib', 'headstart.js');
+var hs = require(fn);
 
 console.log("Reading SMN file...");
 var smn = hs.readFile(process.cwd()+"/mda/smnModels/HeadStart.smn");
