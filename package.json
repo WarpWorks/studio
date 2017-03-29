@@ -1,6 +1,6 @@
 {
   "name": "HeadStart",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/dslama/HeadStart.git"
@@ -12,9 +12,9 @@
   "scripts": {
     "watch": "npm-watch",
     "eslint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
-    "eslint:test": "eslint --fix --config=.eslintrc.test.json  **/*.test.js",
+    "eslint:test": "eslint --fix --config=.eslintrc.test.json  '**/*.test.js'",
     "eslint": "npm run -s eslint:node && npm run -s eslint:test",
-    "test:unit": "mocha lib/**/*.unit.test.js",
+    "test:unit": "mocha 'lib/**/*.unit.test.js'",
     "test": "npm run test:unit",
     "coverage:unit": "nyc --report-dir=coverage/unit npm run test:unit",
     "coverage": "npm run coverage:unit"
@@ -36,6 +36,7 @@
     "rc": "1.1.7"
   },
   "devDependencies": {
+    "@quoin/node-test-helpers": "0.1.7",
     "body-parser": "1.17.1",
     "cookie-parser": "1.4.3",
     "debug": "2.6.3",
@@ -48,7 +49,6 @@
     "hbs-utils": "0.0.4",
     "mocha": "3.2.0",
     "morgan": "1.8.1",
-    "node-test-helpers": "git+https://github.com/Quoin/node-test-helpers.git",
     "npm-watch": "0.1.8",
     "nyc": "10.1.2",
     "serve-favicon": "2.4.1"
