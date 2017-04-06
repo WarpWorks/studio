@@ -8,8 +8,8 @@ var favicon = require('serve-favicon');
 // var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var apiRoutes = require('./routes/apiRoutes');
-var pageRoutes = require('./routes/pageRoutes');
+
+const routes = require('./../lib/routes');
 
 var app = express();
 
@@ -42,8 +42,7 @@ var hs = require('./server/src/headstart');
 hs.loadGeneratedHBSPartials();
 */
 
-app.use('/', pageRoutes.router);
-app.use('/api', apiRoutes);
+app.use(routes('/').router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
