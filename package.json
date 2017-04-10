@@ -1,6 +1,6 @@
 {
   "name": "HeadStart",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/dslama/HeadStart.git"
@@ -13,6 +13,7 @@
     "watch": "npm-watch",
     "eslint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
     "eslint:test": "eslint --fix --config=.eslintrc.test.json  '**/*.test.js'",
+    "eslint:client": "eslint --fix --config=.eslintrc.client.json public/HeadStart",
     "eslint": "npm run -s eslint:node && npm run -s eslint:test",
     "test:unit": "mocha 'lib/**/*.unit.test.js'",
     "test": "npm run test:unit",
@@ -32,9 +33,14 @@
   "dependencies": {
     "@quoin/expressjs-routes-info": "0.1.3",
     "bluebird": "3.5.0",
+    "bootstrap-notify": "3.1.3",
+    "hal": "0.1.0",
+    "hbs": "4.0.1",
+    "hbs-utils": "0.0.4",
     "lodash": "4.17.4",
     "mongodb": "2.2.25",
-    "rc": "1.1.7"
+    "rc": "1.1.7",
+    "serve-favicon": "2.4.1"
   },
   "devDependencies": {
     "@quoin/node-test-helpers": "0.1.7",
@@ -46,13 +52,10 @@
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "2.1.1",
     "express": "4.15.2",
-    "hbs": "4.0.1",
-    "hbs-utils": "0.0.4",
     "mocha": "3.2.0",
     "morgan": "1.8.1",
     "npm-watch": "0.1.8",
-    "nyc": "10.1.2",
-    "serve-favicon": "2.4.1"
+    "nyc": "10.1.2"
   },
   "peerDependencies": {
     "express": ">=4.0.0"

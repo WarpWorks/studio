@@ -5,8 +5,8 @@
 var $active = {};
 $active.domain = null;
 
-$(document).ready(function () {
-    getDomainData(function () {
+$(document).ready(function() {
+    getDomainData(function() {
         updateQSTable();
         updateMyNavBar();
     });
@@ -19,7 +19,7 @@ function handleUpdateEvent() {
 
 function updateQSTable() {
     var total = $active.domain.updateQuantityData();
-    var table = "<table class='table'> <thead> <tr><th>Entity: Instances</th><th>Aggregations</th><th>Child Entities</th><th>Average # of Children</th></tr></thead><tbody>"
+    var table = "<table class='table'> <thead> <tr><th>Entity: Instances</th><th>Aggregations</th><th>Child Entities</th><th>Average # of Children</th></tr></thead><tbody>";
     for (var i in $active.domain.entities) {
         var entity = $active.domain.entities[i];
         var isFirst = true;
@@ -32,7 +32,9 @@ function updateQSTable() {
             var pName = "";
             if (isFirst) {
                 pName = entity.name + ": " + entity.quantity;
-                if (entity.isRootInstance) pName = "#" + pName;
+                if (entity.isRootInstance) {
+                    pName = "#" + pName;
+                }
                 isFirst = false;
             }
             table += "<tr><td>" + pName + "</td>" +
@@ -84,13 +86,13 @@ function postDomainDataToServer() {
     postDomainData();
 }
 
-function saveEvent () {
+function saveEvent() {
     handleUpdateEvent();
     postDomainDataToServer();
 }
 
 function domainCancelEvent() {
-    getDomainData(function () {
+    getDomainData(function() {
         updateQSTable();
     });
 }

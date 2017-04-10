@@ -8,8 +8,8 @@ $active.domain = null;
 $(document).ready(updateDomain);
 
 function updateDomain() {
-    getDomainData(function () {
-        updateNavBar(["Domain: " + $active.domain.name+" <span class='glyphicon glyphicon-arrow-left'></span>", "../domain/"+$active.domain.name]);
+    getDomainData(function() {
+        updateNavBar(["Domain: " + $active.domain.name + " <span class='glyphicon glyphicon-arrow-left'></span>", "../domain/" + $active.domain.name]);
         $active.domain.updateQuantityData();
         updateGraph();
     });
@@ -32,16 +32,15 @@ function updateGraph() {
     var showInheritance = $("#inheritanceI").prop("checked");
     var showQuantities = $("#quantitiesI").prop("checked");
 
-
     // create one array with nodes and one with edges
     var nodeArray = [];
     var edgeArray = [];
-    //console.log("*******************************************************************");
-    //console.log(JSON.stringify($active.domain, null, 2));
-    //console.log("*******************************************************************");
+    // console.log("*******************************************************************");
+    // console.log(JSON.stringify($active.domain, null, 2));
+    // console.log("*******************************************************************");
 
     // Set default styles
-    $active.domain.entities.forEach(function (entity) {
+    $active.domain.entities.forEach(function(entity) {
         entity.borderWidth = 1;
         entity.color = "lightgrey";
     });
@@ -50,48 +49,49 @@ function updateGraph() {
 
     if (graphMode === "entityCluster") {
         // Put active entity at the center:
-        if (!$active.entity)
+        if (!$active.entity) {
             $active.entity = $active.domain.getRoot();
+        }
         $active.entity.borderWidth = 2;
         $active.entity.color = "darkgrey";
         entities = [$active.entity];
-        console.log("Active Entity:"+$active.entity.name);
+        console.log("Active Entity:" + $active.entity.name);
 
         // Add child aggregations:
         var childAggs = $active.entity.getAggregations();
         for (var i in childAggs) {
-            console.log("Child Entity:"+childAggs[i].getTargetEntity().name);
+            console.log("Child Entity:" + childAggs[i].getTargetEntity().name);
             entities.push(childAggs[i].getTargetEntity());
         }
 
         // Add parent aggregations:
         var parentAggs = $active.entity.getAllParentAggregations();
         for (var i in parentAggs) {
-            console.log("Parent Entity:"+parentAggs[i].parent.name);
+            console.log("Parent Entity:" + parentAggs[i].parent.name);
             entities.push(parentAggs[i].parent);
         }
 
         // Add parent class:
         if ($active.entity.hasParentClass()) {
-            console.log($active.entity.name+" has parent "+$active.entity.getParentClass().name);
+            console.log($active.entity.name + " has parent " + $active.entity.getParentClass().name);
             entities.push($active.entity.getParentClass());
         }
 
         // Add derived classes:
-        entities = entities.concat ($active.entity.getAllDerivedEntities());
-    }
-    else {
+        entities = entities.concat($active.entity.getAllDerivedEntities());
+    } else {
         // Show all entities
         entities = $active.domain.entities;
     }
 
-    entities.forEach(function (entity, idx1) {
-        //console.log("*** Entity: " + entity.name);
+    entities.forEach(function(entity, idx1) {
+        // console.log("*** Entity: " + entity.name);
 
         // Add entity
         var name = entity.isRootInstance ? "#" + entity.name : entity.name;
-        if (showQuantities)
+        if (showQuantities) {
             name += "\n(" + entity.quantity.toLocaleString() + ")";
+        }
         nodeArray.push({
             id: entity.id,
             label: name,
@@ -100,8 +100,8 @@ function updateGraph() {
         });
 
         // Now add edges for aggregations and associations for this entity
-        if (entity.relationships)
-            entity.relationships.forEach(function (relationship, idx2) {
+        if (entity.relationships) {
+            entity.relationships.forEach(function(relationship, idx2) {
                 var from = entity.id;
                 var to = relationship.getTargetEntity().id;
                 var id = idx1 + ':' + idx2;
@@ -131,6 +131,7 @@ function updateGraph() {
                     });
                 }
             });
+        }
         if (showInheritance && entity.hasParentClass()) {
             var from = entity.id;
             var to = entity.getParentClass().id;
@@ -150,10 +151,10 @@ function updateGraph() {
     var nodes = new vis.DataSet(nodeArray);
     var edges = new vis.DataSet(edgeArray);
 
-    //console.log("Nodes:");
-    //console.log(JSON.stringify(nodes, null, 2));
-    //console.log("Edges:");
-    //console.log(JSON.stringify(edges, null, 2));
+    // console.log("Nodes:");
+    // console.log(JSON.stringify(nodes, null, 2));
+    // console.log("Edges:");
+    // console.log(JSON.stringify(edges, null, 2));
 
     // create a network
     var container = document.getElementById('mynetwork');
@@ -177,7 +178,7 @@ function updateGraph() {
 
     // Events
     if (graphMode === "entityCluster") {
-        network.on("click", function (params) {
+        network.on("click", function(params) {
             $active.entity = $active.domain.findElementByID(params.nodes[0]);
             updateGraph();
         });

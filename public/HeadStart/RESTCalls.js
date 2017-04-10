@@ -5,21 +5,21 @@ function getDomainData(afterLoad) {
         url: '/api/domain/' + domain,
         type: 'GET',
         contentType: 'application/json; charset=utf-8',
-        success: function (result) {
+        success: function(result) {
             if (result.success) {
                 $active = {}; // Remove old settings
                 $active.domain = get_Domain_fromJSON(result.domain);
+                $active._links = result._links;
 
                 console.log("Loaded: " + $active.domain.name);
                 if (afterLoad) {
                     afterLoad();
                 }
-            }
-            else {
+            } else {
                 alert(result.err);
             }
         },
-        error: function (result) {
+        error: function(result) {
             alert("GET: Error - could not load domain: " + domain);
         }
     });
@@ -29,28 +29,26 @@ function postDomainData() {
     // Prepare request object
     var reqData = {domainData: JSON.stringify($active.domain, null, 2), domainName: $active.domain.name};
     console.log("postDomainData for: " + reqData.domainName);
-    //console.log(reqData.domainData);
-    reqData = JSON.stringify(reqData, null, 2)
+    // console.log(reqData.domainData);
+    reqData = JSON.stringify(reqData, null, 2);
 
-    // Post to server
     $.ajax({
-        url: '/api/saveDomain',
-        type: 'POST',
+        url: $active._links.self.href,
+        method: 'PUT',
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
             if (result.success) {
                 console.log("Save: OK");
                 if (result.warnings) {
-                    createModal ("Saving: "+$active.domain.name, result.status, "warning", null);
+                    createModal("Saving: " + $active.domain.name, result.status, "warning", null);
                 }
-            }
-            else {
+            } else {
                 console.log("Failed to save Domain!");
             }
         },
-        error: function () {
+        error: function() {
             console.log("Error while saving Domain!");
         }
     });
@@ -60,7 +58,7 @@ function generateDefaultViews() {
     // Prepare request object
     var reqData = {domainName: $active.domain.name};
     console.log("generateDefaultViews for: " + reqData.domainName);
-    reqData = JSON.stringify(reqData, null, 2)
+    reqData = JSON.stringify(reqData, null, 2);
 
     // Post to server
     $.ajax({
@@ -69,16 +67,15 @@ function generateDefaultViews() {
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
             loadDomainOverview(); // Re-load model, since it was extended on the server side!
             if (result.success) {
                 $("#testAppStatusD").html("<div class='alert alert-info'><strong>OK:</strong> Successfully generated Default Views</div>");
-            }
-            else {
+            } else {
                 $("#testAppStatusD").html("<div class='alert alert-danger'><strong>Error:</strong> Failed to generated default views!</div>");
             }
         },
-        error: function () {
+        error: function() {
             console.log("Error while generating default views!");
         }
     });
@@ -88,7 +85,7 @@ function createDefaultViews() {
     // Prepare request object
     var reqData = {domainName: $active.domain.name};
     console.log("createDefaultViews for: " + reqData.domainName);
-    reqData = JSON.stringify(reqData, null, 2)
+    reqData = JSON.stringify(reqData, null, 2);
 
     // Post to server
     $.ajax({
@@ -97,21 +94,19 @@ function createDefaultViews() {
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
             loadDomainOverview(); // Re-load model, since it was extended on the server side!
             if (result.success) {
                 console.log("Successfully generated Default Views");
-            }
-            else {
+            } else {
                 console.log("Failure generating Default Views!");
             }
         },
-        error: function () {
+        error: function() {
             console.log("Error while generating default views!");
         }
     });
 }
-
 
 function generateTestData() {
     // Update quantity data
@@ -120,10 +115,10 @@ function generateTestData() {
     var callbacks = [
         { close: true, label: "Edit Quantity Structure", callback: quantityStructure },
         { close: true, label: "Set all averages to '3'", callback: setDefaultAveragesAndGenerateTestData },
-        { close: true, label: "Cancel"}
+        { close: true, label: "Cancel" }
     ];
-    if (cnt<2) {
-        createModal ("Warning", "Quantity Structure is not properly defined. Please go to the 'Quantity Structure' menu and select meaningful values before generating test data! Or select 'Set all averages' to automatically create 3 instances of each Entity type.", "warning", callbacks);
+    if (cnt < 2) {
+        createModal("Warning", "Quantity Structure is not properly defined. Please go to the 'Quantity Structure' menu and select meaningful values before generating test data! Or select 'Set all averages' to automatically create 3 instances of each Entity type.", "warning", callbacks);
         return;
     }
 
@@ -139,15 +134,14 @@ function generateTestData() {
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
             if (result.success) {
-                $("#testAppStatusD").html("<div class='alert alert-info'><strong>OK:</strong> Successfully started generation of test data ("+cnt+" entities)</div>");
-            }
-            else {
+                $("#testAppStatusD").html("<div class='alert alert-info'><strong>OK:</strong> Successfully started generation of test data (" + cnt + " entities)</div>");
+            } else {
                 $("#testAppStatusD").html("<div class='alert alert-danger'><strong>Error:</strong> Failed to generate test data!</div>");
             }
         },
-        error: function () {
+        error: function() {
             console.log("Error while generate test data!");
         }
     });
@@ -157,7 +151,7 @@ function removeTestData() {
     // Prepare request object
     var reqData = {domainName: $active.domain.name};
     console.log("removeTestData for: " + reqData.domainName);
-    reqData = JSON.stringify(reqData, null, 2)
+    reqData = JSON.stringify(reqData, null, 2);
 
     // Post to server
     $.ajax({
@@ -166,15 +160,14 @@ function removeTestData() {
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
-        success: function (result) {
+        success: function(result) {
             if (result.success) {
                 $("#testAppStatusD").html("<div class='alert alert-info'><strong>OK:</strong> Successfully removed test data</div>");
-            }
-            else {
+            } else {
                 $("#testAppStatusD").html("<div class='alert alert-danger'><strong>Error:</strong> Failed to remove test data!</div>");
             }
         },
-        error: function () {
+        error: function() {
             console.log("Error while removing test data!");
         }
     });

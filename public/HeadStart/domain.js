@@ -4,12 +4,26 @@
 var $active = {};
 $active.domain = null;
 
-$(document).ready(function () {
-    loadDomainOverview();
+$(document).ready(function() {
+    $.ajax({
+        url: '../api',
+        method: 'GET',
+        headers: {
+            accept: 'application/hal+json'
+        },
+        success: function(result) {
+            console.log("INITIAL: result=", result);
+            loadDomainOverview();
+        },
+        error: function(err) {
+            console.log("INITIAL: err=", err);
+        }
+    });
+
 });
 
 function loadDomainOverview(domArg) {
-    var domain = domArg ? domArg : window.location.pathname.split('/').pop();
+    var domain = domArg || window.location.pathname.split('/').pop();
 
     if (domain === "New_Domain") {
         $active.domain = get_HeadStart().addNew_Domain("New_Domain", "");
@@ -18,9 +32,8 @@ function loadDomainOverview(domArg) {
         rootInstance.isRootInstance = true;
 
         updateActiveDomain();
-    }
-    else {
-        getDomainData(function () {
+    } else {
+        getDomainData(function() {
             updateActiveDomain();
         });
     }
@@ -42,24 +55,33 @@ function updateActiveDomain(activeEntityArg) {
 
     // Which is the active entity?
     var activeEntity = null;
-    if (activeEntityArg) activeEntity = activeEntityArg;
-    else if ($active.entity) activeEntity = $active.entity.id;
-    else if (!activeEntity) activeEntity = sortedEntityList.length > 0 ? sortedEntityList[0].id : null;
+    if (activeEntityArg) {
+        activeEntity = activeEntityArg;
+    } else if ($active.entity) {
+        activeEntity = $active.entity.id;
+    } else if (!activeEntity) {
+        activeEntity = sortedEntityList.length > 0 ? sortedEntityList[0].id : null;
+    }
 
     // Add new button for each entity
-    if (sortedEntityList.length >0) {
-        sortedEntityList.forEach(function (entity, i) {
+    if (sortedEntityList.length > 0) {
+        sortedEntityList.forEach(function(entity, i) {
             var active = "";
-            if (activeEntity)
+            if (activeEntity) {
                 active = hsCompareIDs(entity.id, activeEntity) ? "class='active'" : "";
+            }
 
             var name = entity.name;
-            if (entity.isRootInstance) name = "#"+name;
-            if (entity.isAbstract) name = "%"+name;
+            if (entity.isRootInstance) {
+                name = "#" + name;
+            }
+            if (entity.isAbstract) {
+                name = "%" + name;
+            }
             var elem = $(
                 "<li " + active + "><a href='#' id='" + entity.id + "'data-toggle='tab'>" + name + "</a></li>");
             $("#entityOverviewNP").append(elem).append(" ");
-            elem.click(function (event) {
+            elem.click(function(event) {
                 updateActiveEntity(event.target.id);
             });
         });
@@ -68,8 +90,7 @@ function updateActiveDomain(activeEntityArg) {
     // Finally, set active entity
     if (activeEntity) {
         updateActiveEntity(activeEntity);
-    }
-    else {
+    } else {
         $("#entityPanelBodyD").hide();
     }
 }
@@ -78,8 +99,7 @@ function updateActiveDomain(activeEntityArg) {
 //                          Active Entity & Tab 1: Basics
 // --------------------------------------------------------------------------------
 
-function updateActiveEntity(entityID)
-{
+function updateActiveEntity(entityID) {
     // Show form (is hidden only in case domain has no entities)
     $("#entityPanelBodyD").show();
 
@@ -89,7 +109,7 @@ function updateActiveEntity(entityID)
         alert("Invalid Entity ID: " + entityID);
         return;
     }
-    if (entity.type != "Entity") {
+    if (entity.type !== "Entity") {
         alert("Invalid type: " + entity.type + " (required: Entity)");
         return;
     }
@@ -99,7 +119,7 @@ function updateActiveEntity(entityID)
     $active.entity = entity;
 
     // Set panel heading
-    $("#entityPanelHeadingD").text("Entity: " + (entity.isRootInstance ? "#":"") + (entity.isAbstract ? "%":"") + entity.name);
+    $("#entityPanelHeadingD").text("Entity: " + (entity.isRootInstance ? "#" : "") + (entity.isAbstract ? "%" : "") + entity.name);
 
     //
     // Basics
@@ -113,24 +133,23 @@ function updateActiveEntity(entityID)
         $("#removeEntityB").hide();
         $("#parentEntityFG").hide();
         $("#rootEntityFG").hide();
-    }
-    else {
+    } else {
         // Show 'remove' button
         $("#removeEntityB").show();
 
         // Update and show info on parent class
-        if (entity.hasParentClass())
+        if (entity.hasParentClass()) {
             $("#parentEntityNameA").text(entity.getParentClass().name);
-        else
+        } else {
             $("#parentEntityNameA").text("undefined");
+        }
         $("#parentEntityFG").show();
 
         // Update and show info on root entity status
         if (entity.isRootEntity) {
             $("#rootEntityStatusA").text("Yes");
             $("#rootEntityMakeRootA").hide();
-        }
-        else {
+        } else {
             $("#rootEntityStatusA").text("No");
             $("#rootEntityMakeRootA").show();
         }
@@ -180,15 +199,15 @@ function removeEntity() {
     updateActiveDomain();
 }
 
-function makeRootEntity () {
+function makeRootEntity() {
     saveAllFormValues();
-    var newReln = $active.domain.getRootInstance().addNew_Relationship("my"+$active.entity.name+"s", "");
+    var newReln = $active.domain.getRootInstance().addNew_Relationship("my" + $active.entity.name + "s", "");
     newReln.isAggregation = true;
     newReln.setTargetEntity($active.entity);
     $active.entity.isRootEntity = true;
     updateActiveEntity($active.entity.id);
-    console.log("Entity '"+$active.entity.name+"' is now a root entity (new relationship '"+newReln.name+"' was automatically added)");
-    createModal("New Status", "Entity '"+$active.entity.name+"' is now a root entity (new relationship '"+newReln.name+"' was automatically added)");
+    console.log("Entity '" + $active.entity.name + "' is now a root entity (new relationship '" + newReln.name + "' was automatically added)");
+    createModal("New Status", "Entity '" + $active.entity.name + "' is now a root entity (new relationship '" + newReln.name + "' was automatically added)");
 }
 
 // --------------------------------------------------------------------------------
@@ -200,8 +219,8 @@ function updateActiveProperty(argActivePropertyID) {
     var sortedPropertyList = $active.entity.getBasicProperties(true);
 
     // Which ID for the active property (if any)?
-    var firstProperty = sortedPropertyList.length>0?sortedPropertyList[0].id:null;
-    var activePropertyID = argActivePropertyID ? argActivePropertyID : firstProperty;
+    var firstProperty = sortedPropertyList.length > 0 ? sortedPropertyList[0].id : null;
+    var activePropertyID = argActivePropertyID || firstProperty;
 
     // Save form values
     savePropertyFormValues();
@@ -209,15 +228,16 @@ function updateActiveProperty(argActivePropertyID) {
     // Update property list
     $("#propertiesNP").empty();
     if (sortedPropertyList.length > 0) {
-        sortedPropertyList.forEach(function (property, i) {
+        sortedPropertyList.forEach(function(property, i) {
             var active = hsCompareIDs(property.id, activePropertyID) ? " class='active'" : "";
             var elem = $("<li" + active + "><a href='#' id='" + property.id + "' data-toggle='tab'>" + property.name + "</a></li>");
             $("#propertiesNP").append(elem).append(" ");
-            elem.click(function (event) { updateActiveProperty(event.target.id); });
+            elem.click(function(event) {
+                updateActiveProperty(event.target.id);
+            });
         });
         $("#propertyDetailsF").show();
-    }
-    else {
+    } else {
         $("#propertyDetailsF").hide();
     }
 
@@ -234,7 +254,7 @@ function updateActiveProperty(argActivePropertyID) {
             alert("Invalid Property ID: " + activePropertyID);
             return;
         }
-        if (property.type != "BasicProperty") {
+        if (property.type !== "BasicProperty") {
             alert("Invalid type: " + property.type + " (required: BasicProperty");
             return;
         }
@@ -284,8 +304,8 @@ function updateActiveEnum(argActiveEnumID) {
     var sortedEnumList = $active.entity.getEnums(true);
 
     // Which ID for the active enum (if any)?
-    var firstEnum = sortedEnumList.length>0?sortedEnumList[0].id:null;
-    var activeEnumID = argActiveEnumID ? argActiveEnumID : firstEnum;
+    var firstEnum = sortedEnumList.length > 0 ? sortedEnumList[0].id : null;
+    var activeEnumID = argActiveEnumID || firstEnum;
 
     // Save form values
     saveEnumFormValues();
@@ -293,15 +313,16 @@ function updateActiveEnum(argActiveEnumID) {
     // Update enum list
     $("#enumsNP").empty();
     if (sortedEnumList.length > 0) {
-        sortedEnumList.forEach(function (enumeration, i) {
+        sortedEnumList.forEach(function(enumeration, i) {
             var active = hsCompareIDs(enumeration.id, activeEnumID) ? " class='active'" : "";
             var elem = $("<li" + active + "><a href='#' id='" + enumeration.id + "'data-toggle='tab'>" + enumeration.name + "</a></li>");
             $("#enumsNP").append(elem).append(" ");
-            elem.click(function (event) { updateActiveEnum(event.target.id); });
+            elem.click(function(event) {
+                updateActiveEnum(event.target.id);
+            });
         });
         $("#enumDetailsF").show();
-    }
-    else {
+    } else {
         $("#enumDetailsF").hide();
     }
 
@@ -317,7 +338,7 @@ function updateActiveEnum(argActiveEnumID) {
             alert("Invalid Enumeration ID: " + activeEnumID);
             return;
         }
-        if (enumeration.type != "Enumeration") {
+        if (enumeration.type !== "Enumeration") {
             alert("Invalid type: " + enumeration.type + " (required: Enumeration");
             return;
         }
@@ -359,48 +380,48 @@ function removeEnum() {
 }
 
 function enumEditLiterals_updateTable() {
-    var body= "<thead><tr><th>Name</th><th>Description</th><th>Position</th><th>Icon</th><th></th></tr></thead>";
+    var body = "<thead><tr><th>Name</th><th>Description</th><th>Position</th><th>Icon</th><th></th></tr></thead>";
     body += "<tbody>";
-    $active.enumeration.literals.forEach(function (literal) {
+    $active.enumeration.literals.forEach(function(literal) {
         var name = literal.name ? literal.name : "";
-        var desc = literal.desc ? literal.desc: "";
-        var pos  = literal.position ? literal.position: "";
+        var desc = literal.desc ? literal.desc : "";
+        var pos = literal.position ? literal.position : "";
         var icon = literal.icon ? literal.icon : "";
         var id = literal.id;
         body += "<tr class='literal-row' id='" + literal.id + "'>" +
-            "<td><input id='"+id+"_name' type='text' class='form-control' value='"+name+"'/></td>" +
-            "<td><input id='"+id+"_desc' type='text' class='form-control' value='"+desc+"'/></td>" +
-            "<td><input id='"+id+"_pos'  type='text' class='form-control' value='"+pos+"'/></td>" +
-            "<td><input id='"+id+"_icon' type='text' class='form-control' value='"+icon+"'/></td>" +
-            "<td><a href='#' class='enumDeleteLiteral' id='"+id+"'><span class='glyphicon glyphicon-remove'></span></a></td>" +
+            "<td><input id='" + id + "_name' type='text' class='form-control' value='" + name + "'/></td>" +
+            "<td><input id='" + id + "_desc' type='text' class='form-control' value='" + desc + "'/></td>" +
+            "<td><input id='" + id + "_pos'  type='text' class='form-control' value='" + pos + "'/></td>" +
+            "<td><input id='" + id + "_icon' type='text' class='form-control' value='" + icon + "'/></td>" +
+            "<td><a href='#' class='enumDeleteLiteral' id='" + id + "'><span class='glyphicon glyphicon-remove'></span></a></td>" +
             "</tr>";
     });
     body += "</tbody>";
     var table = "<table class='table'>" + body + "</table>";
-    var form = "<form class='form-horizontal'>"+table+"</form>";
-    form += "<button type='button' id='enumAddLiteral' class='btn btn-primary'><span class='glyphicon glyphicon-plus-sign'></span> Add Literal</button> "
-    form += "<button type='button' id='enumAutoNumber' class='btn btn-primary'><span class='glyphicon glyphicon-cog'></span> Auto Number</button>"
+    var form = "<form class='form-horizontal'>" + table + "</form>";
+    form += "<button type='button' id='enumAddLiteral' class='btn btn-primary'><span class='glyphicon glyphicon-plus-sign'></span> Add Literal</button> ";
+    form += "<button type='button' id='enumAutoNumber' class='btn btn-primary'><span class='glyphicon glyphicon-cog'></span> Auto Number</button>";
 
     $("#enumEditLiterals_LiteralsT").html($(form));
 
     $("#saveEnumLiteralsB").on("click", enumSaveLiterals);
 
-    $("#enumAutoNumber").on("click", function () {
-        var pos=1;
-        for (i in $active.enumeration.literals) {
+    $("#enumAutoNumber").on("click", function() {
+        var pos = 1;
+        for (var i in $active.enumeration.literals) {
             $active.enumeration.literals[i].position = pos++;
         }
         enumSaveLiterals();
         enumEditLiterals_updateTable();
     });
 
-    $(".enumDeleteLiteral").on("click", function () {
+    $(".enumDeleteLiteral").on("click", function() {
         enumSaveLiterals();
         $active.enumeration.remove_Literal($(this).attr("id"));
         enumEditLiterals_updateTable();
     });
 
-    $("#enumAddLiteral").on("click", function () {
+    $("#enumAddLiteral").on("click", function() {
         enumSaveLiterals();
         var literal = $active.enumeration.addNew_Literal("New");
         literal.position = $active.enumeration.literals.length;
@@ -414,8 +435,8 @@ function enumEditLiterals() {
     $("#enumEditLiteralsM").modal();
 }
 
-function enumSaveLiterals () {
-    for (i in $active.enumeration.literals) {
+function enumSaveLiterals() {
+    for (var i in $active.enumeration.literals) {
         var literal = $active.enumeration.literals[i];
         literal.name = $("#" + literal.id + "_name").val();
         literal.desc = $("#" + literal.id + "_desc").val();
@@ -435,23 +456,22 @@ function updateActiveAggregation(argActiveAggregationID) {
 
     // Which ID for the active aggregation (if any)?
     var aggs = $active.entity.getAggregations(true);
-    var firstAgg = aggs.length>0?aggs[0].id:null;
-    var activeAggregationID = argActiveAggregationID ? argActiveAggregationID : firstAgg;
+    var firstAgg = aggs.length > 0 ? aggs[0].id : null;
+    var activeAggregationID = argActiveAggregationID || firstAgg;
 
     // Update aggregation list
     $("#aggregationNP").empty();
     if (aggs.length > 0) {
-        aggs.forEach(function (aggregation, i) {
+        aggs.forEach(function(aggregation, i) {
             var active = hsCompareIDs(aggregation.id, activeAggregationID) ? " class='active'" : "";
             var elem = $("<li" + active + "><a href='#' id='" + aggregation.id + "'data-toggle='tab'>" + aggregation.name + "</a></li>");
             $("#aggregationNP").append(elem).append(" ");
-            elem.click(function (event) {
+            elem.click(function(event) {
                 updateActiveAggregation(event.target.id);
             });
         });
         $("#aggregationDetailsF").show();
-    }
-    else {
+    } else {
         $("#aggregationDetailsF").hide();
     }
 
@@ -468,7 +488,7 @@ function updateActiveAggregation(argActiveAggregationID) {
             alert("Invalid Relationship ID: " + id);
             return;
         }
-        if (aggregation.type != "Relationship") {
+        if (aggregation.type !== "Relationship") {
             alert("Invalid type: " + aggregation.type + " (required: Relationship");
             return;
         }
@@ -480,10 +500,11 @@ function updateActiveAggregation(argActiveAggregationID) {
         $("#aggregationNameI").val(aggregation.name);
         $("#aggregationDescI").val(aggregation.desc);
         $("#removeAggregationB").html(aggregation.name + " <span class='glyphicon glyphicon-remove-sign'></span>");
-        if (aggregation.hasTargetEntity())
+        if (aggregation.hasTargetEntity()) {
             $("#aggregationTargetNameA").text(aggregation.getTargetEntity().name);
-        else
+        } else {
             $("#aggregationTargetNameA").text("undefined");
+        }
         $("#aggregationTargetAvgI").val(aggregation.targetAverage);
         $("#aggregationTargetMinI").val(aggregation.targetMin);
         $("#aggregationTargetMaxI").val(aggregation.targetMax);
@@ -525,30 +546,28 @@ function removeAggregation() {
 //                              Tab 5: Associations
 // --------------------------------------------------------------------------------
 
-function updateActiveAssociation (argActiveAssociationID)
-{
+function updateActiveAssociation(argActiveAssociationID) {
     // Save current association data
     saveAssociationFormValues();
 
     // Which ID for the active association (if any)?
     var assocs = $active.entity.getAssociations(true);
-    var firstAssoc = assocs.length>0?assocs[0].id:null;
-    var activeAssociationID = argActiveAssociationID ? argActiveAssociationID : firstAssoc;
+    var firstAssoc = assocs.length > 0 ? assocs[0].id : null;
+    var activeAssociationID = argActiveAssociationID || firstAssoc;
 
     // Update association list
     $("#associationNP").empty();
-    if (assocs .length > 0) {
-        assocs.forEach(function (association, i) {
+    if (assocs.length > 0) {
+        assocs.forEach(function(association, i) {
             var active = hsCompareIDs(association.id, activeAssociationID) ? " class='active'" : "";
             var elem = $("<li" + active + "><a href='#' id='" + association.id + "'data-toggle='tab'>" + association.name + "</a></li>");
             $("#associationNP").append(elem).append(" ");
-            elem.click(function (event) {
+            elem.click(function(event) {
                 updateActiveAssociation(event.target.id);
             });
         });
         $("#associationDetailsF").show();
-    }
-    else {
+    } else {
         $("#associationDetailsF").hide();
     }
 
@@ -564,7 +583,7 @@ function updateActiveAssociation (argActiveAssociationID)
             alert("Invalid Relationship ID: " + id);
             return;
         }
-        if (association.type != "Relationship") {
+        if (association.type !== "Relationship") {
             alert("Invalid type: " + association.type + " (required: Relationship");
             return;
         }
@@ -576,10 +595,11 @@ function updateActiveAssociation (argActiveAssociationID)
         $("#associationNameI").val(association.name);
         $("#associationDescI").val(association.desc);
         $("#removeAssociationB").html(association.name + " <span class='glyphicon glyphicon-remove-sign'></span>");
-        if (association.hasTargetEntity())
+        if (association.hasTargetEntity()) {
             $("#associationTargetNameA").text(association.getTargetEntity().name);
-        else
+        } else {
             $("#associationTargetNameA").text("undefined");
+        }
         $("#associationTargetAvgI").val(association.targetAverage);
         $("#associationTargetMinI").val(association.targetMin);
         $("#associationTargetMaxI").val(association.targetMax);
@@ -626,11 +646,11 @@ function updateViewLists() {
     var sortedPageViewList = $active.entity.getPageViews(true);
     $("#pageViewsNP").empty();
     if (sortedPageViewList.length > 0) {
-        sortedPageViewList.forEach(function (pageView, i) {
+        sortedPageViewList.forEach(function(pageView, i) {
             var elem = $("<li><a href='#' id='" + pageView.id + "'data-toggle='tab'>" + pageView.name + "</a></li>");
             $("#pageViewsNP").append(elem).append(" ");
-            elem.click(function (event) {
-                window.location.href = "./../pageView/" + $active.domain.name+"?pv="+pageView.id;
+            elem.click(function(event) {
+                window.location.href = "./../pageView/" + $active.domain.name + "?pv=" + pageView.id;
             });
         });
     }
@@ -644,10 +664,10 @@ function updateViewLists() {
     var sortedTableViewList = $active.entity.getTableViews(true);
     $("#tableViewsNP").empty();
     if (sortedTableViewList.length > 0) {
-        sortedTableViewList.forEach(function (tableView, i) {
+        sortedTableViewList.forEach(function(tableView, i) {
             var elem = $("<li><a href='#' id='" + tableView.id + "'data-toggle='tab'>" + tableView.name + "</a></li>");
             $("#tableViewsNP").append(elem).append(" ");
-            elem.click(function (event) {
+            elem.click(function(event) {
                 window.location.href = "./../tableView/" + $active.domain.name + "?tv=" + tableView.id;
             });
         });
@@ -657,7 +677,6 @@ function updateViewLists() {
     var elem = $("<li><a href='#' id='addTableViewA' data-toggle='tab'><span class='glyphicon glyphicon-plus-sign'></span></a></li>");
     $("#tableViewsNP").append(elem);
     elem.click(addNewTableView);
-
 }
 
 function addNewTableView() {
@@ -695,7 +714,7 @@ function selectTargetEntityForAssociation() {
 
 function selectTargetEntity(context) {
     var rows = "";
-    $active.domain.entities.forEach(function (entity) {
+    $active.domain.entities.forEach(function(entity) {
         rows += "<tr class='entity-selection-row' data-href='" + entity.id + "'>" +
             "<td>" + entity.name + "</td>" +
             "<td>" + entity.desc + "</td>" +
@@ -707,7 +726,7 @@ function selectTargetEntity(context) {
     switch (context) {
         case "aggregation":
             $("#selectElement_titleH").text("Select Aggregation Target");
-            $(".entity-selection-row").click(function () {
+            $(".entity-selection-row").click(function() {
                 $active.aggregationTarget = $active.domain.findElementByID($(this).data("href"));
                 $("#aggregationTargetNameA").text($active.aggregationTarget.name);
 
@@ -723,7 +742,7 @@ function selectTargetEntity(context) {
             break;
         case "association":
             $("#selectElement_titleH").text("Select Association Target");
-            $(".entity-selection-row").click(function () {
+            $(".entity-selection-row").click(function() {
                 $active.associationTarget = $active.domain.findElementByID($(this).data("href"));
                 $("#associationTargetNameA").text($active.associationTarget.name);
 
@@ -739,7 +758,7 @@ function selectTargetEntity(context) {
             break;
         case "inheritance":
             $("#selectElement_titleH").text("Select Parent Entity");
-            $(".entity-selection-row").click(function () {
+            $(".entity-selection-row").click(function() {
                 var pc = $active.domain.findElementByID($(this).data("href"));
                 $active.entity.setParentClass(pc);
                 $("#parentEntityNameA").text(pc.name);
@@ -789,11 +808,11 @@ function saveEnumFormValues() {
         $active.enumeration.desc = $("#enumDescI").val();
         switch ($("#enumValidSelectionI").val()) {
             // TBD: use proper IDs for validEnumSelections:
-            case "Exactly One":     $active.enumeration.validEnumSelections = "Exactly One"; break;
-            case "Zero or One":     $active.enumeration.validEnumSelections = "Zero or One"; break;
-            case "Zero to Many":    $active.enumeration.validEnumSelections = "Zero to Many"; break;
-            case "One to Many":     $active.enumeration.validEnumSelections = "One to Many"; break;
-            default: throw "Unknown selection: "+$("#enumValidSelectionI").val();
+            case "Exactly One": $active.enumeration.validEnumSelections = "Exactly One"; break;
+            case "Zero or One": $active.enumeration.validEnumSelections = "Zero or One"; break;
+            case "Zero to Many": $active.enumeration.validEnumSelections = "Zero to Many"; break;
+            case "One to Many": $active.enumeration.validEnumSelections = "One to Many"; break;
+            default: throw "Unknown selection: " + $("#enumValidSelectionI").val();
         }
     }
 }
@@ -871,7 +890,7 @@ function postDomainDataToServer() {
 }
 
 function domainCancelEvent() {
-    getDomainData(function () {
+    getDomainData(function() {
         updateActiveDomain();
     });
 }
@@ -893,8 +912,8 @@ function openTestAppModal() {
     $("#generateDefaultViewsB").on("click", generateDefaultViews);
     $("#generateTestDataB").on("click", generateTestData);
     $("#removeTestDataB").on("click", removeTestData);
-    $("#viewTestAppB").on("click", function () {
-        setTimeout(function () {
+    $("#viewTestAppB").on("click", function() {
+        setTimeout(function() {
             window.location.href = window.location.protocol + "//" + window.location.hostname + ":3001/app/" + $active.domain.name;
         }, 750);
     });
@@ -910,4 +929,3 @@ function saveDomainOverviewFormData() {
     // Update domain name
     updateMyNavBar();
 }
-
