@@ -2,9 +2,12 @@ function getDomainData(afterLoad) {
     var domain = window.location.pathname.split('/').pop();
 
     $.ajax({
-        url: '/api/domain/' + domain,
-        type: 'GET',
-        contentType: 'application/json; charset=utf-8',
+        url: $active._links.HSdomain.href,
+        method: 'GET',
+        headers: {
+            contentType: 'application/json; charset=utf-8',
+            accept: 'application/hal+json'
+        },
         success: function(result) {
             if (result.success) {
                 $active = {}; // Remove old settings
@@ -36,7 +39,10 @@ function postDomainData() {
         url: $active._links.self.href,
         method: 'PUT',
         data: reqData,
-        contentType: 'application/json; charset=utf-8',
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Accept': 'application/hal+json'
+        },
         dataType: "json",
         success: function(result) {
             if (result.success) {
@@ -62,7 +68,7 @@ function generateDefaultViews() {
 
     // Post to server
     $.ajax({
-        url: '/api/generateDefaultViews',
+        url: $active._links.generateDefaultViews.href,
         type: 'POST',
         data: reqData,
         contentType: 'application/json; charset=utf-8',
@@ -129,7 +135,7 @@ function generateTestData() {
 
     // Post to server
     $.ajax({
-        url: '/api/generateTestData',
+        url: $active._links.generateTestData.href,
         type: 'POST',
         data: reqData,
         contentType: 'application/json; charset=utf-8',
@@ -155,7 +161,7 @@ function removeTestData() {
 
     // Post to server
     $.ajax({
-        url: '/api/removeTestData',
+        url: $active._links.removeTestData.href,
         type: 'POST',
         data: reqData,
         contentType: 'application/json; charset=utf-8',

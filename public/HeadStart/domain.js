@@ -6,13 +6,13 @@ $active.domain = null;
 
 $(document).ready(function() {
     $.ajax({
-        url: '../api',
         method: 'GET',
         headers: {
             accept: 'application/hal+json'
         },
         success: function(result) {
-            console.log("INITIAL: result=", result);
+            $active.domain = result.domain;
+            $active._links = result._links;
             loadDomainOverview();
         },
         error: function(err) {
@@ -645,15 +645,12 @@ function updateViewLists() {
     // Update page view list
     var sortedPageViewList = $active.entity.getPageViews(true);
     $("#pageViewsNP").empty();
-    if (sortedPageViewList.length > 0) {
-        sortedPageViewList.forEach(function(pageView, i) {
-            var elem = $("<li><a href='#' id='" + pageView.id + "'data-toggle='tab'>" + pageView.name + "</a></li>");
-            $("#pageViewsNP").append(elem).append(" ");
-            elem.click(function(event) {
-                window.location.href = "./../pageView/" + $active.domain.name + "?pv=" + pageView.id;
-            });
-        });
-    }
+    sortedPageViewList.forEach(function(pageView, i) {
+        // TODO: Generate this on server.
+        var url = '../pageView/' + $active.domain.name + '?pv=' + pageView.id;
+        var elem = $('<li><a href="' + url + '" id="' + pageView.id + '"data-toggle="tab">' + pageView.name + '</a></li>');
+        $("#pageViewsNP").append(elem).append(" ");
+    });
 
     // Add "new page view" button
     var elem = $("<li><a href='#' id='addPageViewA' data-toggle='tab'><span class='glyphicon glyphicon-plus-sign'></span></a></li>");
@@ -663,15 +660,12 @@ function updateViewLists() {
     // ...and now table views
     var sortedTableViewList = $active.entity.getTableViews(true);
     $("#tableViewsNP").empty();
-    if (sortedTableViewList.length > 0) {
-        sortedTableViewList.forEach(function(tableView, i) {
-            var elem = $("<li><a href='#' id='" + tableView.id + "'data-toggle='tab'>" + tableView.name + "</a></li>");
-            $("#tableViewsNP").append(elem).append(" ");
-            elem.click(function(event) {
-                window.location.href = "./../tableView/" + $active.domain.name + "?tv=" + tableView.id;
-            });
-        });
-    }
+    sortedTableViewList.forEach(function(tableView, i) {
+        // TODO: Generate this on server.
+        var url = "./../tableView/" + $active.domain.name + "?tv=" + tableView.id;
+        var elem = $('<li><a href="' + url + '" id="' + tableView.id + '" data-toggle="tab">' + tableView.name + '</a></li>');
+        $("#tableViewsNP").append(elem).append(" ");
+    });
 
     // Add "new table view" button
     var elem = $("<li><a href='#' id='addTableViewA' data-toggle='tab'><span class='glyphicon glyphicon-plus-sign'></span></a></li>");
@@ -865,7 +859,7 @@ function updateMyNavBar() {
 
 function entityGraph() {
     postDomainDataToServer();
-    window.location.href = "./../entityGraph/" + $active.domain.name;
+    window.location.href = $active._links.entityGraph.href;
 }
 
 function setDefaultAveragesAndGenerateTestData() {
@@ -878,7 +872,7 @@ function setDefaultAveragesAndGenerateTestData() {
 
 function quantityStructure() {
     postDomainDataToServer();
-    window.location.href = "./../quantityStructure/" + $active.domain.name;
+    window.location.href = $active._links.quantityStructure.href;
 }
 
 function postDomainDataToServer() {
@@ -914,7 +908,7 @@ function openTestAppModal() {
     $("#removeTestDataB").on("click", removeTestData);
     $("#viewTestAppB").on("click", function() {
         setTimeout(function() {
-            window.location.href = window.location.protocol + "//" + window.location.hostname + ":3001/app/" + $active.domain.name;
+            window.location.href = $active._links.MonApp.href;
         }, 750);
     });
 

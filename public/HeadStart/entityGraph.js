@@ -5,11 +5,28 @@
 var $active = {};
 $active.domain = null;
 
-$(document).ready(updateDomain);
+$(document).ready(function() {
+    $.ajax({
+        headers: {
+            Accept: 'application/hal+json'
+        },
+        success: function(result) {
+            $active._links = result._links;
+            updateDomain();
+        },
+        error: function(err) {
+        }
+
+    });
+
+});
 
 function updateDomain() {
     getDomainData(function() {
-        updateNavBar(["Domain: " + $active.domain.name + " <span class='glyphicon glyphicon-arrow-left'></span>", "../domain/" + $active.domain.name]);
+        updateNavBar([
+            "Domain: " + $active.domain.name + " <span class='glyphicon glyphicon-arrow-left'></span>",
+            $active._links.domain.href
+        ]);
         $active.domain.updateQuantityData();
         updateGraph();
     });
@@ -106,8 +123,8 @@ function updateGraph() {
                 var to = relationship.getTargetEntity().id;
                 var id = idx1 + ':' + idx2;
                 var lbl = relationship.isAggregation ? "x" + relationship.targetAverage : "";
-                console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
-                console.log("From " + from + ", to " + to);
+                //console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
+                //console.log("From " + from + ", to " + to);
 
                 if (showAggregations && relationship.isAggregation) {
                     edgeArray.push({
@@ -183,12 +200,4 @@ function updateGraph() {
             updateGraph();
         });
     }
-}
-
-function backToDomain() {
-    window.location.href = "./../domain/" + $active.domain.name;
-}
-
-function goToQS() {
-    window.location.href = "./../quantityStructure/" + $active.domain.name;
 }

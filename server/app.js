@@ -7,7 +7,6 @@ var hbs = require('hbs');
 var hbsutils = require('hbs-utils')(hbs);
 var path = require('path');
 var favicon = require('serve-favicon');
-// var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -24,7 +23,6 @@ module.exports = (baseUrl) => {
     app.set('hs:baseUrl', baseUrl === '/' ? '' : baseUrl);
 
     app.use(favicon(path.join(processCwd, 'public', 'images', 'favicon.ico')));
-    // app.use(logger('dev'));
     app.use(bodyParser.json({limit: '10mb'}));
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());

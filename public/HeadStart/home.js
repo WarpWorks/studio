@@ -8,6 +8,7 @@ $(document).ready(function() {
             accept: 'application/hal+json'
         },
         success: function(result) {
+            $active._links = result._links;
             updateSMNExamples(result._links['hs:smn-examples'].href);
             updateDomainOverview(result._links['hs:domains'].href);
         },
@@ -96,6 +97,7 @@ function updateSMNExamples(url) {
         success: function(result) {
             if (result.success) {
                 $active.smnExamples = {};
+
                 $("#SMNExamplesUL").empty();
                 if (result.smnExamples) {
                     result.smnExamples.forEach(function(smnExample) {
@@ -129,15 +131,15 @@ function wizardCreateDomain(evt) {
     // TBD: evt.preventDefault(); => Required here?
 
     $.ajax({
-        url: '/api/createDomainFromSMN',
-        type: 'POST',
+        url: $active._links['hs:create-domain-from-smn'].href,
+        method: 'POST',
         data: JSON.stringify(smn),
         contentType: 'application/json; charset=utf-8',
         dataType: "json",
         success: function(result) {
             if (result.success) {
                 console.log("New Domain: " + result.newDomain);
-                window.location.href = "domain/" + result.newDomain;
+                window.location.href = result._links.domain.href;
             } else {
                 $("#wizardStatusD").html("<div class='alert alert-danger'><strong>Error: </strong>" + result.error + "</div>");
             }

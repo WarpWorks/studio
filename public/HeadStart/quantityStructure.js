@@ -6,9 +6,20 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
-    getDomainData(function() {
-        updateQSTable();
-        updateMyNavBar();
+    $.ajax({
+        headers: {
+            accept: 'application/hal+json'
+        },
+        success: function(result) {
+            $active._links = result._links;
+
+            getDomainData(function() {
+                updateQSTable();
+                updateMyNavBar();
+            });
+        },
+        error: function(err) {
+        }
     });
 });
 
@@ -66,16 +77,11 @@ function saveCurrentFormValues() {
 }
 
 function updateMyNavBar() {
-    var home = ["Domain: " + $active.domain.name + " <span class='glyphicon glyphicon-arrow-left'></span>", "../domain/" + $active.domain.name];
+    var home = [
+        "Domain: " + $active.domain.name + " <span class='glyphicon glyphicon-arrow-left'></span>",
+        $active._links.domain.href
+    ];
     updateNavBar(home, null, null, saveEvent, domainCancelEvent, null);
-}
-
-function goToGraph() {
-    window.location.href = "./../entityGraph/" + $active.domain.name;
-}
-
-function backToDomain() {
-    window.location.href = "./../domain/" + $active.domain.name;
 }
 
 function postDomainDataToServer() {
