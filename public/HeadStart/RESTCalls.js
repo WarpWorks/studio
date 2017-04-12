@@ -95,8 +95,8 @@ function createDefaultViews() {
 
     // Post to server
     $.ajax({
-        url: '/api/createDefaultViews',
-        type: 'POST',
+        url: $active._links.createDefaultViews.href,
+        method: 'POST',
         data: reqData,
         contentType: 'application/json; charset=utf-8',
         dataType: "json",

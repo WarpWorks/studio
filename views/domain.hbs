@@ -6,8 +6,7 @@
         <div class="col-sm-3">
             <div class="panel panel-success">
                 <div class="panel-heading">Entities
-                    <a href="#" id="entityGraphA" onclick="addNewEntity()"><span
-                            class="glyphicon glyphicon-plus-sign pull-right"></span></a>
+                    <a href="#" id="entityGraphA"><span class="glyphicon glyphicon-plus-sign pull-right"></span></a>
                 </div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked" id="entityOverviewNP"></ul>
@@ -42,9 +41,9 @@
                                     <div class="form-group">
                                         <label for="entityNameI" class="col-sm-3 control-label">Name</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="entityNameI"
-                                                   placeholder="Entity Name"
-                                                   onchange="entityNameChanged()">
+                                            <input type="text" class="form-control"
+                                                id="entityNameI" placeholder="Entity Name"
+                                                />
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -59,8 +58,10 @@
                                         <div class="col-sm-9">
                                             <ul class="nav nav-pills" id="parentEntityNP">
                                                 <li><a href="#" id="parentEntityNameA">undefined!</a></li>
-                                                <li><a href="#" onclick="selectTargetEntityForInheritance()"><span
-                                                        class="glyphicon glyphicon-circle-arrow-left"></span></a>
+                                                <li>
+                                                    <a href="#" id="parentEntitySelector">
+                                                        <span class="glyphicon glyphicon-circle-arrow-left"></span>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -70,9 +71,10 @@
                                         <div class="col-sm-9">
                                             <ul class="nav nav-pills" id="rootEntityNP">
                                                 <li><a href="#" id="rootEntityStatusA">No</a></li>
-                                                <li><a href="#" id="rootEntityMakeRootA"
-                                                       onclick="makeRootEntity()">
-                                                    <span class="glyphicon glyphicon-cog"></span> Make Root Entity</a>
+                                                <li>
+                                                    <a href="#"id="rootEntityMakeRootA">
+                                                        <span class="glyphicon glyphicon-cog"></span> Make Root Entity
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -81,8 +83,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">Actions</label>
                                         <div class="col-sm-9">
-                                            <button type="button" class="btn btn-danger btn-sm" id="removeEntityB"
-                                                    onclick="removeEntity()"><span
+                                            <button type="button" class="btn btn-danger btn-sm" id="removeEntityB"><span
                                                     class="glyphicon glyphicon-remove-sign"></span>
                                             </button>
                                         </div>
@@ -101,8 +102,7 @@
                                 <div class="form-group">
                                     <label for="propertyNameI" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="propertyNameI" placeholder="Name"
-                                               onchange="propertyNameChanged()">
+                                        <input type="text" class="form-control" id="propertyNameI" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -141,8 +141,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Actions</label>
                                     <div class="col-sm-9">
-                                        <button type="button" class="btn btn-danger btn-sm" id="removePropertyB"
-                                                onclick="removeProperty()">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removePropertyB">
                                             <span class="glyphicon glyphicon-remove-sign"></span>
                                         </button>
                                     </div>
@@ -160,8 +159,7 @@
                                 <div class="form-group">
                                     <label for="enumNameI" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="enumNameI" placeholder="Name"
-                                               onchange="enumNameChanged()">
+                                        <input type="text" class="form-control" id="enumNameI" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -189,7 +187,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <ul class="nav nav-pills" id="parentEntityNP">
-                                            <li><a href="#" onclick="enumEditLiterals()"><span
+                                            <li><a href="#" id="parentEntityNPitem"><span
                                                     class="glyphicon glyphicon-edit"></span></a>
                                             </li>
                                         </ul>
@@ -199,8 +197,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Actions</label>
                                     <div class="col-sm-9">
-                                        <button type="button" class="btn btn-danger btn-sm" id="removeEnumB"
-                                                onclick="removeEnum()">
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeEnumB">
                                             <span class="glyphicon glyphicon-remove-sign"></span>
                                         </button>
                                     </div>
@@ -218,8 +215,7 @@
                                 <div class="form-group">
                                     <label for="aggregationNameI" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="aggregationNameI" placeholder="Name"
-                                               onchange="aggregationNameChanged()">
+                                        <input type="text" class="form-control" id="aggregationNameI" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -233,7 +229,7 @@
                                     <div class="col-sm-9">
                                         <ul class="nav nav-pills" id="aggregationTargetNP">
                                             <li><a href="#" id="aggregationTargetNameA">undefined!</a></li>
-                                            <li><a href="#" onclick="selectTargetEntityForAggregation()"><span
+                                            <li><a href="#" id="aggregationTargetNameItem"><span
                                                     class="glyphicon glyphicon-circle-arrow-left"></span></a>
                                             </li>
                                         </ul>
@@ -251,7 +247,7 @@
                                                id="aggregationTargetAvgI"
                                                title="/ = undefined"
                                                value="99"
-                                               onchange="aggregationAverageChanged()">
+                                               />
                                     </div>
                                     <label for="aggregationTargetMaxI" class="col-sm-1 control-label">Max.</label>
                                     <div class="col-sm-2">
@@ -263,8 +259,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Actions</label>
                                     <div class="col-sm-9">
-                                        <button type="button" class="btn btn-danger btn-sm" id="removeAggregationB"
-                                                onclick="removeAggregation()"><span
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeAggregationB"><span
                                                 class="glyphicon glyphicon-remove-sign"></span>
                                         </button>
                                     </div>
@@ -282,8 +277,7 @@
                                 <div class="form-group">
                                     <label for="associationNameI" class="col-sm-3 control-label">Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="associationNameI" placeholder="Name"
-                                               onchange="associationNameChanged()">
+                                        <input type="text" class="form-control" id="associationNameI" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -297,7 +291,7 @@
                                     <div class="col-sm-9">
                                         <ul class="nav nav-pills" id="associationTargetNP">
                                             <li><a href="#" id="associationTargetNameA">undefined!</a></li>
-                                            <li><a href="#" onclick="selectTargetEntityForAssociation()"><span
+                                            <li><a href="#" id="associationTagetIcon"><span
                                                     class="glyphicon glyphicon-circle-arrow-left"></span></a>
                                             </li>
                                         </ul>
@@ -311,7 +305,7 @@
                                     <label for="associationTargetAvgI" class="col-sm-1 control-label">Average</label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control" id="associationTargetAvgI"
-                                               value="99" onchange="associationAverageChanged()">
+                                               value="99" />
                                     </div>
                                     <label for="associationTargetMaxI" class="col-sm-1 control-label">Max.</label>
                                     <div class="col-sm-2">
@@ -323,8 +317,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Actions</label>
                                     <div class="col-sm-9">
-                                        <button type="button" class="btn btn-danger btn-sm" id="removeAssociationB"
-                                                onclick="removeAssociation()"><span
+                                        <button type="button" class="btn btn-danger btn-sm" id="removeAssociationB"><span
                                                 class="glyphicon glyphicon-remove-sign"></span>
                                         </button>
                                     </div>
@@ -356,8 +349,7 @@
                                         <label class="col-sm-3 control-label">Actions</label>
                                         <div class="col-sm-9">
                                             <button type='button' class='btn btn-primary'
-                                                    id="createDefaultViewsB"
-                                                    onclick="createDefaultViews()">
+                                                    id="createDefaultViewsB">
                                                 Create Default Views
                                             </button>
                                         </div>

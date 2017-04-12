@@ -5,6 +5,27 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
+    $('#entityGraphA').click(addNewEntity);
+    $('#parentEntitySelector').click(selectTargetEntityForInheritance);
+    $('#rootEntityMakeRootA').click(makeRootEntity);
+    $('#removeEntityB').click(removeEntity);
+    $('#removePropertyB').click(removeProperty);
+    $('#parentEntityNPitem').click(enumEditLiterals);
+    $('#removeEnumB').click(removeEnum);
+    $('#aggregationTargetNameItem').click(selectTargetEntityForAggregation);
+    $('#removeAggregationB').click(removeAggregation);
+    $('#associationTagetIcon').click(selectTargetEntityForAssociation);
+    $('#removeAssociationB').click(removeAssociation);
+    $('#createDefaultViewsB').click(createDefaultViews);
+
+    $('#entityNameI').change(entityNameChanged);
+    $('#propertyNameI').change(propertyNameChanged);
+    $('#enumNameI').change(enumNameChanged);
+    $('#aggregationNameI').change(aggregationNameChanged);
+    $('#aggregationTargetAvgI').change(aggregationAverageChanged);
+    $('#associationNameI').change(associationNameChanged);
+    $('#associationTargetAvgI').change(associationAverageChanged);
+
     $.ajax({
         method: 'GET',
         headers: {
@@ -19,7 +40,6 @@ $(document).ready(function() {
             console.log("INITIAL: err=", err);
         }
     });
-
 });
 
 function loadDomainOverview(domArg) {
@@ -379,7 +399,7 @@ function removeEnum() {
     updateActiveEnum();
 }
 
-function enumEditLiterals_updateTable() {
+function updateEnumEditLiteralsTable() {
     var body = "<thead><tr><th>Name</th><th>Description</th><th>Position</th><th>Icon</th><th></th></tr></thead>";
     body += "<tbody>";
     $active.enumeration.literals.forEach(function(literal) {
@@ -412,13 +432,13 @@ function enumEditLiterals_updateTable() {
             $active.enumeration.literals[i].position = pos++;
         }
         enumSaveLiterals();
-        enumEditLiterals_updateTable();
+        updateEnumEditLiteralsTable();
     });
 
     $(".enumDeleteLiteral").on("click", function() {
         enumSaveLiterals();
         $active.enumeration.remove_Literal($(this).attr("id"));
-        enumEditLiterals_updateTable();
+        updateEnumEditLiteralsTable();
     });
 
     $("#enumAddLiteral").on("click", function() {
@@ -426,12 +446,12 @@ function enumEditLiterals_updateTable() {
         var literal = $active.enumeration.addNew_Literal("New");
         literal.position = $active.enumeration.literals.length;
         literal.icon = "";
-        enumEditLiterals_updateTable();
+        updateEnumEditLiteralsTable();
     });
 }
 
 function enumEditLiterals() {
-    enumEditLiterals_updateTable();
+    updateEnumEditLiteralsTable();
     $("#enumEditLiteralsM").modal();
 }
 
@@ -668,7 +688,7 @@ function updateViewLists() {
     });
 
     // Add "new table view" button
-    var elem = $("<li><a href='#' id='addTableViewA' data-toggle='tab'><span class='glyphicon glyphicon-plus-sign'></span></a></li>");
+    elem = $("<li><a href='#' id='addTableViewA' data-toggle='tab'><span class='glyphicon glyphicon-plus-sign'></span></a></li>");
     $("#tableViewsNP").append(elem);
     elem.click(addNewTableView);
 }
@@ -761,7 +781,7 @@ function selectTargetEntity(context) {
             });
             break;
         default:
-            throw "Undefined: " + context;
+            throw new Error("Undefined: " + context);
     }
 
     $("#selectElementM").modal();
@@ -806,7 +826,7 @@ function saveEnumFormValues() {
             case "Zero or One": $active.enumeration.validEnumSelections = "Zero or One"; break;
             case "Zero to Many": $active.enumeration.validEnumSelections = "Zero to Many"; break;
             case "One to Many": $active.enumeration.validEnumSelections = "One to Many"; break;
-            default: throw "Unknown selection: " + $("#enumValidSelectionI").val();
+            default: throw new Error("Unknown selection: " + $("#enumValidSelectionI").val());
         }
     }
 }

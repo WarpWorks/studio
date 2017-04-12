@@ -2,13 +2,16 @@ $(document).ready(function() {
     $active = {};
 
     $.ajax({
-        //url: './api',
+        // url: './api',
         method: 'GET',
         headers: {
             accept: 'application/hal+json'
         },
         success: function(result) {
             $active._links = result._links;
+
+            $('button[data-url]').click(goToPage);
+
             updateSMNExamples(result._links['hs:smn-examples'].href);
             updateDomainOverview(result._links['hs:domains'].href);
         },
@@ -25,6 +28,10 @@ $(document).ready(function() {
 
     initializeSMNWizard();
 });
+
+function goToPage() {
+    window.location.href = $(this).data('url');
+}
 
 function initializeSMNWizard() {
     $("#wizardAddEntityB").on("click", function() {
@@ -117,35 +124,6 @@ function updateSMNExamples(url) {
         },
         error: function() {
             console.log("GET: Could not get SMNExamples - Server Error!");
-        }
-    });
-}
-
-function wizardClearForm() {
-    $("#wizardFormDataT").val("");
-}
-function wizardCreateDomain(evt) {
-    var smn = {};
-    smn.value = $("#wizardFormDataT").val();
-
-    // TBD: evt.preventDefault(); => Required here?
-
-    $.ajax({
-        url: $active._links['hs:create-domain-from-smn'].href,
-        method: 'POST',
-        data: JSON.stringify(smn),
-        contentType: 'application/json; charset=utf-8',
-        dataType: "json",
-        success: function(result) {
-            if (result.success) {
-                console.log("New Domain: " + result.newDomain);
-                window.location.href = result._links.domain.href;
-            } else {
-                $("#wizardStatusD").html("<div class='alert alert-danger'><strong>Error: </strong>" + result.error + "</div>");
-            }
-        },
-        error: function() {
-            console.log("Error!");
         }
     });
 }

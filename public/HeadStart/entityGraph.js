@@ -6,6 +6,15 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
+    $('#showAllModeI').click(showAllMode);
+    $('#entityClusterModeI').click(entityClusterMode);
+    $('#redrawB').click(updateGraph);
+
+    $('#aggregationsI').change(updateGraph);
+    $('#associationsI').change(updateGraph);
+    $('#inheritanceI').change(updateGraph);
+    $('#quantitiesI').change(updateGraph);
+
     $.ajax({
         headers: {
             Accept: 'application/hal+json'
@@ -18,7 +27,6 @@ $(document).ready(function() {
         }
 
     });
-
 });
 
 function updateDomain() {
@@ -123,8 +131,8 @@ function updateGraph() {
                 var to = relationship.getTargetEntity().id;
                 var id = idx1 + ':' + idx2;
                 var lbl = relationship.isAggregation ? "x" + relationship.targetAverage : "";
-                //console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
-                //console.log("From " + from + ", to " + to);
+                // console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
+                // console.log("From " + from + ", to " + to);
 
                 if (showAggregations && relationship.isAggregation) {
                     edgeArray.push({

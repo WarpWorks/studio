@@ -6,6 +6,8 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
+    $('#entityGraphA').click(handleUpdateEvent);
+
     $.ajax({
         headers: {
             accept: 'application/hal+json'
