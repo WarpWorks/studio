@@ -5,12 +5,14 @@
         </a>
     </div>
     <div class='btn-group'>
-        <button type='button' class='btn btn-primary' onclick="newDomain()"><span class="glyphicon glyphicon-plus-sign"></span> New Domain</button>
+        <button type='button' class='btn btn-primary' data-url="{{_links.newDomain.href}}"
+            ><span class="glyphicon glyphicon-plus-sign"></span> New Domain</button>
         <button type='button' class='btn btn-primary' id="domainWizardB"><span class="glyphicon glyphicon-forward"></span> Domain Wizard</button>
-        <button type='button' class='btn btn-primary' onclick="marketplace()"><span class="glyphicon glyphicon-th-list"></span> Marketplace</button>
+        <button type='button' class='btn btn-primary' data-url="{{_links.marketPlace.href}}"
+            ><span class="glyphicon glyphicon-th-list"></span> Marketplace</button>
     </div>
 </div>
 
-<script src="/HeadStart/HeadStart_WebAPI.js"></script>
-<script src="/HeadStart/home.js"></script>
+<script src="{{baseUrl}}/HeadStart/HeadStart_WebAPI.js"></script>
+<script src="{{baseUrl}}/HeadStart/home.js"></script>
 

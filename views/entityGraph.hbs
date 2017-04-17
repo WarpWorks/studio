@@ -3,33 +3,33 @@
     <form>
         Mode:
         <label class="radio-inline">
-            <input type="radio" name="optradio" checked="checked" onclick="showAllMode()">Show All
+            <input type="radio" name="optradio" checked="checked" id="showAllModeI" />Show All
         </label>
         <label class="radio-inline">
-            <input type="radio" name="optradio" onclick="entityClusterMode()">Browse Entity Hierarchy
+            <input type="radio" name="optradio" id="entityClusterModeI" />Browse Entity Hierarchy
         </label>
     </form>
     <form>
         Show:
         <label class="checkbox-inline">
-            <input type="checkbox" checked="checked" id="aggregationsI" onchange="updateGraph()">Aggregations
+            <input type="checkbox" checked="checked" id="aggregationsI" />Aggregations
         </label>
         <label class="checkbox-inline">
-            <input type="checkbox" id="associationsI" onchange="updateGraph()">Associations
+            <input type="checkbox" id="associationsI" />Associations
         </label>
         <label class="checkbox-inline">
-            <input type="checkbox" checked="checked" id="inheritanceI" onchange="updateGraph()">Inheritance
+            <input type="checkbox" checked="checked" id="inheritanceI" />Inheritance
         </label>
         <label class="checkbox-inline">
-            <input type="checkbox" id="quantitiesI" onchange="updateGraph()">Avg. Quantities
+            <input type="checkbox" id="quantitiesI" />Avg. Quantities
         </label>
     </form>
-    <button type="button" class="btn btn-primary btn-xs" onclick="updateGraph()">Re-Draw</button>
+    <button type="button" class="btn btn-primary btn-xs" id="redrawB">Re-Draw</button>
 </div>
 
-<script src="/HeadStart/HeadStart_WebAPI.js"></script>
-<script src="/HeadStart/HeadStart_WebAPIExtensions.js"></script>
-<script src="/HeadStart/entityGraph.js"></script>
+<script src="{{baseUrl}}/HeadStart/HeadStart_WebAPI.js"></script>
+<script src="{{baseUrl}}/HeadStart/HeadStart_WebAPIExtensions.js"></script>
+<script src="{{baseUrl}}/HeadStart/entityGraph.js"></script>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css"/>

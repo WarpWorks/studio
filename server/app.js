@@ -3,77 +3,77 @@
 //
 
 var express = require('express');
+var hbs = require('hbs');
+var hbsutils = require('hbs-utils')(hbs);
 var path = require('path');
 var favicon = require('serve-favicon');
-// var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var apiRoutes = require('./routes/apiRoutes');
-var pageRoutes = require('./routes/pageRoutes');
 
-var app = express();
+const routes = require('./../lib/routes');
 
-var processCwd = process.cwd();
+const processCwd = path.dirname(require.resolve('./../package.json'));
 
-// view engine setup
-app.set('views', path.join(processCwd, 'views'));
-app.set('view engine', 'hbs');
+module.exports = (baseUrl) => {
+    const app = express();
 
-app.use(favicon(path.join(processCwd, 'public', 'images', 'favicon.ico')));
-// app.use(logger('dev'));
-app.use(bodyParser.json({limit: '10mb'}));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+    // view engine setup
+    app.set('views', path.join(processCwd, 'views'));
+    app.set('view engine', 'hbs');
+    app.set('hs:baseUrl', baseUrl === '/' ? '' : baseUrl);
 
-// Public/static
-app.use(express.static(path.join(processCwd, 'public')));
-app.use(express.static(path.join(processCwd, 'server', 'generated')));
+    app.use(favicon(path.join(processCwd, 'public', 'images', 'favicon.ico')));
+    app.use(bodyParser.json({limit: '10mb'}));
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(cookieParser());
 
-// Deal with Express / Handlebar Partials:
-var partialsDir = path.join(processCwd, 'views');
-var hbs = require('hbs');
-// hbs.registerPartials(partialsDir);
-var hbsutils = require('hbs-utils')(hbs);
-hbsutils.registerWatchedPartials(partialsDir);
+    // Public/static
+    app.use(express.static(path.join(processCwd, 'public')));
+    app.use(express.static(path.join(processCwd, 'server', 'generated')));
 
-/*
-// Load partials for express
-var hs = require('./server/src/headstart');
-hs.loadGeneratedHBSPartials();
-*/
+    // Deal with Express / Handlebar Partials:
+    var partialsDir = path.join(processCwd, 'views');
+    // hbs.registerPartials(partialsDir);
+    hbsutils.registerWatchedPartials(partialsDir);
 
-app.use('/', pageRoutes.router);
-app.use('/api', apiRoutes);
+    /*
+    // Load partials for express
+    var hs = require('./server/src/headstart');
+    hs.loadGeneratedHBSPartials();
+    */
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+    app.use(routes(baseUrl).router);
 
-// error handlers
+    // catch 404 and forward to error handler
+    app.use(function(req, res, next) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
+    // error handlers
+
+    // development error handler
+    // will print stacktrace
+    if (app.get('env') === 'development') {
+        app.use(function(err, req, res, next) {
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: err
+            });
+        });
+    }
+
+    // production error handler
+    // no stacktraces leaked to user
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,
-            error: err
+            error: {}
         });
     });
-}
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
-
-module.exports = app;
+    return app;
+};

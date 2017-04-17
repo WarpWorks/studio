@@ -6,7 +6,7 @@
 var debug = require('debug')('HS:server');
 var http = require('http');
 
-var app = require('./server/app');
+var app = require('./server/app')('/');
 const config = require('./lib/config');
 
 /**
