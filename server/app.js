@@ -36,12 +36,6 @@ module.exports = (baseUrl) => {
     // hbs.registerPartials(partialsDir);
     hbsutils.registerWatchedPartials(partialsDir);
 
-    /*
-    // Load partials for express
-    var hs = require('./server/src/headstart');
-    hs.loadGeneratedHBSPartials();
-    */
-
     app.use(routes(baseUrl).router);
 
     // catch 404 and forward to error handler

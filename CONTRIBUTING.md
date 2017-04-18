@@ -4,7 +4,7 @@
 
 Make sure to run the following before committing:
 
-    npm run eslint
+    npm run lint
     npm run coverage
 
 ## Auto run tests
