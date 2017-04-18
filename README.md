@@ -1,9 +1,9 @@
-# HeadStart
+# WarpWorks
 Cross-domain code generation framework for Rapid Application Development
 
 ## Overwriting defaults
 
-You can create a `.HeadStartrc` in your project:
+You can create a `.WarpWorksrc` in your project:
 
     {
       "cartridgePath": "../dslama/MonApp",
@@ -16,12 +16,12 @@ This file will be read by the [rc](https://www.npmjs.com/package/rc) library.
 
 ## Using inside of another project
 
-    npm install --save https://github.com/dslama/HeadStart.git
+    npm install --save https://github.com/dslama/WarpWorks.git
 
 In your application (`server/app.js`):
 
-    const hsApp = require('HeadStart/server/app');
-    const hsMiddlewares = require('HeadStart/lib/middlewares');
+    const hsApp = require('WarpWorks/server/app');
+    const hsMiddlewares = require('WarpWorks/lib/middlewares');
     app.use('/admin',
         // Authentication and authorization
         session.middlewares.requiresUser,
@@ -53,5 +53,5 @@ The `hsMiddlewares.canAccess.bind(null, 'someUserProp')` indicates to validate
 the variable `req.someUserProp` will be checked for a valid user.
 
 This implementation for authorization might need to be revised because it should
-not be limited to HeadStart users, but should be linked to the hosting app
+not be limited to WarpWorks users, but should be linked to the hosting app
 users.

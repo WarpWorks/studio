@@ -24,7 +24,7 @@
     "watch": "npm-watch",
     "lint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
     "lint:test": "eslint --fix --config=.eslintrc.test.json  '**/*.test.js'",
-    "lint:client": "eslint --fix --config=.eslintrc.client.json public/HeadStart",
+    "lint:client": "eslint --fix --config=.eslintrc.client.json public/WarpWorks",
     "lint": "npm run -s lint:node && npm run -s lint:test",
     "test:unit": "mocha 'lib/**/*.unit.test.js'",
     "test": "npm run test:unit",

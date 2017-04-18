@@ -2,7 +2,7 @@
 // Test for Model API
 //
 
-var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/WarpWorks/WarpWorks.js').WarpWorks;
 
 // Customer Domain
 var customerDomain = hs.createNewDomain("CustomerData", "Customer entities, including contact details");

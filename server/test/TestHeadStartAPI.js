@@ -19,7 +19,7 @@
      return txt;
  };
 
- var hs = get_HeadStart();
+ var hs = warp();
  var domain = hs.addNew_Domain("MyShop", "Test Domain");
 
  var customerEntity = domain.addNew_Entity("Customer", "");
@@ -49,9 +49,9 @@
  customer2order.targetMax = '*';
 
  var hsJson = domain.toJSON();
- writeFile("HeadStartWeb.jsn", JSON.stringify(hsJson, null, 2));
+ writeFile("WarpWorksWeb.jsn", JSON.stringify(hsJson, null, 2));
 
- var myFile = readFile("HeadStartServer.jsn");
+ var myFile = readFile("WarpWorksServer.jsn");
  hsJson = JSON.parse(myFile);
 
  var domainCopy = get_Domain_fromJSON(hsJson);

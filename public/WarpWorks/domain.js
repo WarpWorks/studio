@@ -46,7 +46,7 @@ function loadDomainOverview(domArg) {
     var domain = domArg || window.location.pathname.split('/').pop();
 
     if (domain === "New_Domain") {
-        $active.domain = get_HeadStart().addNew_Domain("New_Domain", "");
+        $active.domain = warp().addNew_Domain("New_Domain", "");
         var rootInstance = $active.domain.addNew_Entity("MyDomain", "");
         rootInstance.isRootEntity = true;
         rootInstance.isRootInstance = true;

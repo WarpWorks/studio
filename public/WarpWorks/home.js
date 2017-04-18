@@ -20,7 +20,7 @@ $(document).ready(function() {
         }
     });
 
-    updateNavBar(["HeadStart", "#"]);
+    updateNavBar(["WarpWorks", "#"]);
 
     $("#domainWizardB").click(function() {
         $("#domainWizardM").modal();

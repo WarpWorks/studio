@@ -12,7 +12,7 @@ Enumeration(Property): validEnumSelections:[One|ZeroOne|ZeroMany|OneMany]
 Literal: position, icon
 
 // Aggregation Hierarchy:
-#HeadStart: {Domain*}
+#WarpWorks: {Domain*}
 Domain:{entities:Entity*}
 Entity:{basicProperties:BasicProperty*, relationships:Relationship*, pageViews:PageView*, tableViews:TableView*, enums:Enumeration*}
 Enumeration:{literals:Literal*}

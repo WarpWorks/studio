@@ -2,7 +2,7 @@
 // Test serialization / deserialization
 //
 
-var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/WarpWorks/WarpWorks.js').WarpWorks;
 
 // Create test model
 

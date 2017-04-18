@@ -1,4 +1,4 @@
-var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/WarpWorks/WarpWorks.js').WarpWorks;
 
 var smn = hs.readFile("./../smn/MyShop.smn");
 var myShopDomain = hs.createModelElementsFromSMN(smn);

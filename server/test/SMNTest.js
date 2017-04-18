@@ -2,9 +2,9 @@
 // Test SMN
 //
 
-var hs = require('./../src/HeadStart/HeadStart.js').HeadStart;
+var hs = require('./../src/WarpWorks/WarpWorks.js').WarpWorks;
 
-// var smn = hs.readFile("smn/HeadStart.smn");
+// var smn = hs.readFile("smn/WarpWorks.smn");
 var smn = hs.readFile("smn/HelloWorld.smn");
 // var smn = hs.readFile("smn/CustomerData.smn");
 // var smn = hs.readFile("./../smn/ErrorTests.smn");
