@@ -1,6 +1,4 @@
 {
-  "extends": "./.eslintrc.json",
-  "env": {
-    "mocha": true
-  }
+  "root": true,
+  "extends": "@quoin/eslint-config-quoin/node-test"
 }

@@ -1,8 +1,7 @@
 {
-  "extends": "./.eslintrc.json",
+  "root": true,
+  "extends": "@quoin/eslint-config-quoin/client",
   "env": {
-    "node": false,
-    "browser": true,
     "jquery": true
   }
 }
