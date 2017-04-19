@@ -1,6 +1,6 @@
 {
   "all": true,
-  "report-dir": "./coverage/default",
+  "report-dir": "./reports/coverage",
   "check-coverage": false,
   "exclude": [
     "**/*.*.test.js",

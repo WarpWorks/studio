@@ -1,9 +1,9 @@
 # Node Modules
-npm-debug.log
-node_modules/
-
-/coverage
 /.nyc_output
+/npm-debug.log*
+/node_modules
+/reports
+/*.tgz
 
 # WebStorm IDE
 .idea/
