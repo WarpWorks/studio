@@ -68,7 +68,7 @@ function wizardCreateDomain(evt) {
     // TBD: evt.preventDefault(); => Required here?
 
     $.ajax({
-        url: $active._links['hs:create-domain-from-smn'].href,
+        url: $active._links['w2:create-domain-from-smn'].href,
         method: 'POST',
         data: JSON.stringify(smn),
         contentType: 'application/json; charset=utf-8',

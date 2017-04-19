@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var debug = require('debug')('HS:server');
+var debug = require('debug')('W2:Studio:server');
 var http = require('http');
 
 var app = require('./server/app')('/');
@@ -13,7 +13,7 @@ const config = require('./lib/config');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || config.port);
+var port = normalizePort(process.env.PORT || config.port || 3000);
 app.set('port', port);
 
 /**

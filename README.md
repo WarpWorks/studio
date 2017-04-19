@@ -1,17 +1,32 @@
 # WarpWorks
+
 Cross-domain code generation framework for Rapid Application Development
 
 ## Overwriting defaults
 
-You can create a `.WarpWorksrc` in your project:
+Overwrite WarpWorks Studio defaults with `.warp-works-studiorc`:
 
     {
-      "cartridgePath": "../dslama/MonApp",
-      "outputPath": "../dslama/MonApp/runtime",
-      "projectPath": "../dslama/IIC-Data"
+      "port": 3000
     }
 
-This file will be read by the [rc](https://www.npmjs.com/package/rc) library.
+You can also overwrite WarpWorks Core default with `.warp-works-corerc`:
+
+    {
+      "cartridgePath": "../warpjs",
+      "outputPath": "../warpjs/runtime",
+      "projectPath": "../w2projects"
+    }
+
+This file will be read by the
+[@quoin/node-rc](https://www.npmjs.com/package/@quoin/node-rc)
+library.
+
+## Debug
+
+You can run in debug mode by defining:
+
+    DEBUG=W2:Studio:*
 
 
 ## Using inside of another project

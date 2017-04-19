@@ -1,5 +1,6 @@
 # Node Modules
 /.nyc_output
+/.warp-works-*rc
 /npm-debug.log*
 /node_modules
 /reports

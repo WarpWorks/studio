@@ -2,7 +2,7 @@ function getDomainData(afterLoad) {
     var domain = window.location.pathname.split('/').pop();
 
     $.ajax({
-        url: $active._links.HSdomain.href,
+        url: $active._links.W2domain.href,
         method: 'GET',
         headers: {
             contentType: 'application/json; charset=utf-8',

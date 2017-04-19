@@ -2,6 +2,8 @@
 /.npmignore
 /.nyc_output
 /.nycrc
+/.warp-works-corerc
+/.warp-works-studiorc
 /lib/**/*.test.js
 /reports
 /server.js

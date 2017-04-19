@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@quoin/expressjs-routes-info": "0.1.5",
+    "@quoin/node-rc": "0.1.0",
     "@warp-works/core": "0.8.0",
     "bluebird": "3.5.0",
     "body-parser": "1.17.1",
@@ -43,8 +44,6 @@
     "hbs": "4.0.1",
     "hbs-utils": "0.0.4",
     "lodash": "4.17.4",
-    "mongodb": "2.2.26",
-    "rc": "1.2.1",
     "serve-favicon": "2.4.2"
   },
   "devDependencies": {

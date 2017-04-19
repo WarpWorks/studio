@@ -12,8 +12,8 @@ $(document).ready(function() {
 
             $('button[data-url]').click(goToPage);
 
-            updateSMNExamples(result._links['hs:smn-examples'].href);
-            updateDomainOverview(result._links['hs:domains'].href);
+            updateSMNExamples(result._links['w2:smn-examples'].href);
+            updateDomainOverview(result._links['w2:domains'].href);
         },
         error: function(err) {
             console.log("INITIAL: err=", err);

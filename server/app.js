@@ -20,7 +20,7 @@ module.exports = (baseUrl) => {
     // view engine setup
     app.set('views', path.join(processCwd, 'views'));
     app.set('view engine', 'hbs');
-    app.set('hs:baseUrl', baseUrl === '/' ? '' : baseUrl);
+    app.set('w2:baseUrl', baseUrl === '/' ? '' : baseUrl);
 
     app.use(favicon(path.join(processCwd, 'public', 'images', 'favicon.ico')));
     app.use(bodyParser.json({limit: '10mb'}));
