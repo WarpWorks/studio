@@ -5,7 +5,19 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
-    pvLoadDomainOverview();
+    $.ajax({
+        method: 'GET',
+        headers: {
+            accept: 'application/hal+json'
+        },
+        success: function(result) {
+            $active._links = result._links;
+            pvLoadDomainOverview();
+        },
+        error: function(err) {
+            console.log("pageView document.ready() error:", err);
+        }
+    });
 });
 
 function pvLoadDomainOverview() {

@@ -668,7 +668,7 @@ function updateViewLists() {
     sortedPageViewList.forEach(function(pageView, i) {
         // TODO: Generate this on server.
         var url = '../pageView/' + $active.domain.name + '?pv=' + pageView.id;
-        var elem = $('<li><a href="' + url + '" id="' + pageView.id + '"data-toggle="tab">' + pageView.name + '</a></li>');
+        var elem = $('<li><a href="' + url + '" id="' + pageView.id + '">' + pageView.name + '</a></li>');
         $("#pageViewsNP").append(elem).append(" ");
     });
 
@@ -683,7 +683,7 @@ function updateViewLists() {
     sortedTableViewList.forEach(function(tableView, i) {
         // TODO: Generate this on server.
         var url = "./../tableView/" + $active.domain.name + "?tv=" + tableView.id;
-        var elem = $('<li><a href="' + url + '" id="' + tableView.id + '" data-toggle="tab">' + tableView.name + '</a></li>');
+        var elem = $('<li><a href="' + url + '" id="' + tableView.id + '">' + tableView.name + '</a></li>');
         $("#tableViewsNP").append(elem).append(" ");
     });
 
