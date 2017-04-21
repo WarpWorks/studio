@@ -14,7 +14,7 @@ You can also overwrite WarpWorks Core default with `.warp-works-corerc`:
 
     {
       "cartridgePath": "../warpjs",
-      "outputPath": "../warpjs/runtime",
+      "outputPath": "../warpjs",
       "projectPath": "../w2projects"
     }
 

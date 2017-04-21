@@ -1,5 +1,9 @@
 # Releases
 
+## 0.8.4 - 2017-04-21
+
+- Updating to WarpWorks/core 0.8.2
+
 ## 0.8.3 - 2017-04-21
 
 - Adding password field.
