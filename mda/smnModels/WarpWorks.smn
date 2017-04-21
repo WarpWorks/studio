@@ -7,7 +7,7 @@ Domain: definitionOfMany:number
 Entity: isAbstract:boolean, namePlural:string, isRootEntity:boolean, isRootInstance:boolean
 Relationship: isAggregation:boolean, sourceRole, sourceMin:number, sourceMax:number, targetRole, targetMin:number, targetMax:number, targetAverage:number
 Property
-BasicProperty(Property): propertyType:[string|number|boolean|date], defaultValue, constraints, examples
+BasicProperty(Property): propertyType:[string|text|password|number|boolean|date], defaultValue, constraints, examples
 Enumeration(Property): validEnumSelections:[One|ZeroOne|ZeroMany|OneMany]
 Literal: position, icon
 
