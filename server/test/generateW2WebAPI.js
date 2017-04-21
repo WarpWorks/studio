@@ -2,8 +2,10 @@ const path = require('path');
 console.log("Generating WarpWorks WebAPI:");
 const warpCore = require('@warp-works/core');
 
+const ROOT_DIR = path.dirname(require.resolve('./../../package.json'));
+
 console.log("Reading SMN file...");
-var smn = warpCore.readFile(process.cwd()+"/../../mda/smnModels/WarpWorks.smn");
+var smn = warpCore.readFile(path.join(ROOT_DIR, 'mda', 'smnModels', 'WarpWorks.smn'));
 console.log("Creating WarpWorks model...");
 var domain = warpCore.createModelElementsFromSMN(smn);
 // console.log (domain.toString());
@@ -12,4 +14,4 @@ var domain = warpCore.createModelElementsFromSMN(smn);
 console.log("Applying template...");
 
 // TBD - fix problem with target directory!
-var t = warpCore.applyTemplateFile(process.cwd()+'/../../mda/templates/WarpWorks_WebAPI.hst', [domain]);
+var t = warpCore.applyTemplateFile(path.join(ROOT_DIR, 'mda', 'templates', 'WarpWorks_WebAPI.hst'), [domain]);
