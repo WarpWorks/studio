@@ -6,7 +6,7 @@
 var debug = require('debug')('W2:Studio:server');
 var http = require('http');
 
-var app = require('./server/app')('/');
+var app = require('./lib/app')('/');
 const config = require('./lib/config');
 
 /**

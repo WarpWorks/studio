@@ -1,5 +1,9 @@
 # Releases
 
+## 0.8.5 - 2017-04-24
+
+- Updating to write into the `projectPath`.
+
 ## 0.8.4 - 2017-04-21
 
 - Updating to WarpWorks/core 0.8.2
