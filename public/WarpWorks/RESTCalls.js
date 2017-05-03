@@ -48,8 +48,12 @@ function postDomainData() {
             if (result.success) {
                 console.log("Save: OK");
                 if (result.warnings) {
-                    createModal("Saving: " + $active.domain.name, result.status, "warning", null);
+                    $active.warnings = result.status;
+                    $("#warningsA").show();
                 }
+                else
+                    $("#warningsA").hide();
+
             } else {
                 console.log("Failed to save Domain!");
             }

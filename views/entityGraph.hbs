@@ -1,16 +1,20 @@
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <div class="container" role="main">
     <div id="mynetwork"></div>
     <form>
         Mode:
         <label class="radio-inline">
-            <input type="radio" name="optradio" checked="checked" id="showAllModeI" />Show All
+            <input type="radio" name="optradio" checked="checked" id="showAllModeI" />Complete Hierarchy
         </label>
         <label class="radio-inline">
-            <input type="radio" name="optradio" id="entityClusterModeI" />Browse Entity Hierarchy
+            <input type="radio" name="optradio" id="entityClusterModeI" />Browse Entity Clusters
         </label>
     </form>
     <form>
         Show:
+        <label class="checkbox-inline">
+            <input type="checkbox" id="docsOnlyI" />Documents Only
+        </label>
         <label class="checkbox-inline">
             <input type="checkbox" checked="checked" id="aggregationsI" />Aggregations
         </label>
@@ -18,7 +22,7 @@
             <input type="checkbox" id="associationsI" />Associations
         </label>
         <label class="checkbox-inline">
-            <input type="checkbox" checked="checked" id="inheritanceI" />Inheritance
+            <input type="checkbox" id="inheritanceI" />Inheritance
         </label>
         <label class="checkbox-inline">
             <input type="checkbox" id="quantitiesI" />Avg. Quantities
@@ -31,13 +35,11 @@
 <script src="{{baseUrl}}/WarpWorks/WarpWorks_WebAPIExtensions.js"></script>
 <script src="{{baseUrl}}/WarpWorks/entityGraph.js"></script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.min.css" rel="stylesheet" type="text/css"/>
 
 <style type="text/css">
     #mynetwork {
-        width: 800px;
-        height: 500px;
         border: 2px solid lightgray;
     }
 </style>

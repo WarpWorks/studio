@@ -31,24 +31,29 @@ function handleUpdateEvent() {
 }
 
 function updateQSTable() {
-    var total = $active.domain.updateQuantityData();
-    var table = "<table class='table'> <thead> <tr><th>Entity: Instances</th><th>Aggregations</th><th>Child Entities</th><th>Average # of Children</th></tr></thead><tbody>";
+    console.log("Updating");
+    var total = formatInteger($active.domain.updateQuantityData());
+    var table = "<table class='table'> <thead> <tr><th>Entity (Quantities)</th><th>Aggregation</th><th>Child Entity</th><th>Average # of Children</th></tr></thead><tbody>";
     for (var i in $active.domain.entities) {
         var entity = $active.domain.entities[i];
         var isFirst = true;
+        var dName = entity.name + " (" + formatInteger(entity.quantity) + ")";
+        if (entity.isRootInstance)
+            dName = "#" + dName;
+        if (entity.isDocument())
+            dName = " <span class='glyphicon glyphicon-file'></span> "+dName;
+        else
+            dName = " <span class='glyphicon glyphicon-list'></span> "+dName;
         var aggs = entity.getAggregations();
         if (aggs.length === 0) {
-            table += "<tr><td>" + entity.name + ": " + entity.quantity + "</td><td></td><td></td><td></td></tr>";
+            table += "<tr><td>" + dName + "</td><td></td><td></td><td></td></tr>";
         }
         for (var j in aggs) {
             var rel = aggs[j];
             var pName = "";
             if (isFirst) {
-                pName = entity.name + ": " + entity.quantity;
-                if (entity.isRootInstance) {
-                    pName = "#" + pName;
-                }
                 isFirst = false;
+                pName = dName;
             }
             table += "<tr><td>" + pName + "</td>" +
                 "<td>" + rel.name + "</td>" +
@@ -56,10 +61,31 @@ function updateQSTable() {
                 "<td><input type='text' class='form-control' id='" + rel.id + "' value='" + rel.targetAverage + "'></td></tr>";
         }
     }
-    table += "<tr><td><strong>Total: " + total + "</strong></td><td></td><td></td><td></td></tr>";
+    table += "<tr bgcolor='#eee8aa'><td><strong>Total: " + total + "</strong></td><td></td><td></td><td></td></tr>";
+
+    table += "<tr><td>Definition of 'Many':</td><td><input type='text' class='form-control' id='defnOfManyI' value='" + $active.domain.definitionOfMany + "'></td><td></td><td></td></tr>";
 
     table += "</tbody></table>";
     $("#qsTableD").html(table);
+}
+
+function optimizeClustering() {
+    saveCurrentFormValues();
+    $active.domain.updateQuantityData();
+    for (var i in $active.domain.entities) {
+        var entity = $active.domain.entities[i];
+        var allParentAggs = entity.getAllParentAggregations();
+        var maxAvg = 0;
+        for (var j in allParentAggs) {
+            var avg = allParentAggs[j].targetAverage;
+            maxAvg = Math.max(avg, maxAvg);
+        }
+        if (entity.isRootInstance)
+            entity.entityType = "Document";
+        else
+            entity.entityType = maxAvg >= $active.domain.definitionOfMany ? "Document" : "Embedded";
+    }
+    updateQSTable();
 }
 
 function saveCurrentFormValues() {
@@ -71,11 +97,12 @@ function saveCurrentFormValues() {
                 var inp = $("#" + rel.id);
                 var newAvg = inp.val();
                 if (!isNaN(newAvg)) {
-                    rel.targetAverage = newAvg;
+                    rel.targetAverage = parseInt(newAvg);
                 }
             }
         }
     }
+    $active.domain.definitionOfMany = parseInt($("#defnOfManyI").val());
 }
 
 function updateMyNavBar() {
@@ -103,4 +130,8 @@ function domainCancelEvent() {
     getDomainData(function() {
         updateQSTable();
     });
+}
+
+function formatInteger(i) {
+    return isNaN(i)?"":i.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
