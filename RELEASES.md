@@ -1,5 +1,9 @@
 # Releases
 
+## 0.8.6 - 2017-05-04
+
+- Adjust to use WarpJS for authorization.
+
 ## 0.8.5 - 2017-04-24
 
 - Updating to write into the `projectPath`.
