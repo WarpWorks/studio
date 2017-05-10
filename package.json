@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "0.8.7",
+  "version": "0.8.8",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -35,6 +35,7 @@
     "@quoin/expressjs-routes-info": "0.1.6",
     "@quoin/node-rc": "0.1.1",
     "@warp-works/core": "0.8.7",
+    "@warp-works/warpjs": "0.6.4",
     "bluebird": "3.5.0",
     "body-parser": "1.17.1",
     "bootstrap-notify": "3.1.3",

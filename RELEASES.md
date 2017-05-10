@@ -1,5 +1,9 @@
 # Releases
 
+## 0.8.8 - 2017-05-10
+
+- Fixed "Start Test Application" link.
+
 ## 0.8.7 - 2017-05-10
 
 - Upgraded to @warp-works/core@0.8.7

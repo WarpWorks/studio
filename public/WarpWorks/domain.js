@@ -928,7 +928,7 @@ function openTestAppModal() {
     $("#removeTestDataB").on("click", removeTestData);
     $("#viewTestAppB").on("click", function() {
         setTimeout(function() {
-            window.location.href = $active._links.MonApp.href;
+            window.location.href = $active._links.WarpJS.href;
         }, 750);
     });
 
