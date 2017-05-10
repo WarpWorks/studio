@@ -1,5 +1,9 @@
 # Releases
 
+## 0.8.7 - 2017-05-10
+
+- Upgraded to @warp-works/core@0.8.7
+
 ## 0.8.6 - 2017-05-04
 
 - Adjust to use WarpJS for authorization.
