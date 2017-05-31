@@ -92,13 +92,19 @@ function updateActiveDomain(activeEntityArg) {
                 active = hsCompareIDs(entity.id, activeEntity) ? "class='active'" : "";
             }
 
-            var name = entity.name;
+            var name = entity.name.substring(0, 15);
+
             if (entity.isRootInstance) {
                 name = "#" + name;
             }
             if (entity.isAbstract) {
                 name = "%" + name;
             }
+
+            var embedded = "<span class='glyphicon glyphicon-list'></span>";
+            var document = "<span class='glyphicon glyphicon-file'></span>";
+            name = (entity.isDocument() ? document : embedded) + ' ' + name;
+
             var elem = $(
                 "<li " + active + "><a href='#' id='" + entity.id + "'data-toggle='tab'>" + name + "</a></li>");
             $("#entityOverviewNP").append(elem).append(" ");
