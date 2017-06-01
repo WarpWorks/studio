@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc3 - 2017-06-01
+
+- Fixed link for the "Start Test Application"
+
 ## 1.0.0-rc2 - 2017-06-01
 
 - Expose library version.

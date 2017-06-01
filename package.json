@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.0.0-rc2",
+  "version": "1.0.0-rc3",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -59,7 +59,7 @@
     "eslint-plugin-standard": "3.0.1",
     "express": "4.15.3",
     "mocha": "3.4.2",
-    "nyc": "10.3.2"
+    "nyc": "11.0.1"
   },
   "peerDependencies": {
     "@warp-works/warpjs": ">=1.0.0-rc1",
