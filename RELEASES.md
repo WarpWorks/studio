@@ -1,8 +1,12 @@
 # Releases
 
+## 1.0.0-rc2 - 2017-06-01
+
+- Expose library version.
+
 ## 1.0.0-rc1 - 2017-05-31
 
--
+- Embedded documents.
 
 ## 0.8.8 - 2017-05-10
 
