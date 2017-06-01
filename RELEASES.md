@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc4 - 2017-06-01
+
+- Updated to warpjs@1.0.0-rc2
+
 ## 1.0.0-rc3 - 2017-06-01
 
 - Fixed link for the "Start Test Application"
