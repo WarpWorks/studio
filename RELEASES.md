@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc5 - 2017-06-02
+
+- Updated to warpjs@1.0.0-rc3
+
 ## 1.0.0-rc4 - 2017-06-01
 
 - Updated to warpjs@1.0.0-rc2
