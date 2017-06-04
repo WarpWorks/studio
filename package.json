@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.0.0-rc5",
+  "version": "1.0.0-rc6",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -34,7 +34,7 @@
   "dependencies": {
     "@quoin/expressjs-routes-info": "0.1.6",
     "@quoin/node-rc": "0.1.1",
-    "@warp-works/core": "1.0.0-rc1",
+    "@warp-works/core": "1.0.0-rc2",
     "bluebird": "3.5.0",
     "body-parser": "1.17.2",
     "bootstrap-notify": "3.1.3",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@quoin/eslint-config-quoin": "0.1.4",
     "@quoin/node-test-helpers": "0.2.1",
-    "@warp-works/warpjs": "1.0.0-rc3",
+    "@warp-works/warpjs": "1.0.0-rc4",
     "eslint": "3.19.0",
     "eslint-plugin-html": "2.0.1",
     "eslint-plugin-import": "2.3.0",
@@ -59,7 +59,7 @@
     "eslint-plugin-standard": "3.0.1",
     "express": "4.15.3",
     "mocha": "3.4.2",
-    "nyc": "11.0.1"
+    "nyc": "11.0.2"
   },
   "peerDependencies": {
     "@warp-works/warpjs": ">=1.0.0-rc1",
