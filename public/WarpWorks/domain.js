@@ -5,7 +5,8 @@ var $active = {};
 $active.domain = null;
 
 $(document).ready(function() {
-    $('#entityGraphA').click(addNewEntity);
+    $('#warningsA').click(showWarnings);
+    $('#addEntityA').click(addNewEntity);
     $('#parentEntitySelector').click(selectTargetEntityForInheritance);
     $('#rootEntityMakeRootA').click(makeRootEntity);
     $('#removeEntityB').click(removeEntity);
@@ -91,13 +92,19 @@ function updateActiveDomain(activeEntityArg) {
                 active = hsCompareIDs(entity.id, activeEntity) ? "class='active'" : "";
             }
 
-            var name = entity.name;
+            var name = entity.name.substring(0, 15);
+
             if (entity.isRootInstance) {
                 name = "#" + name;
             }
             if (entity.isAbstract) {
                 name = "%" + name;
             }
+
+            var embedded = "<span class='glyphicon glyphicon-list'></span>";
+            var document = "<span class='glyphicon glyphicon-file'></span>";
+            name = (entity.isDocument() ? document : embedded) + ' ' + name;
+
             var elem = $(
                 "<li " + active + "><a href='#' id='" + entity.id + "'data-toggle='tab'>" + name + "</a></li>");
             $("#entityOverviewNP").append(elem).append(" ");
@@ -147,10 +154,12 @@ function updateActiveEntity(entityID) {
 
     $("#entityNameI").val(entity.name);
     $("#entityDescI").val(entity.desc);
+    $("#entityTypeI").val(entity.entityType);
     $("#removeEntityB").html(entity.name + " <span class='glyphicon glyphicon-remove-sign'></span>");
 
     if (entity.isRootInstance) {
         $("#removeEntityB").hide();
+        $("#entityTypeFG").hide();
         $("#parentEntityFG").hide();
         $("#rootEntityFG").hide();
     } else {
@@ -163,6 +172,7 @@ function updateActiveEntity(entityID) {
         } else {
             $("#parentEntityNameA").text("undefined");
         }
+        $("#entityTypeFG").show();
         $("#parentEntityFG").show();
 
         // Update and show info on root entity status
@@ -803,6 +813,7 @@ function saveEntityFormValues() {
     if ($active.entity) {
         $active.entity.name = $("#entityNameI").val();
         $active.entity.desc = $("#entityDescI").val();
+        $active.entity.entityType = $("#entityTypeI").val();
     }
 }
 
@@ -942,4 +953,8 @@ function saveDomainOverviewFormData() {
 
     // Update domain name
     updateMyNavBar();
+}
+
+function showWarnings() {
+    createModal("Warnings for Domain '" + $active.domain.name+"'", $active.warnings, "warning", null);
 }

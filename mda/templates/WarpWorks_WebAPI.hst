@@ -222,4 +222,4 @@ function {{js:this.name;/}} (parent, id, name, desc) {
 }
 
 {{/Entity}}
-{{Options}} {"saveAs": [".", "this.name+'_WebAPI.js';"] } {{/Options}}{{/Domain}}
+{{Options}} {"saveAs": ["public", "this.name+'_WebAPI.js';"] } {{/Options}}{{/Domain}}

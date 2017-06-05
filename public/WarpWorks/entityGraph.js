@@ -10,6 +10,7 @@ $(document).ready(function() {
     $('#entityClusterModeI').click(entityClusterMode);
     $('#redrawB').click(updateGraph);
 
+    $('#docsOnlyI').change(updateGraph);
     $('#aggregationsI').change(updateGraph);
     $('#associationsI').change(updateGraph);
     $('#inheritanceI').change(updateGraph);
@@ -52,6 +53,7 @@ function showAllMode() {
 }
 
 function updateGraph() {
+    var showDocsOnly = $("#docsOnlyI").prop("checked");
     var showAggregations = $("#aggregationsI").prop("checked");
     var showAssociations = $("#associationsI").prop("checked");
     var showInheritance = $("#inheritanceI").prop("checked");
@@ -78,7 +80,6 @@ function updateGraph() {
             $active.entity = $active.domain.getRoot();
         }
         $active.entity.borderWidth = 2;
-        $active.entity.color = "darkgrey";
         entities = [$active.entity];
         console.log("Active Entity:" + $active.entity.name);
 
@@ -110,15 +111,32 @@ function updateGraph() {
     }
 
     entities.forEach(function(entity, idx1) {
-        // console.log("*** Entity: " + entity.name);
+        if (showDocsOnly && !entity.isDocument())
+            return;
 
-        // Add entity
+        // Entity Name
         var name = entity.isRootInstance ? "#" + entity.name : entity.name;
         if (showQuantities) {
-            name += "\n(" + entity.quantity.toLocaleString() + ")";
+            name += " [" + entity.quantity.toLocaleString() + "]";
         }
+        if (showInheritance && entity.hasParentClass()) {
+            name += "\n(" + entity.getParentClass().name + ")";
+        }
+
+        // Entity Visualization
+        var icon = {
+            face: 'FontAwesome',
+            code: entity.isDocument() ? '\uf15b' : '\uf03a',
+            size: 30,
+            color: 'darkgrey'
+        };
+        if (entity.isRootInstance) icon.code = '\uf292';
+
+        // Add new Node based on current Entity
         nodeArray.push({
             id: entity.id,
+            shape: "icon",
+            icon: icon,
             label: name,
             borderWidth: entity.borderWidth,
             color: entity.color
@@ -127,8 +145,8 @@ function updateGraph() {
         // Now add edges for aggregations and associations for this entity
         if (entity.relationships) {
             entity.relationships.forEach(function(relationship, idx2) {
-                var from = entity.id;
-                var to = relationship.getTargetEntity().id;
+                var from = relationship.getTargetEntity().id;
+                var to   = entity.id;
                 var id = idx1 + ':' + idx2;
                 var lbl = relationship.isAggregation ? "x" + relationship.targetAverage : "";
                 // console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
@@ -141,7 +159,7 @@ function updateGraph() {
                         id: id,
                         label: showQuantities ? lbl : "",
                         dashes: false,
-                        arrows: "from",
+                        arrows: { middle: { enabled:true, type:"arrow", scaleFactor:1 }, to: { enabled:false, type:"circle", scaleFactor:0.5  } },
                         smooth: true
                     });
                 }
@@ -157,6 +175,7 @@ function updateGraph() {
                 }
             });
         }
+
         if (showInheritance && entity.hasParentClass()) {
             var from = entity.id;
             var to = entity.getParentClass().id;
@@ -166,7 +185,7 @@ function updateGraph() {
                 to: to,
                 id: id,
                 color: 'orange',
-                arrows: "to",
+                arrows: null,
                 dashes: true,
                 smooth: true
             });
@@ -189,9 +208,13 @@ function updateGraph() {
         nodes: nodes,
         edges: edges
     };
+    var w = $( window ).width()*0.85;
+    var h = $( window ).height()*0.75;
+    $("#mynetwork").width(w);
+    $("#mynetwork").height(h);
     var options = {
-        width: "800px",
-        height: "500px",
+        width: w+"px",
+        height: h+"px",
         interaction: {
             navigationButtons: true,
             keyboard: true

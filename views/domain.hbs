@@ -6,7 +6,8 @@
         <div class="col-sm-3">
             <div class="panel panel-success">
                 <div class="panel-heading">Entities
-                    <a href="#" id="entityGraphA"><span class="glyphicon glyphicon-plus-sign pull-right"></span></a>
+                    <a href="#" id="warningsA" style="color:red; display:none" data-toggle="tooltip" title="Click to see warnings"><span class="glyphicon glyphicon-warning-sign pull-right"></span></a>
+                    <a href="#" id="addEntityA" data-toggle="tooltip" title="Click to add new entity"><span class="glyphicon glyphicon-plus-sign pull-right"></span></a>
                 </div>
                 <div class="panel-body">
                     <ul class="nav nav-pills nav-stacked" id="entityOverviewNP"></ul>
@@ -51,6 +52,15 @@
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="entityDescI"
                                                    placeholder="Description">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="entityTypeFG">
+                                        <label for="entityTypeI" class="col-sm-3 control-label">Entity Type</label>
+                                        <div class="col-sm-9">
+                                            <select class="form-control" id="entityTypeI">
+                                                <option>Document</option>
+                                                <option>Embedded</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group" id="parentEntityFG">

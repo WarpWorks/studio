@@ -3,14 +3,18 @@
         <div class="col-sm-12">
             <div class="panel panel-success">
                 <div class="panel-heading">Quantity Structure
-                    <a href="#" id="entityGraphA"><span
-                            class="glyphicon glyphicon-cog pull-right"></span></a>
+                    <a href="#" id="entityGraphA" data-toggle="tooltip" title="Update calculated quantities"><span
+                            class="glyphicon glyphicon-refresh pull-right"></span></a>
                 </div>
                 <div class="panel-body" id="qsTableD">
                 </div>
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-primary" onclick="handleUpdateEvent()" data-toggle="tooltip" title="Update calculated quantities">
+        <span class="glyphicon glyphicon-refresh"></span> Update Quantities</button>
+    <button type="button" class="btn btn-primary" onclick="optimizeClustering()" data-toggle="tooltip" title="Update Entity Type for each entity: Document or Embedded? Algorithm uses data from quantitative model!">
+        <span class="glyphicon glyphicon-cog"></span> Optimize Clustering</button>
 </div>
 
 <script src="{{baseUrl}}/WarpWorks/WarpWorks_WebAPI.js"></script>

@@ -4,8 +4,9 @@ const warpCore = require('@warp-works/core');
 
 const ROOT_DIR = path.dirname(require.resolve('./../../package.json'));
 
+
 console.log("Reading SMN file...");
-var smn = warpCore.readFile(path.join(ROOT_DIR, 'mda', 'smnModels', 'WarpWorks.smn'));
+var smn = warpCore.readFile(require.resolve('@warp-works/core/mda/WarpWorks.smn'));
 console.log("Creating WarpWorks model...");
 var domain = warpCore.createModelElementsFromSMN(smn);
 // console.log (domain.toString());

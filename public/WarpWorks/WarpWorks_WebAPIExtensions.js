@@ -19,6 +19,10 @@ Enumeration.prototype.toString = function() {
 
 // TBD: all "get...()"-classes need to support inheritance (optional)...
 
+Entity.prototype.isDocument = function() {
+    return this.entityType === "Document";
+};
+
 Entity.prototype.hasParentClass = function() {
     return this.parentClass && this.parentClass.length > 0 && this.parentClass[0] != null;
 };
@@ -173,13 +177,13 @@ Entity.prototype.updateQuantityData = function() {
     }
 
     if (++aggCounter > 500) { // TBD: Handle cyclic aggregation graphs
-        throw "Suspecting cycle reference - currently not able to handle this, sorry!";
+        throw "Suspecting cyclic reference - currently not able to handle this, sorry!";
     }
 
     this.quantity = 0;
     var parentAggs = this.getAllParentAggregations();
     for (var i in parentAggs) {
-        rel = parentAggs[i];
+        var rel = parentAggs[i];
         var parentQty = rel.parent.updateQuantityData();
         var targetAvg = isNaN(rel.targetAverage) ? 0 : rel.targetAverage;
         this.quantity += targetAvg * parentQty;
