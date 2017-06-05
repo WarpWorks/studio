@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.0.0-rc6",
+  "version": "1.0.0-rc7",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -32,7 +32,7 @@
     "coverage": "npm run coverage:unit"
   },
   "dependencies": {
-    "@quoin/expressjs-routes-info": "0.1.6",
+    "@quoin/expressjs-routes-info": "0.1.7",
     "@quoin/node-rc": "0.1.1",
     "@warp-works/core": "1.0.0-rc2",
     "bluebird": "3.5.0",
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@quoin/eslint-config-quoin": "0.1.4",
     "@quoin/node-test-helpers": "0.2.1",
-    "@warp-works/warpjs": "1.0.0-rc4",
+    "@warp-works/warpjs": "1.0.0-rc6",
     "eslint": "3.19.0",
     "eslint-plugin-html": "2.0.1",
     "eslint-plugin-import": "2.3.0",

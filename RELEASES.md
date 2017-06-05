@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc7 - 2017-06-05
+
+- Updated warpjs@1.0.0-rc6 and express-routes-info@0.1.7
+
 ## 1.0.0-rc6 - 2017-06-04
 
 - Updated to core@1.0.0-rc2 and warpjs@1.0.0-rc4
