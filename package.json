@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.0.0-rc8",
+  "version": "1.0.0-rc9",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -50,7 +50,7 @@
   "devDependencies": {
     "@quoin/eslint-config-quoin": "0.1.4",
     "@quoin/node-test-helpers": "0.2.1",
-    "@warp-works/warpjs": "1.0.0-rc7",
+    "@warp-works/warpjs": "1.0.0-rc8",
     "eslint": "3.19.0",
     "eslint-plugin-html": "2.0.1",
     "eslint-plugin-import": "2.3.0",
