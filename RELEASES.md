@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc11 - 2017-06-09
+
+- Updated core for relationship description in association documents.
+
 ## 1.0.0-rc10 - 2017-06-07
 
 - Updated warpjs@1.0.0-rc9

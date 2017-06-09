@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.0.0-rc10",
+  "version": "1.0.0-rc11",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -34,7 +34,7 @@
   "dependencies": {
     "@quoin/expressjs-routes-info": "0.1.7",
     "@quoin/node-rc": "0.1.1",
-    "@warp-works/core": "1.0.0-rc3",
+    "@warp-works/core": "1.0.0-rc4",
     "bluebird": "3.5.0",
     "body-parser": "1.17.2",
     "bootstrap-notify": "3.1.3",
