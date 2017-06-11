@@ -1,5 +1,9 @@
 # Releases
 
+## 1.0.0-rc12 - 2017-06-10
+
+- Updated site logo.
+
 ## 1.0.0-rc11 - 2017-06-09
 
 - Updated core for relationship description in association documents.
