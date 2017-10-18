@@ -1,3 +1,5 @@
 {
-  "projectPath": "../w2projects"
+  "projectPath": "../w2projects",
+  "cartridgePath": "../warpjs",
+  "outputPath": "../warpjs"
 }
