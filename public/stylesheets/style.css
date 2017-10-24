@@ -2,6 +2,7 @@
   max-height: 40px;
   margin-top: -7px;
 }
+.centered-navbar {position:absolute; left:25%; width:50%; text-align:center;}
 
 .search-body{
   background:#eee;

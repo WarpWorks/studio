@@ -3,7 +3,7 @@ $(document).ready(function() {
     $('#wizardClearFormButton').click(wizardClearForm);
 });
 
-function updateNavBar(home, pageMenuDD, testModalF, saveHandler, cancelHandler, deleteHandler) {
+function updateNavBar(home, pageMenuDD, testModalF, saveHandler, cancelHandler, deleteHandler,pluginMenuDD) {
     if (home) {
         $("#DomainHomeA").html(home[0]);
         $("#DomainHomeA").on("click", function() {
@@ -32,6 +32,26 @@ function updateNavBar(home, pageMenuDD, testModalF, saveHandler, cancelHandler, 
     } else {
         $("#pageMenuA").hide();
     }
+	
+	// Set up Plugin Menu
+    if (pluginMenuDD) {
+        var ddContent = "";
+		
+        pluginMenuDD.then(function(item){
+			item.forEach(function(elem) {
+				if (elem[0] === "---") {
+					ddContent += "<li role='separator' class='divider'></li>";
+				} else {
+					ddContent += "<li><a href='#' onclick='" + elem[1] + "'>" + elem[0] + "</a></li>";
+				}
+				 $("#pluginMenuDD").html(ddContent);
+				 $("#pluginMenu").show();
+		})});
+       
+    } else {
+        $("#pluginMenu").hide();
+    }
+	
 
     if (testModalF) {
         $("#TestMenuA").attr("onclick", testModalF);

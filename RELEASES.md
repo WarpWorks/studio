@@ -1,9 +1,5 @@
 # Releases
 
-## 1.2.0-rc1 - 2017-10-18
-
-- Temporary version to try to use until refactoring is done.
-
 ## 1.0.0-rc12 - 2017-06-10
 
 - Updated site logo.

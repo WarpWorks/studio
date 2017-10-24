@@ -28,6 +28,20 @@ function getDomainData(afterLoad) {
     });
 }
 
+// gets the Data for the plugins from the backend.
+function getPluginData(){
+	 
+	return new Promise(function (resolve,reject){
+		var xhr = new XMLHttpRequest();
+		xhr.onload = function(){
+			resolve(JSON.parse(this.responseText));}
+		xhr.onerror = reject;
+		xhr.open('get',$active._links.plugins.href);
+		xhr.send();
+	});
+}
+
+
 function postDomainData() {
     // Prepare request object
     var reqData = {domainData: JSON.stringify($active.domain, null, 2), domainName: $active.domain.name};
@@ -63,7 +77,6 @@ function postDomainData() {
         }
     });
 }
-
 function generateDefaultViews() {
     // Prepare request object
     var reqData = {domainName: $active.domain.name};

@@ -880,12 +880,13 @@ function updateMyNavBar() {
         ["Entity Graph", "entityGraph()"],
         ["Quantity Structure", "quantityStructure()"]
     ];
+	let pluginMenuDD = domainPluginEvent()
 
     updateNavBar(
         ["Domain: " + $active.domain.name, "#"],
         ddMenu,
         "openTestAppModal()",
-        postDomainDataToServer, domainCancelEvent, domainDeleteEvent);
+        postDomainDataToServer, domainCancelEvent, domainDeleteEvent,pluginMenuDD);
 }
 
 function entityGraph() {
@@ -909,10 +910,17 @@ function quantityStructure() {
 function postDomainDataToServer() {
     // Save last changes from form => $active.domain
     saveAllFormValues();
-
     // Post to server
     postDomainData();
 }
+function domainPluginEvent(){
+	return getPluginData().then(function(result){	
+		return result.plugins;		
+	}).catch(function(){
+		console.log("Some Error in AJAX call for Plugin")
+	});
+}
+
 
 function domainCancelEvent() {
     getDomainData(function() {
@@ -931,6 +939,7 @@ function openDomainOverviewModal() {
     $("#domainDefOfManyI").val($active.domain.definitionOfMany);
     $("#saveDomainOververviewB").on("click", saveDomainOverviewFormData);
 }
+
 
 function openTestAppModal() {
     postDomainDataToServer();
