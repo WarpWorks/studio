@@ -100,12 +100,27 @@ Entity.prototype.getAssociations = function(sort) {
     }
 };
 
-Entity.prototype.getRelationships = function(sort) {
-    var res = this.relationships;
+Entity.prototype.getRelationships = function(sort, withInherited) {
+    var relationships = (withInherited && this.hasParentClass()) ? this.getParentClass().getRelationships() : [];
+
+    // Overwrite any relationships with the same name.
+    this.relationships.forEach(function(thisRelationship) {
+        var replaced = false;
+        relationships.forEach(function(parentRelationship, index) {
+            if (thisRelationship.name === parentRelationship.name) {
+                relationships[index] = thisRelationship;
+                replaced = true;
+            }
+        });
+        if (!replaced) {
+            relationships.push(thisRelationship);
+        }
+    });
+
     if (sort) {
-        return this.parent.sortElements(res);
+        return this.parent.sortElements(relationships);
     } else {
-        return res;
+        return relationships;
     }
 };
 

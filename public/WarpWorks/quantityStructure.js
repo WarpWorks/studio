@@ -38,12 +38,14 @@ function updateQSTable() {
         var entity = $active.domain.entities[i];
         var isFirst = true;
         var dName = entity.name + " (" + formatInteger(entity.quantity) + ")";
-        if (entity.isRootInstance)
+        if (entity.isRootInstance) {
             dName = "#" + dName;
-        if (entity.isDocument())
-            dName = " <span class='glyphicon glyphicon-file'></span> "+dName;
-        else
-            dName = " <span class='glyphicon glyphicon-list'></span> "+dName;
+        }
+        if (entity.isDocument()) {
+            dName = " <span class='glyphicon glyphicon-file'></span> " + dName;
+        } else {
+            dName = " <span class='glyphicon glyphicon-list'></span> " + dName;
+        }
         var aggs = entity.getAggregations();
         if (aggs.length === 0) {
             table += "<tr><td>" + dName + "</td><td></td><td></td><td></td></tr>";
@@ -80,10 +82,11 @@ function optimizeClustering() {
             var avg = allParentAggs[j].targetAverage;
             maxAvg = Math.max(avg, maxAvg);
         }
-        if (entity.isRootInstance)
+        if (entity.isRootInstance) {
             entity.entityType = "Document";
-        else
+        } else {
             entity.entityType = maxAvg >= $active.domain.definitionOfMany ? "Document" : "Embedded";
+        }
     }
     updateQSTable();
 }
@@ -133,5 +136,5 @@ function domainCancelEvent() {
 }
 
 function formatInteger(i) {
-    return isNaN(i)?"":i.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return isNaN(i) ? "" : i.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

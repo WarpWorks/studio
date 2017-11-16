@@ -1,5 +1,9 @@
 # Releases
 
+## 1.2.0-rc2 - 2017-11-16
+
+- Added inherited relationships for PanelItem selection.
+
 ## 1.2.0-rc1 - 2017-10-18
 
 - Temporary version to try to use until refactoring is done.

@@ -111,8 +111,9 @@ function updateGraph() {
     }
 
     entities.forEach(function(entity, idx1) {
-        if (showDocsOnly && !entity.isDocument())
+        if (showDocsOnly && !entity.isDocument()) {
             return;
+        }
 
         // Entity Name
         var name = entity.isRootInstance ? "#" + entity.name : entity.name;
@@ -130,7 +131,9 @@ function updateGraph() {
             size: 30,
             color: 'darkgrey'
         };
-        if (entity.isRootInstance) icon.code = '\uf292';
+        if (entity.isRootInstance) {
+            icon.code = '\uf292';
+        }
 
         // Add new Node based on current Entity
         nodeArray.push({
@@ -146,7 +149,7 @@ function updateGraph() {
         if (entity.relationships) {
             entity.relationships.forEach(function(relationship, idx2) {
                 var from = relationship.getTargetEntity().id;
-                var to   = entity.id;
+                var to = entity.id;
                 var id = idx1 + ':' + idx2;
                 var lbl = relationship.isAggregation ? "x" + relationship.targetAverage : "";
                 // console.log("Adding: " + entity.name + " => " + relationship.getTargetEntity().name + "(" + relationship.isAggregation + ")");
@@ -159,7 +162,7 @@ function updateGraph() {
                         id: id,
                         label: showQuantities ? lbl : "",
                         dashes: false,
-                        arrows: { middle: { enabled:true, type:"arrow", scaleFactor:1 }, to: { enabled:false, type:"circle", scaleFactor:0.5  } },
+                        arrows: { middle: { enabled: true, type: "arrow", scaleFactor: 1 }, to: { enabled: false, type: "circle", scaleFactor: 0.5 } },
                         smooth: true
                     });
                 }
@@ -208,13 +211,13 @@ function updateGraph() {
         nodes: nodes,
         edges: edges
     };
-    var w = $( window ).width()*0.85;
-    var h = $( window ).height()*0.75;
+    var w = $(window).width() * 0.85;
+    var h = $(window).height() * 0.75;
     $("#mynetwork").width(w);
     $("#mynetwork").height(h);
     var options = {
-        width: w+"px",
-        height: h+"px",
+        width: w + "px",
+        height: h + "px",
         interaction: {
             navigationButtons: true,
             keyboard: true

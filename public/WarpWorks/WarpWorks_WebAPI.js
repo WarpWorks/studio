@@ -8,13 +8,14 @@
 // Root for WarpWorks
 //
 
-get_WarpWorks = function  () {
-    if (!_WarpWorks)
-        _WarpWorks = new WarpWorks (null, null, "Root", null);
+get_WarpWorks = function() {
+    if (!_WarpWorks) {
+        _WarpWorks = new WarpWorks(null, null, "Root", null);
+    }
     return _WarpWorks;
-}
+};
 
-get_Domain_fromJSON = function (json) {
+get_Domain_fromJSON = function(json) {
     var domain = get_WarpWorks().addNew_Domain(json.name, json.desc, json.id);
     domain.fromJSON(json, null);
 
@@ -24,13 +25,13 @@ get_Domain_fromJSON = function (json) {
     var oid = -1;
     var target = null;
     for (i in domain.entities) {
-
         var e = domain.entities[i];
         if (e.hasParentClass()) {
             oid = e.getParentClass();
             target = domain.findElementByID(oid);
-            if (target)
+            if (target) {
                 e.setParentClass(target);
+            }
             // Else: Assume that target is in different domain
             // TBD: Think of some kind of "lazy loading" for entities in different domains!
         }
@@ -38,8 +39,9 @@ get_Domain_fromJSON = function (json) {
             var r = e.relationships[i];
             oid = r.getTargetEntity();
             target = domain.findElementByID(oid);
-            if (target)
+            if (target) {
                 r.setTargetEntity(target);
+            }
         }
         for (i in e.tableViews) {
             var tv = e.tableViews[i];
@@ -47,8 +49,9 @@ get_Domain_fromJSON = function (json) {
                 var ti = tv.tableItems[j];
                 oid = ti.property;
                 target = domain.findElementByID(oid);
-                if(target)
+                if (target) {
                     ti.setProperty(target);
+                }
             }
         }
         for (i in e.pageViews) {
@@ -59,29 +62,32 @@ get_Domain_fromJSON = function (json) {
                     var rpi = p.relationshipPanelItems[k];
                     oid = rpi.relationship;
                     target = domain.findElementByID(oid);
-                    if(target)
+                    if (target) {
                         rpi.setRelationship(target);
+                    }
                 }
                 for (l in p.basicPropertyPanelItems) {
                     var bppi = p.basicPropertyPanelItems[l];
                     oid = bppi.basicProperty;
                     target = domain.findElementByID(oid);
-                    if (target)
+                    if (target) {
                         bppi.setBasicProperty(target);
+                    }
                 }
                 for (m in p.enumPanelItems) {
                     var epi = p.enumPanelItems[m];
                     oid = epi.enumeration;
                     target = domain.findElementByID(oid);
-                    if (target)
+                    if (target) {
                         epi.setEnumeration(target);
+                    }
                 }
             }
         }
     }
 
     return domain;
-}
+};
 
 var _WarpWorks = null;
 
@@ -90,7 +96,9 @@ var _WarpWorks = null;
 //
 
 function Base(type, parent, id, name, desc) {
-    if (/\W/i.test(name) || name.length < 2) throw "Invalid name: '" + name + "'. Please use only a-z, A-Z, 0-9 or _!";
+    if (/\W/i.test(name) || name.length < 2) {
+        throw "Invalid name: '" + name + "'. Please use only a-z, A-Z, 0-9 or _!";
+    }
     this.type = type;
     this.parent = parent;
     this.id = id;
@@ -100,69 +108,67 @@ function Base(type, parent, id, name, desc) {
 
 // Methods
 
-Base.prototype.getDomain = function () {
+Base.prototype.getDomain = function() {
     var domain = this;
-    while (domain.type != "Domain")
+    while (domain.type != "Domain") {
         domain = domain.parent;
+    }
     return domain;
-}
+};
 
-Base.prototype.compareToMyID = function (id) {
-  return ""+this.id === ""+id;
-}
+Base.prototype.compareToMyID = function(id) {
+    return "" + this.id === "" + id;
+};
 
-Base.prototype.idToJSON = function () {
+Base.prototype.idToJSON = function() {
     return this.id;
-}
+};
 
-Base.prototype.findElementByID = function (id) {
+Base.prototype.findElementByID = function(id) {
     var allElems = this.getAllElements(true);
-    for (i in allElems) if (allElems[i].compareToMyID(id)) {
-        var r = allElems[i];
-        return r;
+    for (i in allElems) {
+        if (allElems[i].compareToMyID(id)) {
+            var r = allElems[i];
+            return r;
+        }
     }
     return null;
-}
+};
 
 //
 // Class "Action"
 //
 
 // Constructor
-function Action (parent, id, name, desc) {
+function Action(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Action", parent, id, name, desc);
 
     // Properties:
-    this.icon='text';
-    this.label='text';
-    this.functionName='text';
-    
-
-
+    this.icon = 'text';
+    this.label = 'text';
+    this.functionName = 'text';
 }
 
 // Inheritance
 Action.prototype = Object.create(Base.prototype);
 Action.prototype.constructor = Action;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-Action.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+Action.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-Action.prototype.toJSON = function () {
-    
+Action.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -171,37 +177,35 @@ Action.prototype.toJSON = function () {
         icon: this.icon,
         label: this.label,
         functionName: this.functionName
-    }
-}
+    };
+};
 
-Action.prototype.fromJSON = function (json, parent) {
+Action.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.icon = json.icon;
     this.label = json.label;
     this.functionName = json.functionName;
-    
-}
+};
 
 //
 // Class "Domain"
 //
 
 // Constructor
-function Domain (parent, id, name, desc) {
+function Domain(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Domain", parent, id, name, desc);
 
     // Properties:
-    this.definitionOfMany=0;
+    this.definitionOfMany = 0;
     this.id_counter = 1;
-
 
     // Relationships:
     this.entities = [];
@@ -211,43 +215,50 @@ function Domain (parent, id, name, desc) {
 Domain.prototype = Object.create(Base.prototype);
 Domain.prototype.constructor = Domain;
 
-
 //
 // Methods
 //
 // Manage Aggregations:
-Domain.prototype.addNew_Entity = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_entities = new Entity (this, id, name, desc);
+Domain.prototype.addNew_Entity = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_entities = new Entity(this, id, name, desc);
     new_entities.type = "Entity";
-    this.entities.push (new_entities);
+    this.entities.push(new_entities);
     return new_entities;
-}
-Domain.prototype.remove_Entity = function (id) {
+};
+Domain.prototype.remove_Entity = function(id) {
     var idx = -1;
-    this.entities.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.entities.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.entities.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-Domain.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.entities) r = r.concat(this.entities[i].getAllElements(true));
+Domain.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.entities) {
+        r = r.concat(this.entities[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-Domain.prototype.toJSON = function () {
+Domain.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_entities = [];
-    for (i in this.entities) json_entities.push(this.entities[i].toJSON());
-    
+    for (i in this.entities) {
+        json_entities.push(this.entities[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -255,45 +266,44 @@ Domain.prototype.toJSON = function () {
         id: this.idToJSON(),
         definitionOfMany: this.definitionOfMany,
         entities: json_entities
-    }
-}
+    };
+};
 
-Domain.prototype.fromJSON = function (json, parent) {
+Domain.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.definitionOfMany = json.definitionOfMany;
-    
+
     for (var i in json.entities) {
         var jsElem = json.entities[i];
         var newElem = this.addNew_Entity(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
+};
 
 //
 // Class "Entity"
 //
 
 // Constructor
-function Entity (parent, id, name, desc) {
+function Entity(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Entity", parent, id, name, desc);
 
     // Properties:
-    this.isAbstract=true;
-    this.namePlural='text';
-    this.isRootEntity=true;
-    this.isRootInstance=true;
-    
+    this.isAbstract = true;
+    this.namePlural = 'text';
+    this.isRootEntity = true;
+    this.isRootInstance = true;
 
     // Enumerations:
-    this.entityType="";
+    this.entityType = "";
 
     // Relationships:
     this.basicProperties = [];
@@ -315,125 +325,163 @@ Entity.prototype.enumDef_entityType = ["Document", "Embedded"];
 // Methods
 //
 // Manage Aggregations:
-Entity.prototype.addNew_BasicProperty = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_basicProperties = new BasicProperty (this, id, name, desc);
+Entity.prototype.addNew_BasicProperty = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_basicProperties = new BasicProperty(this, id, name, desc);
     new_basicProperties.type = "BasicProperty";
-    this.basicProperties.push (new_basicProperties);
+    this.basicProperties.push(new_basicProperties);
     return new_basicProperties;
-}
-Entity.prototype.remove_BasicProperty = function (id) {
+};
+Entity.prototype.remove_BasicProperty = function(id) {
     var idx = -1;
-    this.basicProperties.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.basicProperties.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.basicProperties.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Entity.prototype.addNew_Relationship = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_relationships = new Relationship (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Entity.prototype.addNew_Relationship = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_relationships = new Relationship(this, id, name, desc);
     new_relationships.type = "Relationship";
-    this.relationships.push (new_relationships);
+    this.relationships.push(new_relationships);
     return new_relationships;
-}
-Entity.prototype.remove_Relationship = function (id) {
+};
+Entity.prototype.remove_Relationship = function(id) {
     var idx = -1;
-    this.relationships.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.relationships.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.relationships.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Entity.prototype.addNew_PageView = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_pageViews = new PageView (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Entity.prototype.addNew_PageView = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_pageViews = new PageView(this, id, name, desc);
     new_pageViews.type = "PageView";
-    this.pageViews.push (new_pageViews);
+    this.pageViews.push(new_pageViews);
     return new_pageViews;
-}
-Entity.prototype.remove_PageView = function (id) {
+};
+Entity.prototype.remove_PageView = function(id) {
     var idx = -1;
-    this.pageViews.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.pageViews.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.pageViews.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Entity.prototype.addNew_TableView = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_tableViews = new TableView (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Entity.prototype.addNew_TableView = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_tableViews = new TableView(this, id, name, desc);
     new_tableViews.type = "TableView";
-    this.tableViews.push (new_tableViews);
+    this.tableViews.push(new_tableViews);
     return new_tableViews;
-}
-Entity.prototype.remove_TableView = function (id) {
+};
+Entity.prototype.remove_TableView = function(id) {
     var idx = -1;
-    this.tableViews.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.tableViews.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.tableViews.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Entity.prototype.addNew_Enumeration = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_enums = new Enumeration (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Entity.prototype.addNew_Enumeration = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_enums = new Enumeration(this, id, name, desc);
     new_enums.type = "Enumeration";
-    this.enums.push (new_enums);
+    this.enums.push(new_enums);
     return new_enums;
-}
-Entity.prototype.remove_Enumeration = function (id) {
+};
+Entity.prototype.remove_Enumeration = function(id) {
     var idx = -1;
-    this.enums.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.enums.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.enums.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-Entity.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.basicProperties) r = r.concat(this.basicProperties[i].getAllElements(true));
-    for (i in this.relationships) r = r.concat(this.relationships[i].getAllElements(true));
-    for (i in this.pageViews) r = r.concat(this.pageViews[i].getAllElements(true));
-    for (i in this.tableViews) r = r.concat(this.tableViews[i].getAllElements(true));
-    for (i in this.enums) r = r.concat(this.enums[i].getAllElements(true));
+Entity.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.basicProperties) {
+        r = r.concat(this.basicProperties[i].getAllElements(true));
+    }
+    for (i in this.relationships) {
+        r = r.concat(this.relationships[i].getAllElements(true));
+    }
+    for (i in this.pageViews) {
+        r = r.concat(this.pageViews[i].getAllElements(true));
+    }
+    for (i in this.tableViews) {
+        r = r.concat(this.tableViews[i].getAllElements(true));
+    }
+    for (i in this.enums) {
+        r = r.concat(this.enums[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-Entity.prototype.toJSON = function () {
+Entity.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_basicProperties = [];
-    for (i in this.basicProperties) json_basicProperties.push(this.basicProperties[i].toJSON());
+    for (i in this.basicProperties) {
+        json_basicProperties.push(this.basicProperties[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_relationships = [];
-    for (i in this.relationships) json_relationships.push(this.relationships[i].toJSON());
+    for (i in this.relationships) {
+        json_relationships.push(this.relationships[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_pageViews = [];
-    for (i in this.pageViews) json_pageViews.push(this.pageViews[i].toJSON());
+    for (i in this.pageViews) {
+        json_pageViews.push(this.pageViews[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_tableViews = [];
-    for (i in this.tableViews) json_tableViews.push(this.tableViews[i].toJSON());
+    for (i in this.tableViews) {
+        json_tableViews.push(this.tableViews[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_enums = [];
-    for (i in this.enums) json_enums.push(this.enums[i].toJSON());
-    //Get JSON for associations:
+    for (i in this.enums) {
+        json_enums.push(this.enums[i].toJSON());
+    }
+    // Get JSON for associations:
     var json_parentClass = [];
-    for (i in this.parentClass) json_parentClass.push(this.parentClass[i].id);
-    
+    for (i in this.parentClass) {
+        json_parentClass.push(this.parentClass[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -450,24 +498,24 @@ Entity.prototype.toJSON = function () {
         tableViews: json_tableViews,
         enums: json_enums,
         parentClass: json_parentClass
-    }
-}
+    };
+};
 
-Entity.prototype.fromJSON = function (json, parent) {
+Entity.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.isAbstract = json.isAbstract;
     this.namePlural = json.namePlural;
     this.isRootEntity = json.isRootEntity;
     this.isRootInstance = json.isRootInstance;
-    // Enumerations: 
+    // Enumerations:
     this.entityType = json.entityType;
-    
+
     for (var i in json.basicProperties) {
         var jsElem = json.basicProperties[i];
         var newElem = this.addNew_BasicProperty(jsElem.name, jsElem.desc, jsElem.id);
@@ -493,47 +541,42 @@ Entity.prototype.fromJSON = function (json, parent) {
         var newElem = this.addNew_Enumeration(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-    this.parentClass=json.parentClass; // Currently only works for *unary* associations!
-}
+    this.parentClass = json.parentClass; // Currently only works for *unary* associations!
+};
 
 //
 // Class "Literal"
 //
 
 // Constructor
-function Literal (parent, id, name, desc) {
+function Literal(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Literal", parent, id, name, desc);
 
     // Properties:
-    this.position='text';
-    this.icon='text';
-    
-
-
+    this.position = 'text';
+    this.icon = 'text';
 }
 
 // Inheritance
 Literal.prototype = Object.create(Base.prototype);
 Literal.prototype.constructor = Literal;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-Literal.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+Literal.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-Literal.prototype.toJSON = function () {
-    
+Literal.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -541,39 +584,36 @@ Literal.prototype.toJSON = function () {
         id: this.idToJSON(),
         position: this.position,
         icon: this.icon
-    }
-}
+    };
+};
 
-Literal.prototype.fromJSON = function (json, parent) {
+Literal.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.icon = json.icon;
-    
-}
+};
 
 //
 // Class "Panel"
 //
 
 // Constructor
-function Panel (parent, id, name, desc) {
+function Panel(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Panel", parent, id, name, desc);
 
     // Properties:
-    this.position=0;
-    this.label='text';
-    this.columns=0;
-    this.alternatingColors=true;
-    
-
+    this.position = 0;
+    this.label = 'text';
+    this.columns = 0;
+    this.alternatingColors = true;
 
     // Relationships:
     this.separatorPanelItems = [];
@@ -587,127 +627,162 @@ function Panel (parent, id, name, desc) {
 Panel.prototype = Object.create(Base.prototype);
 Panel.prototype.constructor = Panel;
 
-
 //
 // Methods
 //
 // Manage Aggregations:
-Panel.prototype.addNew_SeparatorPanelItem = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_separatorPanelItems = new SeparatorPanelItem (this, id, name, desc);
+Panel.prototype.addNew_SeparatorPanelItem = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_separatorPanelItems = new SeparatorPanelItem(this, id, name, desc);
     new_separatorPanelItems.type = "SeparatorPanelItem";
-    this.separatorPanelItems.push (new_separatorPanelItems);
+    this.separatorPanelItems.push(new_separatorPanelItems);
     return new_separatorPanelItems;
-}
-Panel.prototype.remove_SeparatorPanelItem = function (id) {
+};
+Panel.prototype.remove_SeparatorPanelItem = function(id) {
     var idx = -1;
-    this.separatorPanelItems.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.separatorPanelItems.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.separatorPanelItems.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Panel.prototype.addNew_RelationshipPanelItem = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_relationshipPanelItems = new RelationshipPanelItem (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Panel.prototype.addNew_RelationshipPanelItem = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_relationshipPanelItems = new RelationshipPanelItem(this, id, name, desc);
     new_relationshipPanelItems.type = "RelationshipPanelItem";
-    this.relationshipPanelItems.push (new_relationshipPanelItems);
+    this.relationshipPanelItems.push(new_relationshipPanelItems);
     return new_relationshipPanelItems;
-}
-Panel.prototype.remove_RelationshipPanelItem = function (id) {
+};
+Panel.prototype.remove_RelationshipPanelItem = function(id) {
     var idx = -1;
-    this.relationshipPanelItems.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.relationshipPanelItems.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.relationshipPanelItems.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Panel.prototype.addNew_BasicPropertyPanelItem = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_basicPropertyPanelItems = new BasicPropertyPanelItem (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Panel.prototype.addNew_BasicPropertyPanelItem = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_basicPropertyPanelItems = new BasicPropertyPanelItem(this, id, name, desc);
     new_basicPropertyPanelItems.type = "BasicPropertyPanelItem";
-    this.basicPropertyPanelItems.push (new_basicPropertyPanelItems);
+    this.basicPropertyPanelItems.push(new_basicPropertyPanelItems);
     return new_basicPropertyPanelItems;
-}
-Panel.prototype.remove_BasicPropertyPanelItem = function (id) {
+};
+Panel.prototype.remove_BasicPropertyPanelItem = function(id) {
     var idx = -1;
-    this.basicPropertyPanelItems.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.basicPropertyPanelItems.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.basicPropertyPanelItems.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Panel.prototype.addNew_EnumPanelItem = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_enumPanelItems = new EnumPanelItem (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Panel.prototype.addNew_EnumPanelItem = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_enumPanelItems = new EnumPanelItem(this, id, name, desc);
     new_enumPanelItems.type = "EnumPanelItem";
-    this.enumPanelItems.push (new_enumPanelItems);
+    this.enumPanelItems.push(new_enumPanelItems);
     return new_enumPanelItems;
-}
-Panel.prototype.remove_EnumPanelItem = function (id) {
+};
+Panel.prototype.remove_EnumPanelItem = function(id) {
     var idx = -1;
-    this.enumPanelItems.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.enumPanelItems.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.enumPanelItems.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
-Panel.prototype.addNew_Action = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_actions = new Action (this, id, name, desc);
+    } else {
+        throw "Element not found: " + id;
+    }
+};
+Panel.prototype.addNew_Action = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_actions = new Action(this, id, name, desc);
     new_actions.type = "Action";
-    this.actions.push (new_actions);
+    this.actions.push(new_actions);
     return new_actions;
-}
-Panel.prototype.remove_Action = function (id) {
+};
+Panel.prototype.remove_Action = function(id) {
     var idx = -1;
-    this.actions.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.actions.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.actions.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-Panel.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.separatorPanelItems) r = r.concat(this.separatorPanelItems[i].getAllElements(true));
-    for (i in this.relationshipPanelItems) r = r.concat(this.relationshipPanelItems[i].getAllElements(true));
-    for (i in this.basicPropertyPanelItems) r = r.concat(this.basicPropertyPanelItems[i].getAllElements(true));
-    for (i in this.enumPanelItems) r = r.concat(this.enumPanelItems[i].getAllElements(true));
-    for (i in this.actions) r = r.concat(this.actions[i].getAllElements(true));
+Panel.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.separatorPanelItems) {
+        r = r.concat(this.separatorPanelItems[i].getAllElements(true));
+    }
+    for (i in this.relationshipPanelItems) {
+        r = r.concat(this.relationshipPanelItems[i].getAllElements(true));
+    }
+    for (i in this.basicPropertyPanelItems) {
+        r = r.concat(this.basicPropertyPanelItems[i].getAllElements(true));
+    }
+    for (i in this.enumPanelItems) {
+        r = r.concat(this.enumPanelItems[i].getAllElements(true));
+    }
+    for (i in this.actions) {
+        r = r.concat(this.actions[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-Panel.prototype.toJSON = function () {
+Panel.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_separatorPanelItems = [];
-    for (i in this.separatorPanelItems) json_separatorPanelItems.push(this.separatorPanelItems[i].toJSON());
+    for (i in this.separatorPanelItems) {
+        json_separatorPanelItems.push(this.separatorPanelItems[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_relationshipPanelItems = [];
-    for (i in this.relationshipPanelItems) json_relationshipPanelItems.push(this.relationshipPanelItems[i].toJSON());
+    for (i in this.relationshipPanelItems) {
+        json_relationshipPanelItems.push(this.relationshipPanelItems[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_basicPropertyPanelItems = [];
-    for (i in this.basicPropertyPanelItems) json_basicPropertyPanelItems.push(this.basicPropertyPanelItems[i].toJSON());
+    for (i in this.basicPropertyPanelItems) {
+        json_basicPropertyPanelItems.push(this.basicPropertyPanelItems[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_enumPanelItems = [];
-    for (i in this.enumPanelItems) json_enumPanelItems.push(this.enumPanelItems[i].toJSON());
+    for (i in this.enumPanelItems) {
+        json_enumPanelItems.push(this.enumPanelItems[i].toJSON());
+    }
     // Get JSON for aggregated entities:
     var json_actions = [];
-    for (i in this.actions) json_actions.push(this.actions[i].toJSON());
-    
+    for (i in this.actions) {
+        json_actions.push(this.actions[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -722,22 +797,22 @@ Panel.prototype.toJSON = function () {
         basicPropertyPanelItems: json_basicPropertyPanelItems,
         enumPanelItems: json_enumPanelItems,
         actions: json_actions
-    }
-}
+    };
+};
 
-Panel.prototype.fromJSON = function (json, parent) {
+Panel.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
     this.columns = json.columns;
     this.alternatingColors = json.alternatingColors;
-    
+
     for (var i in json.separatorPanelItems) {
         var jsElem = json.separatorPanelItems[i];
         var newElem = this.addNew_SeparatorPanelItem(jsElem.name, jsElem.desc, jsElem.id);
@@ -763,46 +838,41 @@ Panel.prototype.fromJSON = function (json, parent) {
         var newElem = this.addNew_Action(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
+};
 
 //
 // Class "PanelItem"
 //
 
 // Constructor
-function PanelItem (parent, id, name, desc) {
+function PanelItem(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "PanelItem", parent, id, name, desc);
 
     // Properties:
-    this.position=0;
-    this.label='text';
-    
-
-
+    this.position = 0;
+    this.label = 'text';
 }
 
 // Inheritance
 PanelItem.prototype = Object.create(Base.prototype);
 PanelItem.prototype.constructor = PanelItem;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-PanelItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+PanelItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-PanelItem.prototype.toJSON = function () {
-    
+PanelItem.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -810,33 +880,29 @@ PanelItem.prototype.toJSON = function () {
         id: this.idToJSON(),
         position: this.position,
         label: this.label
-    }
-}
+    };
+};
 
-PanelItem.prototype.fromJSON = function (json, parent) {
+PanelItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    
-}
+};
 
 //
 // Class "BasicPropertyPanelItem"
 //
 
 // Constructor
-function BasicPropertyPanelItem (parent, id, name, desc) {
+function BasicPropertyPanelItem(parent, id, name, desc) {
     // Initialize base class
     PanelItem.call(this, parent, id, name, desc);
-
-    
-
 
     // Relationships:
     this.basicProperty = [];
@@ -846,25 +912,26 @@ function BasicPropertyPanelItem (parent, id, name, desc) {
 BasicPropertyPanelItem.prototype = Object.create(PanelItem.prototype);
 BasicPropertyPanelItem.prototype.constructor = BasicPropertyPanelItem;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-BasicPropertyPanelItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+BasicPropertyPanelItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-BasicPropertyPanelItem.prototype.toJSON = function () {
-    //Get JSON for associations:
+BasicPropertyPanelItem.prototype.toJSON = function() {
+    // Get JSON for associations:
     var json_basicProperty = [];
-    for (i in this.basicProperty) json_basicProperty.push(this.basicProperty[i].id);
-    
+    for (i in this.basicProperty) {
+        json_basicProperty.push(this.basicProperty[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -873,34 +940,31 @@ BasicPropertyPanelItem.prototype.toJSON = function () {
         position: this.position,
         label: this.label,
         basicProperty: json_basicProperty
-    }
-}
+    };
+};
 
-BasicPropertyPanelItem.prototype.fromJSON = function (json, parent) {
+BasicPropertyPanelItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    
-    this.basicProperty=json.basicProperty; // Currently only works for *unary* associations!
-}
+
+    this.basicProperty = json.basicProperty; // Currently only works for *unary* associations!
+};
 
 //
 // Class "EnumPanelItem"
 //
 
 // Constructor
-function EnumPanelItem (parent, id, name, desc) {
+function EnumPanelItem(parent, id, name, desc) {
     // Initialize base class
     PanelItem.call(this, parent, id, name, desc);
-
-    
-
 
     // Relationships:
     this.enumeration = [];
@@ -910,25 +974,26 @@ function EnumPanelItem (parent, id, name, desc) {
 EnumPanelItem.prototype = Object.create(PanelItem.prototype);
 EnumPanelItem.prototype.constructor = EnumPanelItem;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-EnumPanelItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+EnumPanelItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-EnumPanelItem.prototype.toJSON = function () {
-    //Get JSON for associations:
+EnumPanelItem.prototype.toJSON = function() {
+    // Get JSON for associations:
     var json_enumeration = [];
-    for (i in this.enumeration) json_enumeration.push(this.enumeration[i].id);
-    
+    for (i in this.enumeration) {
+        json_enumeration.push(this.enumeration[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -937,36 +1002,34 @@ EnumPanelItem.prototype.toJSON = function () {
         position: this.position,
         label: this.label,
         enumeration: json_enumeration
-    }
-}
+    };
+};
 
-EnumPanelItem.prototype.fromJSON = function (json, parent) {
+EnumPanelItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    
-    this.enumeration=json.enumeration; // Currently only works for *unary* associations!
-}
+
+    this.enumeration = json.enumeration; // Currently only works for *unary* associations!
+};
 
 //
 // Class "RelationshipPanelItem"
 //
 
 // Constructor
-function RelationshipPanelItem (parent, id, name, desc) {
+function RelationshipPanelItem(parent, id, name, desc) {
     // Initialize base class
     PanelItem.call(this, parent, id, name, desc);
 
-    
-
     // Enumerations:
-    this.style="";
+    this.style = "";
 
     // Relationships:
     this.relationship = [];
@@ -983,20 +1046,22 @@ RelationshipPanelItem.prototype.enumDef_style = ["CSV", "Table", "Preview"];
 // Methods
 //
 
-
 // Misc utility functions
-RelationshipPanelItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+RelationshipPanelItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-RelationshipPanelItem.prototype.toJSON = function () {
-    //Get JSON for associations:
+RelationshipPanelItem.prototype.toJSON = function() {
+    // Get JSON for associations:
     var json_relationship = [];
-    for (i in this.relationship) json_relationship.push(this.relationship[i].id);
-    
+    for (i in this.relationship) {
+        json_relationship.push(this.relationship[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1006,59 +1071,53 @@ RelationshipPanelItem.prototype.toJSON = function () {
         label: this.label,
         style: this.style,
         relationship: json_relationship
-    }
-}
+    };
+};
 
-RelationshipPanelItem.prototype.fromJSON = function (json, parent) {
+RelationshipPanelItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    // Enumerations: 
+    // Enumerations:
     this.style = json.style;
-    
-    this.relationship=json.relationship; // Currently only works for *unary* associations!
-}
+
+    this.relationship = json.relationship; // Currently only works for *unary* associations!
+};
 
 //
 // Class "SeparatorPanelItem"
 //
 
 // Constructor
-function SeparatorPanelItem (parent, id, name, desc) {
+function SeparatorPanelItem(parent, id, name, desc) {
     // Initialize base class
     PanelItem.call(this, parent, id, name, desc);
-
-    
-
-
 }
 
 // Inheritance
 SeparatorPanelItem.prototype = Object.create(PanelItem.prototype);
 SeparatorPanelItem.prototype.constructor = SeparatorPanelItem;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-SeparatorPanelItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+SeparatorPanelItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-SeparatorPanelItem.prototype.toJSON = function () {
-    
+SeparatorPanelItem.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -1066,93 +1125,83 @@ SeparatorPanelItem.prototype.toJSON = function () {
         id: this.idToJSON(),
         position: this.position,
         label: this.label
-    }
-}
+    };
+};
 
-SeparatorPanelItem.prototype.fromJSON = function (json, parent) {
+SeparatorPanelItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    
-}
+};
 
 //
 // Class "Property"
 //
 
 // Constructor
-function Property (parent, id, name, desc) {
+function Property(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Property", parent, id, name, desc);
-
-    
-
-
 }
 
 // Inheritance
 Property.prototype = Object.create(Base.prototype);
 Property.prototype.constructor = Property;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-Property.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+Property.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-Property.prototype.toJSON = function () {
-    
+Property.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
         type: this.type,
         id: this.idToJSON()
-    }
-}
+    };
+};
 
-Property.prototype.fromJSON = function (json, parent) {
+Property.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
-    
-}
+};
 
 //
 // Class "BasicProperty"
 //
 
 // Constructor
-function BasicProperty (parent, id, name, desc) {
+function BasicProperty(parent, id, name, desc) {
     // Initialize base class
     Property.call(this, parent, id, name, desc);
 
     // Properties:
-    this.defaultValue='text';
-    this.constraints='text';
-    this.examples='text';
-    
+    this.defaultValue = 'text';
+    this.constraints = 'text';
+    this.examples = 'text';
 
     // Enumerations:
-    this.propertyType="";
-
+    this.propertyType = "";
 }
 
 // Inheritance
@@ -1166,17 +1215,16 @@ BasicProperty.prototype.enumDef_propertyType = ["string", "text", "password", "n
 // Methods
 //
 
-
 // Misc utility functions
-BasicProperty.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+BasicProperty.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-BasicProperty.prototype.toJSON = function () {
-    
+BasicProperty.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -1186,38 +1234,35 @@ BasicProperty.prototype.toJSON = function () {
         constraints: this.constraints,
         examples: this.examples,
         propertyType: this.propertyType
-    }
-}
+    };
+};
 
-BasicProperty.prototype.fromJSON = function (json, parent) {
+BasicProperty.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.defaultValue = json.defaultValue;
     this.constraints = json.constraints;
     this.examples = json.examples;
-    // Enumerations: 
+    // Enumerations:
     this.propertyType = json.propertyType;
-    
-}
+};
 
 //
 // Class "Enumeration"
 //
 
 // Constructor
-function Enumeration (parent, id, name, desc) {
+function Enumeration(parent, id, name, desc) {
     // Initialize base class
     Property.call(this, parent, id, name, desc);
 
-    
-
     // Enumerations:
-    this.validEnumSelections="";
+    this.validEnumSelections = "";
 
     // Relationships:
     this.literals = [];
@@ -1234,38 +1279,46 @@ Enumeration.prototype.enumDef_validEnumSelections = ["One", "ZeroOne", "ZeroMany
 // Methods
 //
 // Manage Aggregations:
-Enumeration.prototype.addNew_Literal = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_literals = new Literal (this, id, name, desc);
+Enumeration.prototype.addNew_Literal = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_literals = new Literal(this, id, name, desc);
     new_literals.type = "Literal";
-    this.literals.push (new_literals);
+    this.literals.push(new_literals);
     return new_literals;
-}
-Enumeration.prototype.remove_Literal = function (id) {
+};
+Enumeration.prototype.remove_Literal = function(id) {
     var idx = -1;
-    this.literals.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.literals.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.literals.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-Enumeration.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.literals) r = r.concat(this.literals[i].getAllElements(true));
+Enumeration.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.literals) {
+        r = r.concat(this.literals[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-Enumeration.prototype.toJSON = function () {
+Enumeration.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_literals = [];
-    for (i in this.literals) json_literals.push(this.literals[i].toJSON());
-    
+    for (i in this.literals) {
+        json_literals.push(this.literals[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1273,47 +1326,45 @@ Enumeration.prototype.toJSON = function () {
         id: this.idToJSON(),
         validEnumSelections: this.validEnumSelections,
         literals: json_literals
-    }
-}
+    };
+};
 
-Enumeration.prototype.fromJSON = function (json, parent) {
+Enumeration.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
-    // Enumerations: 
+    // Enumerations:
     this.validEnumSelections = json.validEnumSelections;
-    
+
     for (var i in json.literals) {
         var jsElem = json.literals[i];
         var newElem = this.addNew_Literal(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
+};
 
 //
 // Class "Relationship"
 //
 
 // Constructor
-function Relationship (parent, id, name, desc) {
+function Relationship(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "Relationship", parent, id, name, desc);
 
     // Properties:
-    this.isAggregation=true;
-    this.sourceRole='text';
-    this.sourceMin=0;
-    this.sourceMax=0;
-    this.targetRole='text';
-    this.targetMin=0;
-    this.targetMax=0;
-    this.targetAverage=0;
-    
-
+    this.isAggregation = true;
+    this.sourceRole = 'text';
+    this.sourceMin = 0;
+    this.sourceMax = 0;
+    this.targetRole = 'text';
+    this.targetMin = 0;
+    this.targetMax = 0;
+    this.targetAverage = 0;
 
     // Relationships:
     this.targetEntity = [];
@@ -1323,25 +1374,26 @@ function Relationship (parent, id, name, desc) {
 Relationship.prototype = Object.create(Base.prototype);
 Relationship.prototype.constructor = Relationship;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-Relationship.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+Relationship.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-Relationship.prototype.toJSON = function () {
-    //Get JSON for associations:
+Relationship.prototype.toJSON = function() {
+    // Get JSON for associations:
     var json_targetEntity = [];
-    for (i in this.targetEntity) json_targetEntity.push(this.targetEntity[i].id);
-    
+    for (i in this.targetEntity) {
+        json_targetEntity.push(this.targetEntity[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1356,15 +1408,15 @@ Relationship.prototype.toJSON = function () {
         targetMax: this.targetMax,
         targetAverage: this.targetAverage,
         targetEntity: json_targetEntity
-    }
-}
+    };
+};
 
-Relationship.prototype.fromJSON = function (json, parent) {
+Relationship.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.isAggregation = json.isAggregation;
@@ -1375,25 +1427,23 @@ Relationship.prototype.fromJSON = function (json, parent) {
     this.targetMin = json.targetMin;
     this.targetMax = json.targetMax;
     this.targetAverage = json.targetAverage;
-    
-    this.targetEntity=json.targetEntity; // Currently only works for *unary* associations!
-}
+
+    this.targetEntity = json.targetEntity; // Currently only works for *unary* associations!
+};
 
 //
 // Class "TableItem"
 //
 
 // Constructor
-function TableItem (parent, id, name, desc) {
+function TableItem(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "TableItem", parent, id, name, desc);
 
     // Properties:
-    this.position=0;
-    this.label='text';
-    
-
+    this.position = 0;
+    this.label = 'text';
 
     // Relationships:
     this.property = [];
@@ -1403,25 +1453,26 @@ function TableItem (parent, id, name, desc) {
 TableItem.prototype = Object.create(Base.prototype);
 TableItem.prototype.constructor = TableItem;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-TableItem.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+TableItem.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-TableItem.prototype.toJSON = function () {
-    //Get JSON for associations:
+TableItem.prototype.toJSON = function() {
+    // Get JSON for associations:
     var json_property = [];
-    for (i in this.property) json_property.push(this.property[i].id);
-    
+    for (i in this.property) {
+        json_property.push(this.property[i].id);
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1430,61 +1481,56 @@ TableItem.prototype.toJSON = function () {
         position: this.position,
         label: this.label,
         property: json_property
-    }
-}
+    };
+};
 
-TableItem.prototype.fromJSON = function (json, parent) {
+TableItem.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.position = json.position;
     this.label = json.label;
-    
-    this.property=json.property; // Currently only works for *unary* associations!
-}
+
+    this.property = json.property; // Currently only works for *unary* associations!
+};
 
 //
 // Class "View"
 //
 
 // Constructor
-function View (parent, id, name, desc) {
+function View(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "View", parent, id, name, desc);
 
     // Properties:
-    this.label='text';
-    this.isDefault=true;
-    
-
-
+    this.label = 'text';
+    this.isDefault = true;
 }
 
 // Inheritance
 View.prototype = Object.create(Base.prototype);
 View.prototype.constructor = View;
 
-
 //
 // Methods
 //
 
-
 // Misc utility functions
-View.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
+View.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
     return r;
-}
+};
 
-View.prototype.toJSON = function () {
-    
+View.prototype.toJSON = function() {
     return {
         name: this.name,
         desc: this.desc,
@@ -1492,33 +1538,29 @@ View.prototype.toJSON = function () {
         id: this.idToJSON(),
         label: this.label,
         isDefault: this.isDefault
-    }
-}
+    };
+};
 
-View.prototype.fromJSON = function (json, parent) {
+View.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.label = json.label;
     this.isDefault = json.isDefault;
-    
-}
+};
 
 //
 // Class "PageView"
 //
 
 // Constructor
-function PageView (parent, id, name, desc) {
+function PageView(parent, id, name, desc) {
     // Initialize base class
     View.call(this, parent, id, name, desc);
-
-    
-
 
     // Relationships:
     this.panels = [];
@@ -1528,43 +1570,50 @@ function PageView (parent, id, name, desc) {
 PageView.prototype = Object.create(View.prototype);
 PageView.prototype.constructor = PageView;
 
-
 //
 // Methods
 //
 // Manage Aggregations:
-PageView.prototype.addNew_Panel = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_panels = new Panel (this, id, name, desc);
+PageView.prototype.addNew_Panel = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_panels = new Panel(this, id, name, desc);
     new_panels.type = "Panel";
-    this.panels.push (new_panels);
+    this.panels.push(new_panels);
     return new_panels;
-}
-PageView.prototype.remove_Panel = function (id) {
+};
+PageView.prototype.remove_Panel = function(id) {
     var idx = -1;
-    this.panels.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.panels.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.panels.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-PageView.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.panels) r = r.concat(this.panels[i].getAllElements(true));
+PageView.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.panels) {
+        r = r.concat(this.panels[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-PageView.prototype.toJSON = function () {
+PageView.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_panels = [];
-    for (i in this.panels) json_panels.push(this.panels[i].toJSON());
-    
+    for (i in this.panels) {
+        json_panels.push(this.panels[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1573,38 +1622,35 @@ PageView.prototype.toJSON = function () {
         label: this.label,
         isDefault: this.isDefault,
         panels: json_panels
-    }
-}
+    };
+};
 
-PageView.prototype.fromJSON = function (json, parent) {
+PageView.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.label = json.label;
     this.isDefault = json.isDefault;
-    
+
     for (var i in json.panels) {
         var jsElem = json.panels[i];
         var newElem = this.addNew_Panel(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
+};
 
 //
 // Class "TableView"
 //
 
 // Constructor
-function TableView (parent, id, name, desc) {
+function TableView(parent, id, name, desc) {
     // Initialize base class
     View.call(this, parent, id, name, desc);
-
-    
-
 
     // Relationships:
     this.tableItems = [];
@@ -1614,43 +1660,50 @@ function TableView (parent, id, name, desc) {
 TableView.prototype = Object.create(View.prototype);
 TableView.prototype.constructor = TableView;
 
-
 //
 // Methods
 //
 // Manage Aggregations:
-TableView.prototype.addNew_TableItem = function (name, desc, existingID) {
-    var id = existingID ? existingID : this.getDomain().createNewID();
-    var new_tableItems = new TableItem (this, id, name, desc);
+TableView.prototype.addNew_TableItem = function(name, desc, existingID) {
+    var id = existingID || this.getDomain().createNewID();
+    var new_tableItems = new TableItem(this, id, name, desc);
     new_tableItems.type = "TableItem";
-    this.tableItems.push (new_tableItems);
+    this.tableItems.push(new_tableItems);
     return new_tableItems;
-}
-TableView.prototype.remove_TableItem = function (id) {
+};
+TableView.prototype.remove_TableItem = function(id) {
     var idx = -1;
-    this.tableItems.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.tableItems.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.tableItems.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-TableView.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.tableItems) r = r.concat(this.tableItems[i].getAllElements(true));
+TableView.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.tableItems) {
+        r = r.concat(this.tableItems[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-TableView.prototype.toJSON = function () {
+TableView.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_tableItems = [];
-    for (i in this.tableItems) json_tableItems.push(this.tableItems[i].toJSON());
-    
+    for (i in this.tableItems) {
+        json_tableItems.push(this.tableItems[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
@@ -1659,39 +1712,36 @@ TableView.prototype.toJSON = function () {
         label: this.label,
         isDefault: this.isDefault,
         tableItems: json_tableItems
-    }
-}
+    };
+};
 
-TableView.prototype.fromJSON = function (json, parent) {
+TableView.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
     // Basic Properties:
     this.label = json.label;
     this.isDefault = json.isDefault;
-    
+
     for (var i in json.tableItems) {
         var jsElem = json.tableItems[i];
         var newElem = this.addNew_TableItem(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
+};
 
 //
 // Class "WarpWorks"
 //
 
 // Constructor
-function WarpWorks (parent, id, name, desc) {
+function WarpWorks(parent, id, name, desc) {
     // Initialize base class
-    
+
     Base.call(this, "WarpWorks", parent, id, name, desc);
-
-    
-
 
     // Relationships:
     this.Domains = [];
@@ -1701,65 +1751,70 @@ function WarpWorks (parent, id, name, desc) {
 WarpWorks.prototype = Object.create(Base.prototype);
 WarpWorks.prototype.constructor = WarpWorks;
 
-
 //
 // Methods
 //
 // Manage Aggregations:
-WarpWorks.prototype.addNew_Domain = function (name, desc, existingID) {
-    var id = existingID ? existingID : 1;// 1 == ID for new Domains
-    var new_Domains = new Domain (this, id, name, desc);
+WarpWorks.prototype.addNew_Domain = function(name, desc, existingID) {
+    var id = existingID || 1;// 1 == ID for new Domains
+    var new_Domains = new Domain(this, id, name, desc);
     new_Domains.type = "Domain";
-    this.Domains.push (new_Domains);
+    this.Domains.push(new_Domains);
     return new_Domains;
-}
-WarpWorks.prototype.remove_Domain = function (id) {
+};
+WarpWorks.prototype.remove_Domain = function(id) {
     var idx = -1;
-    this.Domains.forEach (function (elem, i) {
-        if (elem.compareToMyID(id)) idx = i;
+    this.Domains.forEach(function(elem, i) {
+        if (elem.compareToMyID(id)) {
+            idx = i;
+        }
     });
-    if(idx != -1)
+    if (idx != -1) {
         this.Domains.splice(idx, 1);
-    else
-        throw "Element not found: "+id;
-}
+    } else {
+        throw "Element not found: " + id;
+    }
+};
 
 // Misc utility functions
-WarpWorks.prototype.getAllElements = function (includeSelf)
-{
-    var r = new Array ();
-    if (includeSelf) r = r.concat(this);
-    for (i in this.Domains) r = r.concat(this.Domains[i].getAllElements(true));
+WarpWorks.prototype.getAllElements = function(includeSelf) {
+    var r = new Array();
+    if (includeSelf) {
+        r = r.concat(this);
+    }
+    for (i in this.Domains) {
+        r = r.concat(this.Domains[i].getAllElements(true));
+    }
     return r;
-}
+};
 
-WarpWorks.prototype.toJSON = function () {
+WarpWorks.prototype.toJSON = function() {
     // Get JSON for aggregated entities:
     var json_Domains = [];
-    for (i in this.Domains) json_Domains.push(this.Domains[i].toJSON());
-    
+    for (i in this.Domains) {
+        json_Domains.push(this.Domains[i].toJSON());
+    }
+
     return {
         name: this.name,
         desc: this.desc,
         type: this.type,
         id: this.idToJSON(),
         Domains: json_Domains
-    }
-}
+    };
+};
 
-WarpWorks.prototype.fromJSON = function (json, parent) {
+WarpWorks.prototype.fromJSON = function(json, parent) {
     // Base attibutes:
     this.parent = parent;
     this.name = json.name;
     this.desc = json.desc;
-    this.type =  json.type;
+    this.type = json.type;
     this.id = json.id;
-    
+
     for (var i in json.Domains) {
         var jsElem = json.Domains[i];
         var newElem = this.addNew_Domain(jsElem.name, jsElem.desc, jsElem.id);
         newElem.fromJSON(jsElem, this);
     }
-}
-
-
+};

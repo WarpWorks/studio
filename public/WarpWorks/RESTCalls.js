@@ -50,10 +50,9 @@ function postDomainData() {
                 if (result.warnings) {
                     $active.warnings = result.status;
                     $("#warningsA").show();
-                }
-                else
+                } else {
                     $("#warningsA").hide();
-
+                }
             } else {
                 console.log("Failed to save Domain!");
             }

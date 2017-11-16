@@ -956,5 +956,5 @@ function saveDomainOverviewFormData() {
 }
 
 function showWarnings() {
-    createModal("Warnings for Domain '" + $active.domain.name+"'", $active.warnings, "warning", null);
+    createModal("Warnings for Domain '" + $active.domain.name + "'", $active.warnings, "warning", null);
 }

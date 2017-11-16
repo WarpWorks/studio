@@ -310,7 +310,7 @@ function updatePanelOverview(panel) {
             "           </ul>" +
             "       </div>" +
 
-//            "       <label for='panelItemPositionI' class='col-sm-2 control-label'>Position</label>"+
+                //            "       <label for='panelItemPositionI' class='col-sm-2 control-label'>Position</label>"+
             "       <div class='col-sm-3'>" +
             "           <input type='text' class='form-control' id='piPositionI" + pItem.id + "' value='" + pItem.position + "'>" +
             "       </div>" +
@@ -476,7 +476,7 @@ function selectEnumeration(event) {
 function selectRelationship(event) {
     var panelItemID = getIDfromSelectEvent(event);
 
-    var relationships = $active.pageView.parent.getRelationships();
+    var relationships = $active.pageView.parent.getRelationships(false, true);
     if (!relationships || relationships.length < 1) {
         createModal("Warning", "Entity '" + $active.pageView.parent.name + "' does not contain Relationships!");
         return;
