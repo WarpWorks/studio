@@ -1,5 +1,9 @@
 # Releases
 
+## 1.2.0-rc3 - 2017-12-28
+
+- Moved the `express-routes-info` as a `peerDependencies`.
+
 ## 1.2.0-rc2 - 2017-11-16
 
 - Added inherited relationships for PanelItem selection.

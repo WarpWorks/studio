@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/studio",
-  "version": "1.2.0-rc2",
+  "version": "1.2.0-rc3",
   "repository": {
     "type": "git",
     "url": "https://github.com/WarpWorks/studio.git"
@@ -22,6 +22,7 @@
   ],
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run -s lint && npm -s test",
     "lint:node": "eslint --fix --ignore-pattern *.test.js --ignore-pattern server/test lib server",
     "lint:test": "eslint --fix --config=.eslintrc.test.json  '**/*.test.js'",
     "lint:client": "eslint --fix --config=.eslintrc.client.json public/WarpWorks/*.js",
@@ -32,7 +33,6 @@
     "coverage": "npm run coverage:unit"
   },
   "dependencies": {
-    "@quoin/expressjs-routes-info": "0.1.10",
     "@quoin/node-rc": "0.1.1",
     "@warp-works/core": "1.0.0-rc4",
     "@warp-works/warpjs": "1.0.0-rc17",
@@ -49,10 +49,11 @@
   },
   "devDependencies": {
     "@quoin/eslint-config-quoin": "latest",
+    "@quoin/expressjs-routes-info": "0.2.0",
     "@quoin/node-test-helpers": "latest",
     "@warp-works/warpjs": "latest",
-    "eslint": "4.11.0",
-    "eslint-plugin-html": "4.0.0",
+    "eslint": "4.14.x",
+    "eslint-plugin-html": "4.0.x",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-json": "1.2.0",
     "eslint-plugin-node": "5.2.1",
@@ -60,9 +61,10 @@
     "eslint-plugin-standard": "3.0.1",
     "express": "4.16.2",
     "mocha": "4.0.1",
-    "nyc": "11.3.0"
+    "nyc": "11.4.x"
   },
   "peerDependencies": {
+    "@quoin/expressjs-routes-info": ">=0.2.0",
     "express": ">=4.0.0"
   }
 }
